@@ -245,6 +245,7 @@ namespace AirdropBot
 
                     loadingFinished = false;
                     browser.DocumentCompleted += browser_document_completed;
+                 
                     browser.Navigate(node.Attributes["url"].Value);
                     while (!loadingFinished)
                     {
@@ -357,8 +358,27 @@ namespace AirdropBot
                         }
                     }
                 }
+                if(command=="clearcookies")
+                {
+                    SuppressCookiePersistence();
+                }
             }
         }
+        private static void SuppressCookiePersistence()
+        {
+            int flag = INTERNET_SUPPRESS_COOKIE_PERSIST;
+            if (!InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SUPPRESS_BEHAVIOR, ref flag, sizeof(int)))
+            {
+                var ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                throw ex;
+            }
+        }
+
+        const int INTERNET_OPTION_SUPPRESS_BEHAVIOR = 81;
+        const int INTERNET_SUPPRESS_COOKIE_PERSIST = 3;
+
+        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, ref int flag, int dwBufferLength);
 
         private HtmlElement GetElement(XmlNode node, List<string> discardAttrs = null)
         {
@@ -573,35 +593,35 @@ namespace AirdropBot
 
         private void navigateToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<navigate url=\"\" proxy=\"\">";
+            txtScenario.SelectedText = "<navigate url=\"\" proxy=\"\"/>";
         }
 
         private void setFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<set value=\"\" id=\"\" name=\"\" class=\"\" tag=\"\">";
+            txtScenario.SelectedText = "<set value=\"\" id=\"\" name=\"\" class=\"\" tag=\"\"/>";
         }
 
         private void getFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" class=\"\" tag=\"\">";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" class=\"\" tag=\"\"/>";
  
         }
 
         private void clickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<click id=\"\" name=\"\" class=\"\" tag=\"\" waitforbrowser=\"true\">";
+            txtScenario.SelectedText = "<click id=\"\" name=\"\" class=\"\" tag=\"\" waitforbrowser=\"true\"/>";
 
         }
 
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\" maxtry=\"\">";
+            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\" maxtry=\"\"/>";
  
         }
 
         private void waitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<wait for=\"2\">";
+            txtScenario.SelectedText = "<wait for=\"2\"/>";
  
         }
 
@@ -735,6 +755,18 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "${UserBtcTalkProfileLink}";
 
+        }
+
+        private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" message=\"\"/>";
+ 
+        }
+
+        private void clearCookiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<clearcookies/>";
+ 
         }
     }
 

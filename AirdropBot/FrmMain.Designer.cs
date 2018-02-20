@@ -45,7 +45,6 @@
             this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.browser = new System.Windows.Forms.WebBrowser();
             this.commandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.navigateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,6 +86,8 @@
             this.btcTalkUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btcTalkPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btcTalkProfileLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.browser = new System.Windows.Forms.WebBrowser();
+            this.clearCookiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -225,18 +226,6 @@
             this.toolStripMenuItem1.Text = "New";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
-            // browser
-            // 
-            this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.browser.Location = new System.Drawing.Point(410, 89);
-            this.browser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.browser.Name = "browser";
-            this.browser.ScriptErrorsSuppressed = true;
-            this.browser.Size = new System.Drawing.Size(556, 582);
-            this.browser.TabIndex = 4;
-            // 
             // commandsToolStripMenuItem
             // 
             this.commandsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -254,7 +243,8 @@
             this.navigateToolStripMenuItem1,
             this.setFieldToolStripMenuItem1,
             this.getFieldToolStripMenuItem1,
-            this.clickToolStripMenuItem});
+            this.clickToolStripMenuItem,
+            this.clearCookiesToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
             this.navigateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
@@ -272,32 +262,33 @@
             this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
             this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.getFieldToolStripMenuItem.Text = "Telegram";
+            this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
             // 
             // navigateToolStripMenuItem1
             // 
             this.navigateToolStripMenuItem1.Name = "navigateToolStripMenuItem1";
-            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(121, 22);
             this.navigateToolStripMenuItem1.Text = "Navigate";
             this.navigateToolStripMenuItem1.Click += new System.EventHandler(this.navigateToolStripMenuItem1_Click);
             // 
             // setFieldToolStripMenuItem1
             // 
             this.setFieldToolStripMenuItem1.Name = "setFieldToolStripMenuItem1";
-            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(121, 22);
             this.setFieldToolStripMenuItem1.Text = "Set Field";
             this.setFieldToolStripMenuItem1.Click += new System.EventHandler(this.setFieldToolStripMenuItem1_Click);
             // 
             // getFieldToolStripMenuItem1
             // 
             this.getFieldToolStripMenuItem1.Name = "getFieldToolStripMenuItem1";
-            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(121, 22);
             this.getFieldToolStripMenuItem1.Text = "Get Field";
             this.getFieldToolStripMenuItem1.Click += new System.EventHandler(this.getFieldToolStripMenuItem1_Click);
             // 
             // clickToolStripMenuItem
             // 
             this.clickToolStripMenuItem.Name = "clickToolStripMenuItem";
-            this.clickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clickToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.clickToolStripMenuItem.Text = "Click";
             this.clickToolStripMenuItem.Click += new System.EventHandler(this.clickToolStripMenuItem_Click);
             // 
@@ -391,12 +382,12 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(172, 6);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(172, 6);
             // 
             // fBUsernameToolStripMenuItem
             // 
@@ -415,7 +406,7 @@
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(172, 6);
             // 
             // winUserToolStripMenuItem
             // 
@@ -434,7 +425,7 @@
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(172, 6);
             // 
             // twitterNameToolStripMenuItem
             // 
@@ -460,7 +451,7 @@
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(161, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(172, 6);
             // 
             // ethAddressToolStripMenuItem
             // 
@@ -486,7 +477,7 @@
             // toolStripMenuItem7
             // 
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(161, 6);
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(172, 6);
             // 
             // proxyIPToolStripMenuItem
             // 
@@ -505,7 +496,7 @@
             // toolStripMenuItem8
             // 
             this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            this.toolStripMenuItem8.Size = new System.Drawing.Size(161, 6);
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(172, 6);
             // 
             // redditUserToolStripMenuItem
             // 
@@ -524,7 +515,7 @@
             // toolStripMenuItem9
             // 
             this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(161, 6);
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(172, 6);
             // 
             // btcTalkUserToolStripMenuItem
             // 
@@ -546,6 +537,25 @@
             this.btcTalkProfileLinkToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.btcTalkProfileLinkToolStripMenuItem.Text = "BtcTalk Profile Link";
             this.btcTalkProfileLinkToolStripMenuItem.Click += new System.EventHandler(this.btcTalkProfileLinkToolStripMenuItem_Click);
+            // 
+            // browser
+            // 
+            this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.browser.Location = new System.Drawing.Point(410, 89);
+            this.browser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.browser.Name = "browser";
+            this.browser.ScriptErrorsSuppressed = true;
+            this.browser.Size = new System.Drawing.Size(556, 582);
+            this.browser.TabIndex = 4;
+            // 
+            // clearCookiesToolStripMenuItem
+            // 
+            this.clearCookiesToolStripMenuItem.Name = "clearCookiesToolStripMenuItem";
+            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearCookiesToolStripMenuItem.Text = "Clear Cookies";
+            this.clearCookiesToolStripMenuItem.Click += new System.EventHandler(this.clearCookiesToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -630,6 +640,7 @@
         private System.Windows.Forms.ToolStripMenuItem btcTalkUserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem btcTalkPassToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem btcTalkProfileLinkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearCookiesToolStripMenuItem;
     }
 }
 
