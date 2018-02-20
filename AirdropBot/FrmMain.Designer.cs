@@ -46,6 +46,47 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.browser = new System.Windows.Forms.WebBrowser();
+            this.commandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.navigateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.navigateToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.setFieldToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.getFieldToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.clickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lastNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mailAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mailPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.fBUsernameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fBPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.winUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.winPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+            this.twitterNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterEmailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.ethAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ethPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ethPrivateKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+            this.proxyIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.proxyPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
+            this.redditUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redditPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
+            this.btcTalkUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btcTalkPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btcTalkProfileLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,7 +142,9 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.scenarioToolStripMenuItem});
+            this.scenarioToolStripMenuItem,
+            this.commandsToolStripMenuItem,
+            this.tokensToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(989, 24);
@@ -194,6 +237,316 @@
             this.browser.Size = new System.Drawing.Size(556, 582);
             this.browser.TabIndex = 4;
             // 
+            // commandsToolStripMenuItem
+            // 
+            this.commandsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.navigateToolStripMenuItem,
+            this.setFieldToolStripMenuItem,
+            this.getFieldToolStripMenuItem,
+            this.waitToolStripMenuItem});
+            this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
+            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.commandsToolStripMenuItem.Text = "Commands";
+            // 
+            // navigateToolStripMenuItem
+            // 
+            this.navigateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.navigateToolStripMenuItem1,
+            this.setFieldToolStripMenuItem1,
+            this.getFieldToolStripMenuItem1,
+            this.clickToolStripMenuItem});
+            this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
+            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem.Text = "Browser";
+            this.navigateToolStripMenuItem.Click += new System.EventHandler(this.navigateToolStripMenuItem_Click);
+            // 
+            // setFieldToolStripMenuItem
+            // 
+            this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
+            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setFieldToolStripMenuItem.Text = "Gmail";
+            this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
+            // 
+            // getFieldToolStripMenuItem
+            // 
+            this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
+            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.getFieldToolStripMenuItem.Text = "Telegram";
+            // 
+            // navigateToolStripMenuItem1
+            // 
+            this.navigateToolStripMenuItem1.Name = "navigateToolStripMenuItem1";
+            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem1.Text = "Navigate";
+            this.navigateToolStripMenuItem1.Click += new System.EventHandler(this.navigateToolStripMenuItem1_Click);
+            // 
+            // setFieldToolStripMenuItem1
+            // 
+            this.setFieldToolStripMenuItem1.Name = "setFieldToolStripMenuItem1";
+            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.setFieldToolStripMenuItem1.Text = "Set Field";
+            this.setFieldToolStripMenuItem1.Click += new System.EventHandler(this.setFieldToolStripMenuItem1_Click);
+            // 
+            // getFieldToolStripMenuItem1
+            // 
+            this.getFieldToolStripMenuItem1.Name = "getFieldToolStripMenuItem1";
+            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.getFieldToolStripMenuItem1.Text = "Get Field";
+            this.getFieldToolStripMenuItem1.Click += new System.EventHandler(this.getFieldToolStripMenuItem1_Click);
+            // 
+            // clickToolStripMenuItem
+            // 
+            this.clickToolStripMenuItem.Name = "clickToolStripMenuItem";
+            this.clickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clickToolStripMenuItem.Text = "Click";
+            this.clickToolStripMenuItem.Click += new System.EventHandler(this.clickToolStripMenuItem_Click);
+            // 
+            // waitToolStripMenuItem
+            // 
+            this.waitToolStripMenuItem.Name = "waitToolStripMenuItem";
+            this.waitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.waitToolStripMenuItem.Text = "Wait";
+            this.waitToolStripMenuItem.Click += new System.EventHandler(this.waitToolStripMenuItem_Click);
+            // 
+            // tokensToolStripMenuItem
+            // 
+            this.tokensToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.userToolStripMenuItem,
+            this.variableToolStripMenuItem});
+            this.tokensToolStripMenuItem.Name = "tokensToolStripMenuItem";
+            this.tokensToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.tokensToolStripMenuItem.Text = "Tokens";
+            // 
+            // userToolStripMenuItem
+            // 
+            this.userToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nameToolStripMenuItem,
+            this.lastNameToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.mailAddressToolStripMenuItem,
+            this.mailPasswordToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.fBUsernameToolStripMenuItem,
+            this.fBPasswordToolStripMenuItem,
+            this.toolStripMenuItem4,
+            this.winUserToolStripMenuItem,
+            this.winPassToolStripMenuItem,
+            this.toolStripMenuItem6,
+            this.twitterNameToolStripMenuItem,
+            this.twitterEmailToolStripMenuItem,
+            this.twitterPasswordToolStripMenuItem,
+            this.toolStripMenuItem5,
+            this.ethAddressToolStripMenuItem,
+            this.ethPassToolStripMenuItem,
+            this.ethPrivateKeyToolStripMenuItem,
+            this.toolStripMenuItem7,
+            this.proxyIPToolStripMenuItem,
+            this.proxyPortToolStripMenuItem,
+            this.toolStripMenuItem8,
+            this.redditUserToolStripMenuItem,
+            this.redditPassToolStripMenuItem,
+            this.toolStripMenuItem9,
+            this.btcTalkUserToolStripMenuItem,
+            this.btcTalkPassToolStripMenuItem,
+            this.btcTalkProfileLinkToolStripMenuItem});
+            this.userToolStripMenuItem.Name = "userToolStripMenuItem";
+            this.userToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.userToolStripMenuItem.Text = "User";
+            // 
+            // nameToolStripMenuItem
+            // 
+            this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.nameToolStripMenuItem.Text = "Name";
+            this.nameToolStripMenuItem.Click += new System.EventHandler(this.nameToolStripMenuItem_Click);
+            // 
+            // variableToolStripMenuItem
+            // 
+            this.variableToolStripMenuItem.Name = "variableToolStripMenuItem";
+            this.variableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.variableToolStripMenuItem.Text = "Get Variable";
+            this.variableToolStripMenuItem.Click += new System.EventHandler(this.variableToolStripMenuItem_Click);
+            // 
+            // lastNameToolStripMenuItem
+            // 
+            this.lastNameToolStripMenuItem.Name = "lastNameToolStripMenuItem";
+            this.lastNameToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.lastNameToolStripMenuItem.Text = "LastName";
+            this.lastNameToolStripMenuItem.Click += new System.EventHandler(this.lastNameToolStripMenuItem_Click);
+            // 
+            // mailAddressToolStripMenuItem
+            // 
+            this.mailAddressToolStripMenuItem.Name = "mailAddressToolStripMenuItem";
+            this.mailAddressToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.mailAddressToolStripMenuItem.Text = "Mail Address";
+            this.mailAddressToolStripMenuItem.Click += new System.EventHandler(this.mailAddressToolStripMenuItem_Click);
+            // 
+            // mailPasswordToolStripMenuItem
+            // 
+            this.mailPasswordToolStripMenuItem.Name = "mailPasswordToolStripMenuItem";
+            this.mailPasswordToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.mailPasswordToolStripMenuItem.Text = "Mail Password";
+            this.mailPasswordToolStripMenuItem.Click += new System.EventHandler(this.mailPasswordToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            // 
+            // fBUsernameToolStripMenuItem
+            // 
+            this.fBUsernameToolStripMenuItem.Name = "fBUsernameToolStripMenuItem";
+            this.fBUsernameToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.fBUsernameToolStripMenuItem.Text = "FB Username";
+            this.fBUsernameToolStripMenuItem.Click += new System.EventHandler(this.fBUsernameToolStripMenuItem_Click);
+            // 
+            // fBPasswordToolStripMenuItem
+            // 
+            this.fBPasswordToolStripMenuItem.Name = "fBPasswordToolStripMenuItem";
+            this.fBPasswordToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.fBPasswordToolStripMenuItem.Text = "FB Password";
+            this.fBPasswordToolStripMenuItem.Click += new System.EventHandler(this.fBPasswordToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+            // 
+            // winUserToolStripMenuItem
+            // 
+            this.winUserToolStripMenuItem.Name = "winUserToolStripMenuItem";
+            this.winUserToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.winUserToolStripMenuItem.Text = "Win User";
+            this.winUserToolStripMenuItem.Click += new System.EventHandler(this.winUserToolStripMenuItem_Click);
+            // 
+            // winPassToolStripMenuItem
+            // 
+            this.winPassToolStripMenuItem.Name = "winPassToolStripMenuItem";
+            this.winPassToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.winPassToolStripMenuItem.Text = "Win Pass";
+            this.winPassToolStripMenuItem.Click += new System.EventHandler(this.winPassToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+            // 
+            // twitterNameToolStripMenuItem
+            // 
+            this.twitterNameToolStripMenuItem.Name = "twitterNameToolStripMenuItem";
+            this.twitterNameToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.twitterNameToolStripMenuItem.Text = "Twitter Name";
+            this.twitterNameToolStripMenuItem.Click += new System.EventHandler(this.twitterNameToolStripMenuItem_Click);
+            // 
+            // twitterEmailToolStripMenuItem
+            // 
+            this.twitterEmailToolStripMenuItem.Name = "twitterEmailToolStripMenuItem";
+            this.twitterEmailToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.twitterEmailToolStripMenuItem.Text = "Twitter Email";
+            this.twitterEmailToolStripMenuItem.Click += new System.EventHandler(this.twitterEmailToolStripMenuItem_Click);
+            // 
+            // twitterPasswordToolStripMenuItem
+            // 
+            this.twitterPasswordToolStripMenuItem.Name = "twitterPasswordToolStripMenuItem";
+            this.twitterPasswordToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.twitterPasswordToolStripMenuItem.Text = "Twitter Password";
+            this.twitterPasswordToolStripMenuItem.Click += new System.EventHandler(this.twitterPasswordToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(161, 6);
+            // 
+            // ethAddressToolStripMenuItem
+            // 
+            this.ethAddressToolStripMenuItem.Name = "ethAddressToolStripMenuItem";
+            this.ethAddressToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.ethAddressToolStripMenuItem.Text = "Eth Address";
+            this.ethAddressToolStripMenuItem.Click += new System.EventHandler(this.ethAddressToolStripMenuItem_Click);
+            // 
+            // ethPassToolStripMenuItem
+            // 
+            this.ethPassToolStripMenuItem.Name = "ethPassToolStripMenuItem";
+            this.ethPassToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.ethPassToolStripMenuItem.Text = "Eth Pass";
+            this.ethPassToolStripMenuItem.Click += new System.EventHandler(this.ethPassToolStripMenuItem_Click);
+            // 
+            // ethPrivateKeyToolStripMenuItem
+            // 
+            this.ethPrivateKeyToolStripMenuItem.Name = "ethPrivateKeyToolStripMenuItem";
+            this.ethPrivateKeyToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.ethPrivateKeyToolStripMenuItem.Text = "Eth Private Key";
+            this.ethPrivateKeyToolStripMenuItem.Click += new System.EventHandler(this.ethPrivateKeyToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(161, 6);
+            // 
+            // proxyIPToolStripMenuItem
+            // 
+            this.proxyIPToolStripMenuItem.Name = "proxyIPToolStripMenuItem";
+            this.proxyIPToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.proxyIPToolStripMenuItem.Text = "Proxy IP";
+            this.proxyIPToolStripMenuItem.Click += new System.EventHandler(this.proxyIPToolStripMenuItem_Click);
+            // 
+            // proxyPortToolStripMenuItem
+            // 
+            this.proxyPortToolStripMenuItem.Name = "proxyPortToolStripMenuItem";
+            this.proxyPortToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.proxyPortToolStripMenuItem.Text = "Proxy Port";
+            this.proxyPortToolStripMenuItem.Click += new System.EventHandler(this.proxyPortToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem8
+            // 
+            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(161, 6);
+            // 
+            // redditUserToolStripMenuItem
+            // 
+            this.redditUserToolStripMenuItem.Name = "redditUserToolStripMenuItem";
+            this.redditUserToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.redditUserToolStripMenuItem.Text = "Reddit User";
+            this.redditUserToolStripMenuItem.Click += new System.EventHandler(this.redditUserToolStripMenuItem_Click);
+            // 
+            // redditPassToolStripMenuItem
+            // 
+            this.redditPassToolStripMenuItem.Name = "redditPassToolStripMenuItem";
+            this.redditPassToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.redditPassToolStripMenuItem.Text = "Reddit Pass";
+            this.redditPassToolStripMenuItem.Click += new System.EventHandler(this.redditPassToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem9
+            // 
+            this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(161, 6);
+            // 
+            // btcTalkUserToolStripMenuItem
+            // 
+            this.btcTalkUserToolStripMenuItem.Name = "btcTalkUserToolStripMenuItem";
+            this.btcTalkUserToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.btcTalkUserToolStripMenuItem.Text = "BtcTalk User";
+            this.btcTalkUserToolStripMenuItem.Click += new System.EventHandler(this.btcTalkUserToolStripMenuItem_Click);
+            // 
+            // btcTalkPassToolStripMenuItem
+            // 
+            this.btcTalkPassToolStripMenuItem.Name = "btcTalkPassToolStripMenuItem";
+            this.btcTalkPassToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.btcTalkPassToolStripMenuItem.Text = "BtcTalk Pass";
+            this.btcTalkPassToolStripMenuItem.Click += new System.EventHandler(this.btcTalkPassToolStripMenuItem_Click);
+            // 
+            // btcTalkProfileLinkToolStripMenuItem
+            // 
+            this.btcTalkProfileLinkToolStripMenuItem.Name = "btcTalkProfileLinkToolStripMenuItem";
+            this.btcTalkProfileLinkToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.btcTalkProfileLinkToolStripMenuItem.Text = "BtcTalk Profile Link";
+            this.btcTalkProfileLinkToolStripMenuItem.Click += new System.EventHandler(this.btcTalkProfileLinkToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -236,6 +589,47 @@
         private System.Windows.Forms.SaveFileDialog saveScenarioFile;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem commandsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem navigateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setFieldToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem getFieldToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem navigateToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem setFieldToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem getFieldToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem clickToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem waitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tokensToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem userToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem variableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lastNameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mailAddressToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mailPasswordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem fBUsernameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fBPasswordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem winUserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem winPassToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem twitterNameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem twitterEmailToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem twitterPasswordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem ethAddressToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ethPassToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ethPrivateKeyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem proxyIPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem proxyPortToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
+        private System.Windows.Forms.ToolStripMenuItem redditUserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem redditPassToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
+        private System.Windows.Forms.ToolStripMenuItem btcTalkUserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem btcTalkPassToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem btcTalkProfileLinkToolStripMenuItem;
     }
 }
 

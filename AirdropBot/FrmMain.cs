@@ -395,11 +395,11 @@ namespace AirdropBot
                     }
                 }
 
-                if (tag != null)
+                if (tag != null && !string.IsNullOrEmpty(tag.Value))
                 {
                     allSatisfied = allSatisfied && (element.TagName.ToLower() == tag.Value);
                 }
-                if (innertextcriterion != null && element.InnerText != null)
+                if (innertextcriterion != null && !string.IsNullOrEmpty(innertextcriterion.Value) &&  element.InnerText != null)
                 {
                     allSatisfied = allSatisfied && (element.InnerText.Trim() == innertextcriterion.Value.Trim());
                 }
@@ -564,6 +564,177 @@ namespace AirdropBot
             scenarioFileName = "";
             txtScenario.Select(32,1);
             txtScenario.Focus();
+        }
+
+        private void navigateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void navigateToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<navigate url=\"\" proxy=\"\">";
+        }
+
+        private void setFieldToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" id=\"\" name=\"\" class=\"\" tag=\"\">";
+        }
+
+        private void getFieldToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" class=\"\" tag=\"\">";
+ 
+        }
+
+        private void clickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click id=\"\" name=\"\" class=\"\" tag=\"\" waitforbrowser=\"true\">";
+
+        }
+
+        private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\" maxtry=\"\">";
+ 
+        }
+
+        private void waitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<wait for=\"2\">";
+ 
+        }
+
+        private void variableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${Variable}";
+ 
+        }
+
+        private void nameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserName}";
+ 
+        }
+
+        private void lastNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserLastName}";
+ 
+        }
+
+        private void mailAddressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserMail}";
+ 
+        }
+
+        private void mailPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserMailPwd}";
+
+        }
+
+        private void fBUsernameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserFBUser}";
+
+        }
+
+        private void fBPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserFBPwd}";
+
+        }
+
+        private void winUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserWinUser}";
+
+        }
+
+        private void winPassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserWinPwd}";
+
+        }
+
+        private void twitterNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwName}";
+
+        }
+
+        private void twitterEmailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwUserName}";
+        }
+
+        private void twitterPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwPwd}";
+    
+        }
+
+        private void ethAddressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserEthAddress}";
+    
+            
+        }
+
+        private void ethPassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserEthPass}";
+    
+        }
+
+        private void ethPrivateKeyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserEthPrivateKey}";
+    
+        }
+
+        private void proxyIPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserProxyIp}";
+    
+        }
+
+        private void proxyPortToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserProxyPort}";
+
+        }
+
+        private void redditUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserReddUser}";
+
+        }
+
+        private void redditPassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserReddPwd}";
+
+        }
+
+        private void btcTalkUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserBtcTalkUser}";
+   
+        }
+
+        private void btcTalkPassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserBtcTalkPwd}";
+
+        }
+
+        private void btcTalkProfileLinkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserBtcTalkProfileLink}";
+
         }
     }
 
