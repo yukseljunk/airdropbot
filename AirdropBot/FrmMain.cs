@@ -62,12 +62,7 @@ namespace AirdropBot
         private User ActiveUser { get; set; }
         private void btnOpenInputFile_Click(object sender, EventArgs e)
         {
-            DialogResult result = openCsvFile.ShowDialog();
-            if (result == DialogResult.OK) // Test result.
-            {
-                Users = new Dictionary<string, User>();
-                ParseCsvFile(openCsvFile.FileName);
-            }
+
         }
 
         private void ParseCsvFile(string fileName)
@@ -121,17 +116,6 @@ namespace AirdropBot
         }
 
         private const string GMAILBOT_OUTPUT = "c:\\temp\\gmailbot3.html";
-        private void btnLoginMail_Click(object sender, EventArgs e)
-        {
-            if (ActiveUser == null) return;
-
-            StartGoogleBot(ActiveUser.Mail + " " + ActiveUser.MailPwd + " Find \"" + txtMailFind.Text.Trim() + "\" \"" + GMAILBOT_OUTPUT + "\"", true);
-
-            gmailbotrefreshed = false;
-            browser.Navigate("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
-            browser.DocumentCompleted += browser_document_completed;
-        }
-
         private void StartGoogleBot(string args, bool checkOutput = false)
         {
             if (File.Exists(GMAILBOT_OUTPUT)) File.Delete(GMAILBOT_OUTPUT);
@@ -168,7 +152,7 @@ namespace AirdropBot
         {
             if (e.Url.AbsolutePath != (sender as WebBrowser).Url.AbsolutePath)
                 return;
-            Debug.WriteLine("loadingfinished "+ DateTime.Now.ToString("hh:mm:ss"));
+            Debug.WriteLine("loadingfinished " + DateTime.Now.ToString("hh:mm:ss"));
             loadingFinished = true;
             HtmlDocument doc = browser.Document;
             if (!gmailbotrefreshed && e.Url.ToString().ToLower().Contains(GMAILBOT_OUTPUT.Replace("\\", "/")))
@@ -229,7 +213,7 @@ namespace AirdropBot
             foreach (XmlNode node in nodeList)
             {
                 var command = node.Name.ToLower();
-                if(command!="") Debug.WriteLine(command + " " + DateTime.Now.ToString("hh:mm:ss"));
+                if (command != "") Debug.WriteLine(command + " " + DateTime.Now.ToString("hh:mm:ss"));
 
                 if (command == "navigate")
                 {
@@ -264,7 +248,7 @@ namespace AirdropBot
                     browser.Navigate(node.Attributes["url"].Value);
                     while (!loadingFinished)
                     {
-                       Application.DoEvents();
+                        Application.DoEvents();
                     }
                 }
                 if (command == "set")
@@ -335,14 +319,14 @@ namespace AirdropBot
                     }
                 }
 
-                if(command=="wait")
+                if (command == "wait")
                 {
 
                     var waitsecs = 1;
                     var secs = node.Attributes["for"];
                     if (secs != null) waitsecs = int.Parse(node.Attributes["for"].Value);
-                    Thread.Sleep(1000*waitsecs);
-                    
+                    Thread.Sleep(1000 * waitsecs);
+
                 }
                 if (command == "gmail")
                 {
@@ -366,7 +350,7 @@ namespace AirdropBot
                         gmailbotrefreshed = false;
                         browser.Navigate("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
                         browser.DocumentCompleted += browser_document_completed;
-                        while(!gmailbotrefreshed)
+                        while (!gmailbotrefreshed)
                         {
                             Application.DoEvents();
 
@@ -415,7 +399,7 @@ namespace AirdropBot
                 {
                     allSatisfied = allSatisfied && (element.TagName.ToLower() == tag.Value);
                 }
-                if (innertextcriterion != null && element.InnerText!=null)
+                if (innertextcriterion != null && element.InnerText != null)
                 {
                     allSatisfied = allSatisfied && (element.InnerText.Trim() == innertextcriterion.Value.Trim());
                 }
@@ -525,6 +509,61 @@ namespace AirdropBot
         private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void openUsersFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openCsvFile.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                Users = new Dictionary<string, User>();
+                ParseCsvFile(openCsvFile.FileName);
+            }
+        }
+
+        private string scenarioFileName = "";
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openScenarioFile.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                txtScenario.Text= File.ReadAllText(openScenarioFile.FileName);
+                scenarioFileName = openScenarioFile.FileName;
+                this.Text = scenarioFileName;
+            }
+
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (scenarioFileName != "")
+            {
+                File.WriteAllText(scenarioFileName, txtScenario.Text);
+            }
+            else
+            {
+                saveAsToolStripMenuItem_Click(sender, e);
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = saveScenarioFile.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                File.WriteAllText(saveScenarioFile.FileName, txtScenario.Text);
+                scenarioFileName = saveScenarioFile.FileName;
+                this.Text = scenarioFileName;
+
+            }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.Text = "<?xml version=\"1.0\"?>\r\n<steps>\r\n\r\n\r\n</steps>";
+            scenarioFileName = "";
+            txtScenario.Select(32,1);
+            txtScenario.Focus();
         }
     }
 
