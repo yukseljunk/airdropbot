@@ -72,6 +72,7 @@ namespace GmailBot
         private bool fileWritten = false;
         private bool openedfirstmail = false;
         private int matchingCount = 0;
+        private int tries = 0;
         private void browser_document_completed(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if (e.Url.AbsolutePath != (sender as WebBrowser).Url.AbsolutePath)
@@ -155,9 +156,25 @@ namespace GmailBot
                                         }
                                     }
                                 }
-                                File.WriteAllText(FileName, string.Format(htmlformat, "<div>found " + matchingCount + "</div>"));
-
-                                //MessageBox.Show(string.Format("Found {0} matching item!", matchingCount));
+                                if (matchingCount == 0 && tries < MaxTries)
+                                {
+                                    tries++;
+                                    Thread.Sleep(7500);
+                                    var inputels2 = doc.GetElementsByTagName("input");
+                                    foreach (HtmlElement inputel in inputels2)
+                                    {
+                                        if (inputel.GetAttribute("type") == "submit" &&
+                                            inputel.GetAttribute("name") == "nvp_site_mail")
+                                        {
+                                            inputel.InvokeMember("click");
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    File.WriteAllText(FileName,
+                                                      string.Format(htmlformat, "<div>found " + matchingCount + "</div>"));
+                                }
                             }
                             else
                             {
