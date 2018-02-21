@@ -383,7 +383,7 @@ namespace AirdropBot
                     System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                     startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
                     startInfo.FileName = "runas";
-                    startInfo.Arguments = string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ", ReplaceTokens(user.Value), group == null ? "" : "-- tg://resolve/?domain=" + group.Value);
+                    startInfo.Arguments = string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ", ReplaceTokens(user.Value), group == null ? "" : "-- tg://resolve/?domain=" + ReplaceTokens(group.Value));
                     process.StartInfo = startInfo;
                     process.Start();
                     Thread.Sleep(2000);
@@ -427,7 +427,7 @@ namespace AirdropBot
                         {
                             Thread.Sleep(1000);
                             mainWindow.Mouse.Click();
-                            mainWindow.Keyboard.Enter(message.Value);
+                            mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
                             mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
                         }
 
