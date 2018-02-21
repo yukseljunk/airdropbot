@@ -37,32 +37,29 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openUsersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label2 = new System.Windows.Forms.Label();
             this.scenarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openScenarioFile = new System.Windows.Forms.OpenFileDialog();
-            this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.commandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.navigateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.navigateToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.setFieldToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.clickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCookiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lastNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.mailAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mailPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.fBUsernameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fBPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -86,8 +83,12 @@
             this.btcTalkUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btcTalkPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btcTalkProfileLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
+            this.openScenarioFile = new System.Windows.Forms.OpenFileDialog();
+            this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
             this.browser = new System.Windows.Forms.WebBrowser();
-            this.clearCookiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnRunRest = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -123,7 +124,7 @@
             this.txtScenario.Multiline = true;
             this.txtScenario.Name = "txtScenario";
             this.txtScenario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtScenario.Size = new System.Drawing.Size(368, 341);
+            this.txtScenario.Size = new System.Drawing.Size(368, 329);
             this.txtScenario.TabIndex = 8;
             this.txtScenario.Text = resources.GetString("txtScenario.Text");
             this.txtScenario.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -131,7 +132,7 @@
             // btnApplyScenario
             // 
             this.btnApplyScenario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnApplyScenario.Location = new System.Drawing.Point(200, 648);
+            this.btnApplyScenario.Location = new System.Drawing.Point(16, 636);
             this.btnApplyScenario.Name = "btnApplyScenario";
             this.btnApplyScenario.Size = new System.Drawing.Size(180, 23);
             this.btnApplyScenario.TabIndex = 9;
@@ -148,7 +149,7 @@
             this.tokensToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(989, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(953, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -167,15 +168,6 @@
             this.openUsersFileToolStripMenuItem.Text = "Open Users File...";
             this.openUsersFileToolStripMenuItem.Click += new System.EventHandler(this.openUsersFileToolStripMenuItem_Click);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 263);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Scenario";
-            // 
             // scenarioToolStripMenuItem
             // 
             this.scenarioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -187,44 +179,33 @@
             this.scenarioToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.scenarioToolStripMenuItem.Text = "Scenario";
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
+            this.toolStripMenuItem1.Text = "New";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.loadToolStripMenuItem.Text = "Load...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // openScenarioFile
-            // 
-            this.openScenarioFile.Filter = "Scenario Files|*.xml";
-            this.openScenarioFile.RestoreDirectory = true;
-            // 
-            // saveScenarioFile
-            // 
-            this.saveScenarioFile.DefaultExt = "xml";
-            this.saveScenarioFile.Filter = "Scenario Files|*.xml";
-            this.saveScenarioFile.RestoreDirectory = true;
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.saveAsToolStripMenuItem.Text = "Save As ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem1.Text = "New";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // commandsToolStripMenuItem
             // 
@@ -246,56 +227,63 @@
             this.clickToolStripMenuItem,
             this.clearCookiesToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
-            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
             this.navigateToolStripMenuItem.Click += new System.EventHandler(this.navigateToolStripMenuItem_Click);
-            // 
-            // setFieldToolStripMenuItem
-            // 
-            this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
-            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.setFieldToolStripMenuItem.Text = "Gmail";
-            this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
-            // 
-            // getFieldToolStripMenuItem
-            // 
-            this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
-            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.getFieldToolStripMenuItem.Text = "Telegram";
-            this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
             // 
             // navigateToolStripMenuItem1
             // 
             this.navigateToolStripMenuItem1.Name = "navigateToolStripMenuItem1";
-            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(121, 22);
+            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.navigateToolStripMenuItem1.Text = "Navigate";
             this.navigateToolStripMenuItem1.Click += new System.EventHandler(this.navigateToolStripMenuItem1_Click);
             // 
             // setFieldToolStripMenuItem1
             // 
             this.setFieldToolStripMenuItem1.Name = "setFieldToolStripMenuItem1";
-            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(121, 22);
+            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.setFieldToolStripMenuItem1.Text = "Set Field";
             this.setFieldToolStripMenuItem1.Click += new System.EventHandler(this.setFieldToolStripMenuItem1_Click);
             // 
             // getFieldToolStripMenuItem1
             // 
             this.getFieldToolStripMenuItem1.Name = "getFieldToolStripMenuItem1";
-            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(121, 22);
+            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.getFieldToolStripMenuItem1.Text = "Get Field";
             this.getFieldToolStripMenuItem1.Click += new System.EventHandler(this.getFieldToolStripMenuItem1_Click);
             // 
             // clickToolStripMenuItem
             // 
             this.clickToolStripMenuItem.Name = "clickToolStripMenuItem";
-            this.clickToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.clickToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.clickToolStripMenuItem.Text = "Click";
             this.clickToolStripMenuItem.Click += new System.EventHandler(this.clickToolStripMenuItem_Click);
+            // 
+            // clearCookiesToolStripMenuItem
+            // 
+            this.clearCookiesToolStripMenuItem.Name = "clearCookiesToolStripMenuItem";
+            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.clearCookiesToolStripMenuItem.Text = "Clear Cookies";
+            this.clearCookiesToolStripMenuItem.Click += new System.EventHandler(this.clearCookiesToolStripMenuItem_Click);
+            // 
+            // setFieldToolStripMenuItem
+            // 
+            this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
+            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.setFieldToolStripMenuItem.Text = "Gmail";
+            this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
+            // 
+            // getFieldToolStripMenuItem
+            // 
+            this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
+            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.getFieldToolStripMenuItem.Text = "Telegram";
+            this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
             // 
             // waitToolStripMenuItem
             // 
             this.waitToolStripMenuItem.Name = "waitToolStripMenuItem";
-            this.waitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.waitToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.waitToolStripMenuItem.Text = "Wait";
             this.waitToolStripMenuItem.Click += new System.EventHandler(this.waitToolStripMenuItem_Click);
             // 
@@ -341,7 +329,7 @@
             this.btcTalkPassToolStripMenuItem,
             this.btcTalkProfileLinkToolStripMenuItem});
             this.userToolStripMenuItem.Name = "userToolStripMenuItem";
-            this.userToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.userToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.userToolStripMenuItem.Text = "User";
             // 
             // nameToolStripMenuItem
@@ -351,19 +339,17 @@
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.Click += new System.EventHandler(this.nameToolStripMenuItem_Click);
             // 
-            // variableToolStripMenuItem
-            // 
-            this.variableToolStripMenuItem.Name = "variableToolStripMenuItem";
-            this.variableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.variableToolStripMenuItem.Text = "Get Variable";
-            this.variableToolStripMenuItem.Click += new System.EventHandler(this.variableToolStripMenuItem_Click);
-            // 
             // lastNameToolStripMenuItem
             // 
             this.lastNameToolStripMenuItem.Name = "lastNameToolStripMenuItem";
             this.lastNameToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.lastNameToolStripMenuItem.Text = "LastName";
             this.lastNameToolStripMenuItem.Click += new System.EventHandler(this.lastNameToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(172, 6);
             // 
             // mailAddressToolStripMenuItem
             // 
@@ -383,11 +369,6 @@
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(172, 6);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(172, 6);
             // 
             // fBUsernameToolStripMenuItem
             // 
@@ -538,6 +519,33 @@
             this.btcTalkProfileLinkToolStripMenuItem.Text = "BtcTalk Profile Link";
             this.btcTalkProfileLinkToolStripMenuItem.Click += new System.EventHandler(this.btcTalkProfileLinkToolStripMenuItem_Click);
             // 
+            // variableToolStripMenuItem
+            // 
+            this.variableToolStripMenuItem.Name = "variableToolStripMenuItem";
+            this.variableToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.variableToolStripMenuItem.Text = "Get Variable";
+            this.variableToolStripMenuItem.Click += new System.EventHandler(this.variableToolStripMenuItem_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 263);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Scenario";
+            // 
+            // openScenarioFile
+            // 
+            this.openScenarioFile.Filter = "Scenario Files|*.xml";
+            this.openScenarioFile.RestoreDirectory = true;
+            // 
+            // saveScenarioFile
+            // 
+            this.saveScenarioFile.DefaultExt = "xml";
+            this.saveScenarioFile.Filter = "Scenario Files|*.xml";
+            this.saveScenarioFile.RestoreDirectory = true;
+            // 
             // browser
             // 
             this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -547,21 +555,28 @@
             this.browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.browser.Name = "browser";
             this.browser.ScriptErrorsSuppressed = true;
-            this.browser.Size = new System.Drawing.Size(556, 582);
+            this.browser.Size = new System.Drawing.Size(520, 570);
             this.browser.TabIndex = 4;
             // 
-            // clearCookiesToolStripMenuItem
+            // btnRunRest
             // 
-            this.clearCookiesToolStripMenuItem.Name = "clearCookiesToolStripMenuItem";
-            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.clearCookiesToolStripMenuItem.Text = "Clear Cookies";
-            this.clearCookiesToolStripMenuItem.Click += new System.EventHandler(this.clearCookiesToolStripMenuItem_Click);
+            this.btnRunRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRunRest.BackColor = System.Drawing.Color.Maroon;
+            this.btnRunRest.ForeColor = System.Drawing.Color.White;
+            this.btnRunRest.Location = new System.Drawing.Point(204, 636);
+            this.btnRunRest.Name = "btnRunRest";
+            this.btnRunRest.Size = new System.Drawing.Size(180, 23);
+            this.btnRunRest.TabIndex = 12;
+            this.btnRunRest.Text = "Run Scenario From Selected User ";
+            this.btnRunRest.UseVisualStyleBackColor = false;
+            this.btnRunRest.Click += new System.EventHandler(this.btnRunRest_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(989, 694);
+            this.ClientSize = new System.Drawing.Size(953, 682);
+            this.Controls.Add(this.btnRunRest);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnApplyScenario);
             this.Controls.Add(this.txtScenario);
@@ -641,6 +656,7 @@
         private System.Windows.Forms.ToolStripMenuItem btcTalkPassToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem btcTalkProfileLinkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCookiesToolStripMenuItem;
+        private System.Windows.Forms.Button btnRunRest;
     }
 }
 

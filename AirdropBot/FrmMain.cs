@@ -853,6 +853,19 @@ namespace AirdropBot
         // Activate an application window.
         [DllImport("USER32.DLL")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private void btnRunRest_Click(object sender, EventArgs e)
+        {
+            if (lstUsers.Items.Count == 0) return;
+            var selectedIndex = lstUsers.SelectedIndex;
+            if (selectedIndex == -1) return;
+            for (int i = selectedIndex; i < lstUsers.Items.Count; i++)
+            {
+                lstUsers.SelectedIndex = i;
+                Thread.Sleep(1000);
+                btnApplyScenario_Click(sender, e);
+            }
+        }
     }
 
 }
