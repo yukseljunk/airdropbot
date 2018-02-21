@@ -245,7 +245,7 @@ namespace AirdropBot
 
                     loadingFinished = false;
                     browser.DocumentCompleted += browser_document_completed;
-                 
+
                     browser.Navigate(node.Attributes["url"].Value);
                     while (!loadingFinished)
                     {
@@ -358,9 +358,46 @@ namespace AirdropBot
                         }
                     }
                 }
-                if(command=="clearcookies")
+                if (command == "clearcookies")
                 {
                     SuppressCookiePersistence();
+                }
+                if (command == "telegram")
+                {
+                    //<telegram user=\"\" pass=\"\" group=\"\" message=\"\"/>
+                    var user = node.Attributes["user"];
+                    var password = node.Attributes["pass"];
+                    var group = node.Attributes["group"];
+                    var message = node.Attributes["message"];
+                    if (user == null || password == null) return;
+
+
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                    startInfo.FileName = "runas";
+                    startInfo.Arguments = string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ", ReplaceTokens(user.Value), group == null ? "" : "-- tg://resolve/?domain=" + group.Value);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    Thread.Sleep(2000);
+
+                    // Get a handle to the Calculator application. The window class
+                    // and window name were obtained using the Spy++ tool.
+                    IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
+
+                    // Verify that Calculator is a running process.
+                    if (runasHandle == IntPtr.Zero)
+                    {
+                        MessageBox.Show("runas.exe is not running.");
+                        return;
+                    }
+
+                    // Make Calculator the foreground application and send it 
+                    // a set of calculations.
+                    SetForegroundWindow(runasHandle);
+                    SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
+
+
                 }
             }
         }
@@ -419,7 +456,7 @@ namespace AirdropBot
                 {
                     allSatisfied = allSatisfied && (element.TagName.ToLower() == tag.Value);
                 }
-                if (innertextcriterion != null && !string.IsNullOrEmpty(innertextcriterion.Value) &&  element.InnerText != null)
+                if (innertextcriterion != null && !string.IsNullOrEmpty(innertextcriterion.Value) && element.InnerText != null)
                 {
                     allSatisfied = allSatisfied && (element.InnerText.Trim() == innertextcriterion.Value.Trim());
                 }
@@ -547,7 +584,7 @@ namespace AirdropBot
             DialogResult result = openScenarioFile.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                txtScenario.Text= File.ReadAllText(openScenarioFile.FileName);
+                txtScenario.Text = File.ReadAllText(openScenarioFile.FileName);
                 scenarioFileName = openScenarioFile.FileName;
                 this.Text = scenarioFileName;
             }
@@ -582,7 +619,7 @@ namespace AirdropBot
         {
             txtScenario.Text = "<?xml version=\"1.0\"?>\r\n<steps>\r\n\r\n\r\n</steps>";
             scenarioFileName = "";
-            txtScenario.Select(32,1);
+            txtScenario.Select(32, 1);
             txtScenario.Focus();
         }
 
@@ -604,7 +641,7 @@ namespace AirdropBot
         private void getFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" class=\"\" tag=\"\"/>";
- 
+
         }
 
         private void clickToolStripMenuItem_Click(object sender, EventArgs e)
@@ -616,37 +653,37 @@ namespace AirdropBot
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\" maxtry=\"\"/>";
- 
+
         }
 
         private void waitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<wait for=\"2\"/>";
- 
+
         }
 
         private void variableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${Variable}";
- 
+
         }
 
         private void nameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserName}";
- 
+
         }
 
         private void lastNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserLastName}";
- 
+
         }
 
         private void mailAddressToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserMail}";
- 
+
         }
 
         private void mailPasswordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -693,32 +730,32 @@ namespace AirdropBot
         private void twitterPasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserTwPwd}";
-    
+
         }
 
         private void ethAddressToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserEthAddress}";
-    
-            
+
+
         }
 
         private void ethPassToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserEthPass}";
-    
+
         }
 
         private void ethPrivateKeyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserEthPrivateKey}";
-    
+
         }
 
         private void proxyIPToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserProxyIp}";
-    
+
         }
 
         private void proxyPortToolStripMenuItem_Click(object sender, EventArgs e)
@@ -742,7 +779,7 @@ namespace AirdropBot
         private void btcTalkUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserBtcTalkUser}";
-   
+
         }
 
         private void btcTalkPassToolStripMenuItem_Click(object sender, EventArgs e)
@@ -760,14 +797,24 @@ namespace AirdropBot
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" message=\"\"/>";
- 
+
         }
 
         private void clearCookiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<clearcookies/>";
- 
+
         }
+
+
+        // Get a handle to an application window.
+        [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow(string lpClassName,
+            string lpWindowName);
+
+        // Activate an application window.
+        [DllImport("USER32.DLL")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
     }
 
 }
