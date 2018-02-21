@@ -9,6 +9,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Common;
+using TestStack.White.UIItems;
+using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
 {
@@ -371,6 +373,11 @@ namespace AirdropBot
                     var message = node.Attributes["message"];
                     if (user == null || password == null) return;
 
+                    //close all instances of telegram first
+                    foreach (var p in Process.GetProcessesByName("Telegram"))
+                    {
+                        p.Kill();
+                    }
 
                     System.Diagnostics.Process process = new System.Diagnostics.Process();
                     System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -396,7 +403,38 @@ namespace AirdropBot
                     // a set of calculations.
                     SetForegroundWindow(runasHandle);
                     SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
+                    //join or open group/send message
+                    if (group != null && group.Value.Trim()!="") 
+                    {
+                        //wait for telegram to open
+                        Thread.Sleep(5000);
 
+                        //this may require closing off all telegram instances
+                        TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
+                        var mainWindow = app.GetWindows()[0];
+                        try
+                        {
+                            mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                        }
+                        catch
+                        {
+                        }
+                        Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
+                                                      mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));
+                        mainWindow.Mouse.Location = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
+                        mainWindow.Mouse.Click();
+                        if (message != null && message.Value.Trim() != "")
+                        {
+                            Thread.Sleep(1000);
+                            mainWindow.Mouse.Click();
+                            mainWindow.Keyboard.Enter(message.Value);
+                            mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                        }
+
+
+
+
+                    }
 
                 }
             }
