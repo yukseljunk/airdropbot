@@ -268,6 +268,7 @@ namespace AirdropBot
 
                     var param = node.Attributes["param"];
                     var what = node.Attributes["what"];
+                    var regex = node.Attributes["regex"];
                     if (param == null || what == null) continue;
                     var element = GetElement(node);
                     if (element != null)
@@ -291,6 +292,20 @@ namespace AirdropBot
                                 result = element.OuterHtml;
                                 break;
                         }
+
+                        if (regex!=null && regex.Value!="")
+                        {
+                            var reg = new Regex(regex.Value);
+                            var match = reg.Match(result);
+                            if(match.Success)
+                            {
+                                if (match.Groups.Count > 1)
+                                {
+                                    result = match.Groups[1].Value;
+                                }
+                            }
+                        }
+
                         if (!localVariables.ContainsKey(param.Value))
                         {
                             localVariables.Add(param.Value, result);
@@ -301,7 +316,7 @@ namespace AirdropBot
                 if (command == "click")
                 {
 
-                    var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext" });
+                    var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext","regex" });
                     if (element != null)
                     {
                         var wait4browser = node.Attributes["waitforbrowser"] != null && node.Attributes["waitforbrowser"].Value == "true";
@@ -404,7 +419,7 @@ namespace AirdropBot
                     SetForegroundWindow(runasHandle);
                     SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
                     //join or open group/send message
-                    if (group != null && group.Value.Trim()!="") 
+                    if (group != null && group.Value.Trim() != "")
                     {
                         //wait for telegram to open
                         Thread.Sleep(5000);
@@ -462,7 +477,7 @@ namespace AirdropBot
             {
                 return browser.Document.GetElementById(id.Value);
             }
-            var defaultDiscardedAttrs = new List<string>() { "value", "tag", "param", "what", "innertext" };
+            var defaultDiscardedAttrs = new List<string>() { "value", "tag", "param", "regex", "what", "innertext" };
             if (discardAttrs == null)
             {
                 discardAttrs = defaultDiscardedAttrs;
@@ -678,7 +693,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" class=\"\" tag=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" regex=\"\" class=\"\" tag=\"\"/>";
 
         }
 
