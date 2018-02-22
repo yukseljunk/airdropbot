@@ -14,9 +14,7 @@ using TestStack.White.WindowsAPI;
 namespace AirdropBot
 {
     /// <summary>
-    /// TODO: 
     /// click on a mouse location command on the browser
-    /// scroll the browser
     /// later: automize firefox, proxy and cache etc
     /// 
     /// </summary>
@@ -249,6 +247,14 @@ namespace AirdropBot
                 {
                     commandResult = NavigateCommand(node);
                 }
+                if (command == "scroll")
+                {
+                    commandResult = ScrollCommand(node);
+                }
+                if (command == "snap")
+                {
+                    commandResult = SnapCommand(node);
+                }
                 if (command == "set")
                 {
                     commandResult = SetCommand(node);
@@ -287,6 +293,41 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string SnapCommand(XmlNode node)
+        {
+            var x = 0;
+            var y = 0;
+            var xnode = node.Attributes["x"];
+            if (xnode != null)
+            {
+                int.TryParse(node.Attributes["x"].Value, out x);
+            }
+            var ynode = node.Attributes["y"];
+            if (ynode != null)
+            {
+                int.TryParse(node.Attributes["y"].Value, out y);
+
+            }
+            MouseOperations.SetCursorPosition(this.Left + browser.Left + x, this.Top + browser.Top + y);
+            MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
+            MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
+
+            return "";
+        }
+
+        private string ScrollCommand(XmlNode node)
+        {
+            var height = 100;
+            var secs = node.Attributes["height"];
+            if (secs != null)
+            {
+                int.TryParse(node.Attributes["height"].Value, out height);
+            }
+
+            browser.Document.Window.ScrollTo(0, height);
+            return "";
         }
 
         private string TelegramCommand(XmlNode node)
@@ -1014,6 +1055,17 @@ namespace AirdropBot
         {
             stopped = true;
         }
-    }
 
+        private void scrollToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //scroll height
+            txtScenario.SelectedText = "<scroll height=\"100\"/>";
+
+        }
+
+        private void snapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap x=\"0\" y=\"0\"/>";
+        }
+    }
 }

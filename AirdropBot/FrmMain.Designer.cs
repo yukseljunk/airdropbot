@@ -92,6 +92,8 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.llUncheckAll = new System.Windows.Forms.LinkLabel();
             this.btnStop = new System.Windows.Forms.Button();
+            this.scrollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.snapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -218,9 +220,11 @@
             this.setFieldToolStripMenuItem1,
             this.getFieldToolStripMenuItem1,
             this.clickToolStripMenuItem,
-            this.clearCookiesToolStripMenuItem});
+            this.clearCookiesToolStripMenuItem,
+            this.scrollToolStripMenuItem,
+            this.snapToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
-            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
             this.navigateToolStripMenuItem.Click += new System.EventHandler(this.navigateToolStripMenuItem_Click);
             // 
@@ -606,6 +610,20 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
+            // scrollToolStripMenuItem
+            // 
+            this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scrollToolStripMenuItem.Text = "Scroll";
+            this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
+            // 
+            // snapToolStripMenuItem
+            // 
+            this.snapToolStripMenuItem.Name = "snapToolStripMenuItem";
+            this.snapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.snapToolStripMenuItem.Text = "Snap";
+            this.snapToolStripMenuItem.Click += new System.EventHandler(this.snapToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -698,6 +716,8 @@
         private System.Windows.Forms.LinkLabel llCheckAll;
         private System.Windows.Forms.LinkLabel llUncheckAll;
         private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.ToolStripMenuItem scrollToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem snapToolStripMenuItem;
     }
 }
 
