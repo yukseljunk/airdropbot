@@ -91,6 +91,7 @@
             this.lstUsers = new System.Windows.Forms.CheckedListBox();
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.llUncheckAll = new System.Windows.Forms.LinkLabel();
+            this.btnStop = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,7 +117,7 @@
             this.txtScenario.Multiline = true;
             this.txtScenario.Name = "txtScenario";
             this.txtScenario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtScenario.Size = new System.Drawing.Size(368, 329);
+            this.txtScenario.Size = new System.Drawing.Size(368, 302);
             this.txtScenario.TabIndex = 8;
             this.txtScenario.Text = resources.GetString("txtScenario.Text");
             this.txtScenario.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -124,7 +125,7 @@
             // btnApplyScenario
             // 
             this.btnApplyScenario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnApplyScenario.Location = new System.Drawing.Point(16, 636);
+            this.btnApplyScenario.Location = new System.Drawing.Point(12, 598);
             this.btnApplyScenario.Name = "btnApplyScenario";
             this.btnApplyScenario.Size = new System.Drawing.Size(180, 23);
             this.btnApplyScenario.TabIndex = 9;
@@ -141,7 +142,7 @@
             this.tokensToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(953, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(928, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -547,7 +548,7 @@
             this.browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.browser.Name = "browser";
             this.browser.ScriptErrorsSuppressed = true;
-            this.browser.Size = new System.Drawing.Size(520, 570);
+            this.browser.Size = new System.Drawing.Size(495, 557);
             this.browser.TabIndex = 4;
             // 
             // btnRunRest
@@ -555,7 +556,7 @@
             this.btnRunRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRunRest.BackColor = System.Drawing.Color.Maroon;
             this.btnRunRest.ForeColor = System.Drawing.Color.White;
-            this.btnRunRest.Location = new System.Drawing.Point(204, 636);
+            this.btnRunRest.Location = new System.Drawing.Point(200, 598);
             this.btnRunRest.Name = "btnRunRest";
             this.btnRunRest.Size = new System.Drawing.Size(180, 23);
             this.btnRunRest.TabIndex = 12;
@@ -594,11 +595,23 @@
             this.llUncheckAll.Text = "Uncheck All";
             this.llUncheckAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llUncheckAll_LinkClicked);
             // 
+            // btnStop
+            // 
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnStop.Location = new System.Drawing.Point(111, 634);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(180, 23);
+            this.btnStop.TabIndex = 16;
+            this.btnStop.Text = "Stop Processing";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(953, 682);
+            this.ClientSize = new System.Drawing.Size(928, 669);
+            this.Controls.Add(this.btnStop);
             this.Controls.Add(this.llUncheckAll);
             this.Controls.Add(this.llCheckAll);
             this.Controls.Add(this.lstUsers);
@@ -684,6 +697,7 @@
         private System.Windows.Forms.CheckedListBox lstUsers;
         private System.Windows.Forms.LinkLabel llCheckAll;
         private System.Windows.Forms.LinkLabel llUncheckAll;
+        private System.Windows.Forms.Button btnStop;
     }
 }
 

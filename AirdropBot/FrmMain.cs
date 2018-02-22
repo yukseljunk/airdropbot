@@ -9,20 +9,15 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Common;
-using TestStack.White.UIItems;
 using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
 {
     /// <summary>
     /// TODO: 
-    /// listbox to checked list box
-    /// stop bulk
     /// click on a mouse location command on the browser
     /// scroll the browser
     /// later: automize firefox, proxy and cache etc
-    /// break when failed in bulk
-    /// stop when failed
     /// 
     /// </summary>
     public partial class FrmMain : Form, IOleClientSite, IServiceProvider, IAuthenticate
@@ -187,6 +182,7 @@ namespace AirdropBot
             {
                 WBEmulator.SetBrowserEmulationVersion();
             }
+            btnStop.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -216,263 +212,369 @@ namespace AirdropBot
 
         private bool loadingFinished = false;
 
+        private bool stopped = false;
         private void btnApplyScenario_Click(object sender, EventArgs e)
         {
+
+            EnDis(true);
+            stopped = false;
+            Run();
+            EnDis(false);
+
+        }
+
+        private void EnDis(bool state)
+        {
+            btnStop.Enabled = state;
+            btnApplyScenario.Enabled = !state;
+            btnRunRest.Enabled = !state;
+
+        }
+
+        private void Run()
+        {
             if (txtScenario.Text == "") return;
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(txtScenario.Text);
             var nodeList = doc.SelectNodes("/steps/*");
             if (nodeList == null) return;
+            var stepNo = 1;
             foreach (XmlNode node in nodeList)
             {
                 var command = node.Name.ToLower();
                 if (command != "") Debug.WriteLine(command + " " + DateTime.Now.ToString("hh:mm:ss"));
-
+                if (stopped) break;
+                var commandResult = "";
                 if (command == "navigate")
                 {
-                    object obj = browser.ActiveXInstance;
-                    IOleObject oc = obj as IOleObject;
-                    oc.SetClientSite(this as IOleClientSite);
-
-                    WinInetHelper.EndBrowserSession();
-                    WinInetHelper.SupressCookiePersist();
-                    Thread.Sleep(1000);
-                    SetProxyServer(null);
-                    Thread.Sleep(1000);
-
-                    var useProxyAttr = node.Attributes["proxy"];
-                    if (useProxyAttr != null)
-                    {
-                        var proxy = ReplaceTokens(useProxyAttr.Value);
-
-                        if (Regex.IsMatch(proxy, @"\d+:\d+"))
-                        {
-                            WinInetHelper.EndBrowserSession();
-                            WinInetHelper.SupressCookiePersist();
-                            Thread.Sleep(1000);
-                            SetProxyServer(proxy);
-                            Thread.Sleep(100);
-
-                        }
-                    }
-
-                    loadingFinished = false;
-                    browser.DocumentCompleted += browser_document_completed;
-
-                    browser.Navigate(node.Attributes["url"].Value);
-                    while (!loadingFinished)
-                    {
-                        Application.DoEvents();
-                    }
+                    commandResult = NavigateCommand(node);
                 }
                 if (command == "set")
                 {
-
-                    var value = node.Attributes["value"];
-                    if (value == null) continue;
-                    HtmlElement element = GetElement(node);
-                    if (element != null) element.SetAttribute("value", ReplaceTokens(value.Value));
+                    commandResult = SetCommand(node);
                 }
-
                 if (command == "get")
                 {
-
-                    var param = node.Attributes["param"];
-                    var what = node.Attributes["what"];
-                    var regex = node.Attributes["regex"];
-                    if (param == null || what == null) continue;
-                    var element = GetElement(node);
-                    if (element != null)
-                    {
-                        var result = "";
-                        switch (what.Value.ToLower())
-                        {
-                            case "value":
-                                result = element.GetAttribute("value");
-                                break;
-                            case "innertext":
-                                result = element.InnerText;
-                                break;
-                            case "outertext":
-                                result = element.OuterText;
-                                break;
-                            case "innerhtml":
-                                result = element.InnerHtml;
-                                break;
-                            case "outerhtml":
-                                result = element.OuterHtml;
-                                break;
-                        }
-
-                        if (regex != null && regex.Value != "")
-                        {
-                            var reg = new Regex(regex.Value);
-                            var match = reg.Match(result);
-                            if (match.Success)
-                            {
-                                if (match.Groups.Count > 1)
-                                {
-                                    result = match.Groups[1].Value;
-                                }
-                            }
-                        }
-
-                        if (!localVariables.ContainsKey(param.Value))
-                        {
-                            localVariables.Add(param.Value, result);
-                        }
-                        localVariables[param.Value] = result;
-                    }
+                    commandResult = GetCommand(node);
                 }
                 if (command == "click")
                 {
-
-                    var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext", "regex" });
-                    if (element != null)
-                    {
-                        var wait4browser = node.Attributes["waitforbrowser"] != null && node.Attributes["waitforbrowser"].Value == "true";
-                        if (wait4browser)
-                        {
-                            loadingFinished = false;
-                            browser.DocumentCompleted += browser_document_completed;
-                        }
-                        element.InvokeMember("click");
-                        if (wait4browser)
-                        {
-                            while (!loadingFinished)
-                            {
-                                Application.DoEvents();
-                            }
-                        }
-
-                    }
+                    commandResult = ClickCommand(node);
                 }
 
                 if (command == "wait")
                 {
-
-                    var waitsecs = 1;
-                    var secs = node.Attributes["for"];
-                    if (secs != null) waitsecs = int.Parse(node.Attributes["for"].Value);
-                    Thread.Sleep(1000 * waitsecs);
-
+                    commandResult = WaitCommand(node);
                 }
                 if (command == "gmail")
                 {
-
-                    //user, pass, search
-                    var user = node.Attributes["user"];
-                    var password = node.Attributes["pass"];
-                    var search = node.Attributes["search"];
-                    var maxtries = 1;
-                    var maxtry = node.Attributes["maxtry"];
-                    if (user == null || password == null) return;
-                    if (maxtry != null) maxtries = int.Parse(maxtry.Value);
-                    if (search == null)
-                    {
-                        StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value));
-                    }
-                    else
-                    {
-                        StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value) + " Find \"" + search.Value + "\" \"" + GMAILBOT_OUTPUT + "\" " + maxtries.ToString());
-
-                        gmailbotrefreshed = false;
-                        browser.Navigate("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
-                        browser.DocumentCompleted += browser_document_completed;
-                        while (!gmailbotrefreshed)
-                        {
-                            Application.DoEvents();
-
-                        }
-                    }
+                    commandResult = GmailCommand(node);
                 }
                 if (command == "clearcookies")
                 {
-                    SuppressCookiePersistence();
+                    commandResult = SuppressCookiePersistence();
                 }
                 if (command == "telegram")
                 {
-                    //<telegram user=\"\" pass=\"\" group=\"\" message=\"\"/>
-                    var user = node.Attributes["user"];
-                    var password = node.Attributes["pass"];
-                    var group = node.Attributes["group"];
-                    var message = node.Attributes["message"];
-                    if (user == null || password == null) return;
+                    commandResult = TelegramCommand(node);
+                }
+                if (commandResult != "")
+                {
+                    MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
+                    stopped = true;
+                    break;
+                }
+                stepNo++;
+            }
 
-                    //close all instances of telegram first
-                    foreach (var p in Process.GetProcessesByName("Telegram"))
-                    {
-                        p.Kill();
-                    }
+        }
 
-                    System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-                    startInfo.FileName = "runas";
-                    startInfo.Arguments = string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ", ReplaceTokens(user.Value), group == null ? "" : "-- tg://resolve/?domain=" + ReplaceTokens(group.Value));
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    Thread.Sleep(2000);
+        private string TelegramCommand(XmlNode node)
+        {
+            var user = node.Attributes["user"];
+            var password = node.Attributes["pass"];
+            var group = node.Attributes["group"];
+            var message = node.Attributes["message"];
+            if (user == null || password == null) return "User/pass not defined";
 
-                    // Get a handle to the Calculator application. The window class
-                    // and window name were obtained using the Spy++ tool.
-                    IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
-
-                    // Verify that Calculator is a running process.
-                    if (runasHandle == IntPtr.Zero)
-                    {
-                        MessageBox.Show("runas.exe is not running.");
-                        return;
-                    }
-
-                    // Make Calculator the foreground application and send it 
-                    // a set of calculations.
-                    SetForegroundWindow(runasHandle);
-                    SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
-                    //join or open group/send message
-                    if (group != null && group.Value.Trim() != "")
-                    {
-                        //wait for telegram to open
-                        Thread.Sleep(5000);
-
-                        //this may require closing off all telegram instances
-                        TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
-                        var mainWindow = app.GetWindows()[0];
-                        try
-                        {
-                            mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
-                        }
-                        catch
-                        {
-                        }
-                        Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
-                                                      mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));
-                        mainWindow.Mouse.Location = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
-                        mainWindow.Mouse.Click();
-                        if (message != null && message.Value.Trim() != "")
-                        {
-                            Thread.Sleep(1000);
-                            mainWindow.Mouse.Click();
-                            mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
-                            mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
-                        }
-
-
-
-
-                    }
-
+            try
+            {
+                //close all instances of telegram first
+                foreach (var p in Process.GetProcessesByName("Telegram"))
+                {
+                    p.Kill();
                 }
             }
+            catch
+            {
+            }
+
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+            startInfo.FileName = "runas";
+            startInfo.Arguments =
+                string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
+                              ReplaceTokens(user.Value),
+                              @group == null ? "" : "-- tg://resolve/?domain=" + ReplaceTokens(@group.Value));
+            process.StartInfo = startInfo;
+            process.Start();
+            Thread.Sleep(2000);
+
+            // Get a handle to the Calculator application. The window class
+            // and window name were obtained using the Spy++ tool.
+            IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
+
+            // Verify that Calculator is a running process.
+            if (runasHandle == IntPtr.Zero)
+            {
+                return "Runas.exe is not running.";
+            }
+
+            // Make Calculator the foreground application and send it 
+            // a set of calculations.
+            SetForegroundWindow(runasHandle);
+            SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
+            //join or open group/send message
+            if (@group != null && @group.Value.Trim() != "")
+            {
+                //wait for telegram to open
+                Thread.Sleep(5000);
+
+                //this may require closing off all telegram instances
+                TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
+                var mainWindow = app.GetWindows()[0];
+                try
+                {
+                    mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                }
+                catch
+                {
+                }
+                Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
+                                              mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));
+                mainWindow.Mouse.Location = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
+                mainWindow.Mouse.Click();
+                if (message != null && message.Value.Trim() != "")
+                {
+                    Thread.Sleep(1000);
+                    mainWindow.Mouse.Click();
+                    mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
+                    mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                }
+            }
+            return "";
         }
-        private static void SuppressCookiePersistence()
+
+        private string GmailCommand(XmlNode node)
+        {
+            //user, pass, search
+            var user = node.Attributes["user"];
+            var password = node.Attributes["pass"];
+            var search = node.Attributes["search"];
+            var maxtries = 1;
+            var maxtry = node.Attributes["maxtry"];
+            if (user == null || password == null) return "User/password empty or not defined";
+            if (maxtry != null)
+            {
+                int.TryParse(maxtry.Value, out maxtries);
+            }
+            if (search == null)
+            {
+                StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value));
+            }
+            else
+            {
+                StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value) + " Find \"" + search.Value +
+                               "\" \"" + GMAILBOT_OUTPUT + "\" " + maxtries.ToString());
+
+                gmailbotrefreshed = false;
+                browser.Navigate("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
+                browser.DocumentCompleted += browser_document_completed;
+                while (!gmailbotrefreshed)
+                {
+                    Application.DoEvents();
+                }
+            }
+            return "";
+        }
+
+        private static string WaitCommand(XmlNode node)
+        {
+            var waitsecs = 1;
+            var secs = node.Attributes["for"];
+            if (secs != null)
+            {
+                waitsecs = int.Parse(node.Attributes["for"].Value);
+            }
+            Thread.Sleep(1000 * waitsecs);
+            return "";
+        }
+
+        private string ClickCommand(XmlNode node)
+        {
+            var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext", "regex" });
+            if (element != null)
+            {
+                var wait4browser = node.Attributes["waitforbrowser"] != null &&
+                                   node.Attributes["waitforbrowser"].Value == "true";
+                if (wait4browser)
+                {
+                    loadingFinished = false;
+                    browser.DocumentCompleted += browser_document_completed;
+                }
+                element.InvokeMember("click");
+                if (wait4browser)
+                {
+
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    while (!loadingFinished)
+                    {
+                        Application.DoEvents();
+                        if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
+                        {
+                            return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
+                        }
+                    }
+                }
+                return "";
+            }
+            return "Element not found!";
+        }
+
+        private string GetCommand(XmlNode node)
+        {
+            var param = node.Attributes["param"];
+            var what = node.Attributes["what"];
+            var regex = node.Attributes["regex"];
+            if (param == null || what == null) return "Param and what is not defined!";
+            var element = GetElement(node);
+            if (element != null)
+            {
+                var result = "";
+                switch (what.Value.ToLower())
+                {
+                    case "value":
+                        result = element.GetAttribute("value");
+                        break;
+                    case "innertext":
+                        result = element.InnerText;
+                        break;
+                    case "outertext":
+                        result = element.OuterText;
+                        break;
+                    case "innerhtml":
+                        result = element.InnerHtml;
+                        break;
+                    case "outerhtml":
+                        result = element.OuterHtml;
+                        break;
+                }
+
+                if (regex != null && regex.Value != "")
+                {
+                    var reg = new Regex(regex.Value);
+                    var match = reg.Match(result);
+                    if (match.Success)
+                    {
+                        if (match.Groups.Count > 1)
+                        {
+                            result = match.Groups[1].Value;
+                        }
+                    }
+                }
+
+                if (!localVariables.ContainsKey(param.Value))
+                {
+                    localVariables.Add(param.Value, result);
+                }
+                localVariables[param.Value] = result;
+                return "";
+            }
+            return "Element cannot be found!";
+        }
+
+        private string SetCommand(XmlNode node)
+        {
+            var value = node.Attributes["value"];
+            if (value == null) return "No value is defined!";
+            HtmlElement element = GetElement(node);
+            if (element != null)
+            {
+                element.SetAttribute("value", ReplaceTokens(value.Value));
+                return "";
+            }
+            return "Element cannot be found!";
+        }
+        private int browsertimeoutSecs = 60;
+
+        private string NavigateCommand(XmlNode node)
+        {
+            object obj = browser.ActiveXInstance;
+            IOleObject oc = obj as IOleObject;
+            oc.SetClientSite(this as IOleClientSite);
+
+            WinInetHelper.EndBrowserSession();
+            WinInetHelper.SupressCookiePersist();
+            Thread.Sleep(1000);
+            SetProxyServer(null);
+            Thread.Sleep(1000);
+
+            var useProxyAttr = node.Attributes["proxy"];
+            if (useProxyAttr != null)
+            {
+                var proxy = ReplaceTokens(useProxyAttr.Value);
+
+                if (Regex.IsMatch(proxy, @"\d+:\d+"))
+                {
+                    WinInetHelper.EndBrowserSession();
+                    WinInetHelper.SupressCookiePersist();
+                    Thread.Sleep(1000);
+                    SetProxyServer(proxy);
+                    Thread.Sleep(100);
+                }
+            }
+
+            loadingFinished = false;
+            browser.DocumentCompleted += browser_document_completed;
+            try
+            {
+                browser.Navigate(node.Attributes["url"].Value);
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (!loadingFinished)
+                {
+                    Application.DoEvents();
+                    if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
+                    {
+                        return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                return exception.ToString();
+            }
+            return "";
+        }
+
+        private static string SuppressCookiePersistence()
         {
             int flag = INTERNET_SUPPRESS_COOKIE_PERSIST;
-            if (!InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SUPPRESS_BEHAVIOR, ref flag, sizeof(int)))
+            try
             {
-                var ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                throw ex;
+                if (!InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SUPPRESS_BEHAVIOR, ref flag, sizeof(int)))
+                {
+                    var ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    throw ex;
+                }
             }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+            return "";
         }
 
         const int INTERNET_OPTION_SUPPRESS_BEHAVIOR = 81;
@@ -878,9 +980,11 @@ namespace AirdropBot
 
         private void btnRunRest_Click(object sender, EventArgs e)
         {
+            stopped = false;
             if (lstUsers.Items.Count == 0) return;
             foreach (var idx in lstUsers.CheckedIndices)
             {
+                if (stopped) break;
                 lstUsers.SelectedIndex = (int)idx;
                 Thread.Sleep(1000);
                 btnApplyScenario_Click(sender, e);
@@ -904,6 +1008,11 @@ namespace AirdropBot
         {
             ChkUnChkLstUserAll(false);
 
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            stopped = true;
         }
     }
 
