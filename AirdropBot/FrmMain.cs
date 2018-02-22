@@ -14,6 +14,17 @@ using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
 {
+    /// <summary>
+    /// TODO: 
+    /// listbox to checked list box
+    /// stop bulk
+    /// click on a mouse location command on the browser
+    /// scroll the browser
+    /// later: automize firefox, proxy and cache etc
+    /// break when failed in bulk
+    /// stop when failed
+    /// 
+    /// </summary>
     public partial class FrmMain : Form, IOleClientSite, IServiceProvider, IAuthenticate
     {
         [DllImport("wininet.dll", SetLastError = true)]
@@ -293,11 +304,11 @@ namespace AirdropBot
                                 break;
                         }
 
-                        if (regex!=null && regex.Value!="")
+                        if (regex != null && regex.Value != "")
                         {
                             var reg = new Regex(regex.Value);
                             var match = reg.Match(result);
-                            if(match.Success)
+                            if (match.Success)
                             {
                                 if (match.Groups.Count > 1)
                                 {
@@ -316,7 +327,7 @@ namespace AirdropBot
                 if (command == "click")
                 {
 
-                    var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext","regex" });
+                    var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext", "regex" });
                     if (element != null)
                     {
                         var wait4browser = node.Attributes["waitforbrowser"] != null && node.Attributes["waitforbrowser"].Value == "true";
@@ -616,10 +627,6 @@ namespace AirdropBot
 
         #endregion
 
-        private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void openUsersFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -872,14 +879,31 @@ namespace AirdropBot
         private void btnRunRest_Click(object sender, EventArgs e)
         {
             if (lstUsers.Items.Count == 0) return;
-            var selectedIndex = lstUsers.SelectedIndex;
-            if (selectedIndex == -1) return;
-            for (int i = selectedIndex; i < lstUsers.Items.Count; i++)
+            foreach (var idx in lstUsers.CheckedIndices)
             {
-                lstUsers.SelectedIndex = i;
+                lstUsers.SelectedIndex = (int)idx;
                 Thread.Sleep(1000);
                 btnApplyScenario_Click(sender, e);
             }
+        }
+
+        private void llCheckAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ChkUnChkLstUserAll(true);
+        }
+        private void ChkUnChkLstUserAll(bool state)
+        {
+            for (int i = 0; i < lstUsers.Items.Count; i++)
+            {
+                lstUsers.SetItemChecked(i, state);
+            }
+
+        }
+
+        private void llUncheckAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ChkUnChkLstUserAll(false);
+
         }
     }
 

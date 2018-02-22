@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.openCsvFile = new System.Windows.Forms.OpenFileDialog();
-            this.lstUsers = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtScenario = new System.Windows.Forms.TextBox();
             this.btnApplyScenario = new System.Windows.Forms.Button();
@@ -89,6 +88,9 @@
             this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
             this.browser = new System.Windows.Forms.WebBrowser();
             this.btnRunRest = new System.Windows.Forms.Button();
+            this.lstUsers = new System.Windows.Forms.CheckedListBox();
+            this.llCheckAll = new System.Windows.Forms.LinkLabel();
+            this.llUncheckAll = new System.Windows.Forms.LinkLabel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,16 +98,6 @@
             // 
             this.openCsvFile.Filter = "CSV Files|*.csv";
             this.openCsvFile.RestoreDirectory = true;
-            // 
-            // lstUsers
-            // 
-            this.lstUsers.FormattingEnabled = true;
-            this.lstUsers.Location = new System.Drawing.Point(16, 64);
-            this.lstUsers.Name = "lstUsers";
-            this.lstUsers.Size = new System.Drawing.Size(368, 186);
-            this.lstUsers.TabIndex = 1;
-            this.lstUsers.SelectedIndexChanged += new System.EventHandler(this.lstUsers_SelectedIndexChanged);
-            this.lstUsers.SelectedValueChanged += new System.EventHandler(this.lstUsers_SelectedValueChanged);
             // 
             // label1
             // 
@@ -567,22 +559,55 @@
             this.btnRunRest.Name = "btnRunRest";
             this.btnRunRest.Size = new System.Drawing.Size(180, 23);
             this.btnRunRest.TabIndex = 12;
-            this.btnRunRest.Text = "Run Scenario From Selected User ";
+            this.btnRunRest.Text = "Run Scenario For Checked Users";
             this.btnRunRest.UseVisualStyleBackColor = false;
             this.btnRunRest.Click += new System.EventHandler(this.btnRunRest_Click);
+            // 
+            // lstUsers
+            // 
+            this.lstUsers.FormattingEnabled = true;
+            this.lstUsers.Location = new System.Drawing.Point(16, 65);
+            this.lstUsers.Name = "lstUsers";
+            this.lstUsers.Size = new System.Drawing.Size(364, 184);
+            this.lstUsers.TabIndex = 13;
+            this.lstUsers.SelectedValueChanged += new System.EventHandler(this.lstUsers_SelectedValueChanged);
+            // 
+            // llCheckAll
+            // 
+            this.llCheckAll.AutoSize = true;
+            this.llCheckAll.Location = new System.Drawing.Point(85, 38);
+            this.llCheckAll.Name = "llCheckAll";
+            this.llCheckAll.Size = new System.Drawing.Size(52, 13);
+            this.llCheckAll.TabIndex = 14;
+            this.llCheckAll.TabStop = true;
+            this.llCheckAll.Text = "Check All";
+            this.llCheckAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llCheckAll_LinkClicked);
+            // 
+            // llUncheckAll
+            // 
+            this.llUncheckAll.AutoSize = true;
+            this.llUncheckAll.Location = new System.Drawing.Point(154, 38);
+            this.llUncheckAll.Name = "llUncheckAll";
+            this.llUncheckAll.Size = new System.Drawing.Size(65, 13);
+            this.llUncheckAll.TabIndex = 15;
+            this.llUncheckAll.TabStop = true;
+            this.llUncheckAll.Text = "Uncheck All";
+            this.llUncheckAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llUncheckAll_LinkClicked);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(953, 682);
+            this.Controls.Add(this.llUncheckAll);
+            this.Controls.Add(this.llCheckAll);
+            this.Controls.Add(this.lstUsers);
             this.Controls.Add(this.btnRunRest);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnApplyScenario);
             this.Controls.Add(this.txtScenario);
             this.Controls.Add(this.browser);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lstUsers);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
@@ -598,7 +623,6 @@
         #endregion
 
         private System.Windows.Forms.OpenFileDialog openCsvFile;
-        private System.Windows.Forms.ListBox lstUsers;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.WebBrowser browser;
         private System.Windows.Forms.TextBox txtScenario;
@@ -657,6 +681,9 @@
         private System.Windows.Forms.ToolStripMenuItem btcTalkProfileLinkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCookiesToolStripMenuItem;
         private System.Windows.Forms.Button btnRunRest;
+        private System.Windows.Forms.CheckedListBox lstUsers;
+        private System.Windows.Forms.LinkLabel llCheckAll;
+        private System.Windows.Forms.LinkLabel llUncheckAll;
     }
 }
 
