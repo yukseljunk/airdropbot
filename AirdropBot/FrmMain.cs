@@ -14,7 +14,6 @@ using TestStack.White.WindowsAPI;
 namespace AirdropBot
 {
     /// <summary>
-    /// click on a mouse location command on the browser
     /// later: automize firefox, proxy and cache etc
     /// 
     /// </summary>
@@ -284,6 +283,11 @@ namespace AirdropBot
                 {
                     commandResult = TelegramCommand(node);
                 }
+                if (command == "info")
+                {
+                    commandResult = InfoCommand(node);
+                }
+
                 if (commandResult != "")
                 {
                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
@@ -293,6 +297,14 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string InfoCommand(XmlNode node)
+        {
+            var xnode = node.Attributes["value"];
+            if (xnode == null) return "";
+            MessageBox.Show(ReplaceTokens(xnode.Value));
+            return "";
         }
 
         private string SnapCommand(XmlNode node)
@@ -1066,6 +1078,13 @@ namespace AirdropBot
         private void snapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<snap x=\"0\" y=\"0\"/>";
+        }
+
+        private void inoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // var xnode = node.Attributes["x"];
+            txtScenario.SelectedText = "<info value=\"${Variable}\"/>";
+           
         }
     }
 }

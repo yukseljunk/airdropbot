@@ -94,6 +94,7 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.scrollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.snapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -208,7 +209,8 @@
             this.navigateToolStripMenuItem,
             this.setFieldToolStripMenuItem,
             this.getFieldToolStripMenuItem,
-            this.waitToolStripMenuItem});
+            this.waitToolStripMenuItem,
+            this.inoToolStripMenuItem});
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.commandsToolStripMenuItem.Text = "Commands";
@@ -624,6 +626,13 @@
             this.snapToolStripMenuItem.Text = "Snap";
             this.snapToolStripMenuItem.Click += new System.EventHandler(this.snapToolStripMenuItem_Click);
             // 
+            // inoToolStripMenuItem
+            // 
+            this.inoToolStripMenuItem.Name = "inoToolStripMenuItem";
+            this.inoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.inoToolStripMenuItem.Text = "Info";
+            this.inoToolStripMenuItem.Click += new System.EventHandler(this.inoToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -718,6 +727,7 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.ToolStripMenuItem scrollToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem snapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inoToolStripMenuItem;
     }
 }
 
