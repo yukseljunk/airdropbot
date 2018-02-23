@@ -50,10 +50,12 @@
             this.clearCookiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scrollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.snapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +87,10 @@
             this.btcTalkUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btcTalkPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btcTalkProfileLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+            this.telegramUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clipboardValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.openScenarioFile = new System.Windows.Forms.OpenFileDialog();
             this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
@@ -95,11 +100,7 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.llUncheckAll = new System.Windows.Forms.LinkLabel();
             this.btnStop = new System.Windows.Forms.Button();
-            this.sendKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clipboardValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
-            this.telegramUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ContentPanel = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,7 +126,7 @@
             this.txtScenario.Multiline = true;
             this.txtScenario.Name = "txtScenario";
             this.txtScenario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtScenario.Size = new System.Drawing.Size(368, 302);
+            this.txtScenario.Size = new System.Drawing.Size(368, 282);
             this.txtScenario.TabIndex = 8;
             this.txtScenario.Text = resources.GetString("txtScenario.Text");
             this.txtScenario.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -133,7 +134,7 @@
             // btnApplyScenario
             // 
             this.btnApplyScenario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnApplyScenario.Location = new System.Drawing.Point(12, 598);
+            this.btnApplyScenario.Location = new System.Drawing.Point(12, 578);
             this.btnApplyScenario.Name = "btnApplyScenario";
             this.btnApplyScenario.Size = new System.Drawing.Size(180, 23);
             this.btnApplyScenario.TabIndex = 9;
@@ -150,7 +151,7 @@
             this.tokensToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(928, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1179, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -233,86 +234,100 @@
             this.snapToolStripMenuItem,
             this.sendKeysToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
-            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
             this.navigateToolStripMenuItem.Click += new System.EventHandler(this.navigateToolStripMenuItem_Click);
             // 
             // navigateToolStripMenuItem1
             // 
             this.navigateToolStripMenuItem1.Name = "navigateToolStripMenuItem1";
-            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.navigateToolStripMenuItem1.Text = "Navigate";
             this.navigateToolStripMenuItem1.Click += new System.EventHandler(this.navigateToolStripMenuItem1_Click);
             // 
             // setFieldToolStripMenuItem1
             // 
             this.setFieldToolStripMenuItem1.Name = "setFieldToolStripMenuItem1";
-            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.setFieldToolStripMenuItem1.Text = "Set Field";
             this.setFieldToolStripMenuItem1.Click += new System.EventHandler(this.setFieldToolStripMenuItem1_Click);
             // 
             // getFieldToolStripMenuItem1
             // 
             this.getFieldToolStripMenuItem1.Name = "getFieldToolStripMenuItem1";
-            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.getFieldToolStripMenuItem1.Text = "Get Field";
             this.getFieldToolStripMenuItem1.Click += new System.EventHandler(this.getFieldToolStripMenuItem1_Click);
             // 
             // clickToolStripMenuItem
             // 
             this.clickToolStripMenuItem.Name = "clickToolStripMenuItem";
-            this.clickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clickToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.clickToolStripMenuItem.Text = "Click";
             this.clickToolStripMenuItem.Click += new System.EventHandler(this.clickToolStripMenuItem_Click);
             // 
             // clearCookiesToolStripMenuItem
             // 
             this.clearCookiesToolStripMenuItem.Name = "clearCookiesToolStripMenuItem";
-            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.clearCookiesToolStripMenuItem.Text = "Clear Cookies";
             this.clearCookiesToolStripMenuItem.Click += new System.EventHandler(this.clearCookiesToolStripMenuItem_Click);
             // 
             // scrollToolStripMenuItem
             // 
             this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
-            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.scrollToolStripMenuItem.Text = "Scroll";
             this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
             // snapToolStripMenuItem
             // 
             this.snapToolStripMenuItem.Name = "snapToolStripMenuItem";
-            this.snapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.snapToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.snapToolStripMenuItem.Text = "Snap";
             this.snapToolStripMenuItem.Click += new System.EventHandler(this.snapToolStripMenuItem_Click);
+            // 
+            // sendKeysToolStripMenuItem
+            // 
+            this.sendKeysToolStripMenuItem.Name = "sendKeysToolStripMenuItem";
+            this.sendKeysToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.sendKeysToolStripMenuItem.Text = "SendKeys";
+            this.sendKeysToolStripMenuItem.Click += new System.EventHandler(this.sendKeysToolStripMenuItem_Click);
             // 
             // setFieldToolStripMenuItem
             // 
             this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
-            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setFieldToolStripMenuItem.Text = "Gmail";
             this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
             // 
             // getFieldToolStripMenuItem
             // 
             this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
-            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.getFieldToolStripMenuItem.Text = "Telegram";
             this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
             // 
             // waitToolStripMenuItem
             // 
             this.waitToolStripMenuItem.Name = "waitToolStripMenuItem";
-            this.waitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.waitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.waitToolStripMenuItem.Text = "Wait";
             this.waitToolStripMenuItem.Click += new System.EventHandler(this.waitToolStripMenuItem_Click);
             // 
             // inoToolStripMenuItem
             // 
             this.inoToolStripMenuItem.Name = "inoToolStripMenuItem";
-            this.inoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.inoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.inoToolStripMenuItem.Text = "Info";
             this.inoToolStripMenuItem.Click += new System.EventHandler(this.inoToolStripMenuItem_Click);
+            // 
+            // bringWindowFronToolStripMenuItem
+            // 
+            this.bringWindowFronToolStripMenuItem.Name = "bringWindowFronToolStripMenuItem";
+            this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bringWindowFronToolStripMenuItem.Text = "Bring Window Front";
+            this.bringWindowFronToolStripMenuItem.Click += new System.EventHandler(this.bringWindowFronToolStripMenuItem_Click);
             // 
             // tokensToolStripMenuItem
             // 
@@ -549,12 +564,31 @@
             this.btcTalkProfileLinkToolStripMenuItem.Text = "BtcTalk Profile Link";
             this.btcTalkProfileLinkToolStripMenuItem.Click += new System.EventHandler(this.btcTalkProfileLinkToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem10
+            // 
+            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+            this.toolStripMenuItem10.Size = new System.Drawing.Size(172, 6);
+            // 
+            // telegramUseToolStripMenuItem
+            // 
+            this.telegramUseToolStripMenuItem.Name = "telegramUseToolStripMenuItem";
+            this.telegramUseToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.telegramUseToolStripMenuItem.Text = "Telegram User";
+            this.telegramUseToolStripMenuItem.Click += new System.EventHandler(this.telegramUseToolStripMenuItem_Click);
+            // 
             // variableToolStripMenuItem
             // 
             this.variableToolStripMenuItem.Name = "variableToolStripMenuItem";
-            this.variableToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.variableToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.variableToolStripMenuItem.Text = "Get Variable";
             this.variableToolStripMenuItem.Click += new System.EventHandler(this.variableToolStripMenuItem_Click);
+            // 
+            // clipboardValueToolStripMenuItem
+            // 
+            this.clipboardValueToolStripMenuItem.Name = "clipboardValueToolStripMenuItem";
+            this.clipboardValueToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.clipboardValueToolStripMenuItem.Text = "Clipboard Value";
+            this.clipboardValueToolStripMenuItem.Click += new System.EventHandler(this.clipboardValueToolStripMenuItem_Click);
             // 
             // label2
             // 
@@ -578,14 +612,13 @@
             // 
             // browser
             // 
-            this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.browser.Location = new System.Drawing.Point(410, 89);
             this.browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.browser.Name = "browser";
             this.browser.ScriptErrorsSuppressed = true;
-            this.browser.Size = new System.Drawing.Size(495, 557);
+            this.browser.Size = new System.Drawing.Size(746, 268);
             this.browser.TabIndex = 4;
             // 
             // btnRunRest
@@ -593,7 +626,7 @@
             this.btnRunRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRunRest.BackColor = System.Drawing.Color.Maroon;
             this.btnRunRest.ForeColor = System.Drawing.Color.White;
-            this.btnRunRest.Location = new System.Drawing.Point(200, 598);
+            this.btnRunRest.Location = new System.Drawing.Point(200, 578);
             this.btnRunRest.Name = "btnRunRest";
             this.btnRunRest.Size = new System.Drawing.Size(180, 23);
             this.btnRunRest.TabIndex = 12;
@@ -635,7 +668,7 @@
             // btnStop
             // 
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStop.Location = new System.Drawing.Point(111, 634);
+            this.btnStop.Location = new System.Drawing.Point(111, 614);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(180, 23);
             this.btnStop.TabIndex = 16;
@@ -643,44 +676,26 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // sendKeysToolStripMenuItem
+            // ContentPanel
             // 
-            this.sendKeysToolStripMenuItem.Name = "sendKeysToolStripMenuItem";
-            this.sendKeysToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sendKeysToolStripMenuItem.Text = "SendKeys";
-            this.sendKeysToolStripMenuItem.Click += new System.EventHandler(this.sendKeysToolStripMenuItem_Click);
-            // 
-            // clipboardValueToolStripMenuItem
-            // 
-            this.clipboardValueToolStripMenuItem.Name = "clipboardValueToolStripMenuItem";
-            this.clipboardValueToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.clipboardValueToolStripMenuItem.Text = "Clipboard Value";
-            this.clipboardValueToolStripMenuItem.Click += new System.EventHandler(this.clipboardValueToolStripMenuItem_Click);
-            // 
-            // bringWindowFronToolStripMenuItem
-            // 
-            this.bringWindowFronToolStripMenuItem.Name = "bringWindowFronToolStripMenuItem";
-            this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.bringWindowFronToolStripMenuItem.Text = "Bring Window Front";
-            this.bringWindowFronToolStripMenuItem.Click += new System.EventHandler(this.bringWindowFronToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem10
-            // 
-            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-            this.toolStripMenuItem10.Size = new System.Drawing.Size(172, 6);
-            // 
-            // telegramUseToolStripMenuItem
-            // 
-            this.telegramUseToolStripMenuItem.Name = "telegramUseToolStripMenuItem";
-            this.telegramUseToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.telegramUseToolStripMenuItem.Text = "Telegram User";
-            this.telegramUseToolStripMenuItem.Click += new System.EventHandler(this.telegramUseToolStripMenuItem_Click);
+            this.ContentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ContentPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.ContentPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ContentPanel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.ContentPanel.Location = new System.Drawing.Point(410, 383);
+            this.ContentPanel.Name = "ContentPanel";
+            this.ContentPanel.Size = new System.Drawing.Size(746, 254);
+            this.ContentPanel.TabIndex = 17;
+            this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(928, 669);
+            this.ClientSize = new System.Drawing.Size(1179, 649);
+            this.Controls.Add(this.ContentPanel);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.llUncheckAll);
             this.Controls.Add(this.llCheckAll);
@@ -776,6 +791,7 @@
         private System.Windows.Forms.ToolStripMenuItem bringWindowFronToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
         private System.Windows.Forms.ToolStripMenuItem telegramUseToolStripMenuItem;
+        private System.Windows.Forms.Panel ContentPanel;
     }
 }
 

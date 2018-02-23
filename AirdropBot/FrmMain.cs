@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using CefSharp;
+using CefSharp.WinForms;
 using Common;
 using TestStack.White.WindowsAPI;
 
@@ -30,6 +32,9 @@ namespace AirdropBot
         private const int INTERNET_OPEN_TYPE_PROXY = 3;
         private string _currentUsername;
         private string _currentPassword;
+
+        private ChromiumWebBrowser cbrowser;
+
 
         private Dictionary<string, string> localVariables = new Dictionary<string, string>();
         private Dictionary<string, string> attrTranslations = new Dictionary<string, string>() { { "for", "htmlfor" }, { "class", "className" } };
@@ -76,7 +81,7 @@ namespace AirdropBot
             foreach (var content in contents.Skip(1))
             {
                 var fields = content.Split(new char[] { ';', ',' }, StringSplitOptions.None);
-                if (fields.Length < 3) continue;
+                if (fields.Length < 30) continue;
                 var user = new User()
                                {
                                    Name = fields[1],
@@ -208,6 +213,7 @@ namespace AirdropBot
         }
 
         private bool loadingFinished = false;
+        private bool cloadingFinished = false;
 
         private bool stopped = false;
         private void btnApplyScenario_Click(object sender, EventArgs e)
@@ -305,6 +311,59 @@ namespace AirdropBot
             }
 
         }
+        public void Configure(string proxy)
+        {
+            CefSettings cfsettings = new CefSettings();
+            cfsettings.CefCommandLineArgs.Add("proxy-server", proxy);
+            Cef.Initialize(cfsettings);
+        }
+        private void CreateCBrowser(string url, string proxy)
+        {
+
+            ContentPanel.Controls.Clear();
+            // Configure(proxy);
+            cproxy = proxy;
+            cbrowser = new ChromiumWebBrowser(url)
+            {
+                Dock = DockStyle.Fill
+            };
+
+            ContentPanel.Controls.Add(cbrowser);
+            cbrowser.IsBrowserInitializedChanged += cbrowser_initalize;
+
+            cbrowser.LoadingStateChanged += OnLoadingStateChanged;
+            /*            browser.ConsoleMessage += OnBrowserConsoleMessage;
+                        browser.StatusMessage += OnBrowserStatusMessage;
+                        browser.TitleChanged += OnBrowserTitleChanged;
+                        browser.AddressChanged += OnBrowserAddressChanged;
+              */
+        }
+
+        private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            if (!e.IsLoading)//loading done
+            {
+                cloadingFinished = true;
+            }
+        }
+
+        private string cproxy;
+
+        private void cbrowser_initalize(object sender, IsBrowserInitializedChangedEventArgs e)
+        {
+            if (e.IsBrowserInitialized)
+            {
+                Cef.UIThreadTaskFactory.StartNew(delegate
+                {
+                    var rc = cbrowser.GetBrowser().GetHost().RequestContext;
+                    var v = new Dictionary<string, object>();
+                    v["mode"] = "fixed_servers";
+                    v["server"] = "http://" + cproxy;
+                    string error;
+                    bool success = rc.SetPreference("proxy", v, out error);
+                });
+            }
+        }
 
         private string BringToFrontCommand(XmlNode node)
         {
@@ -363,6 +422,7 @@ namespace AirdropBot
             }
 
             browser.Document.Window.ScrollTo(0, height);
+            cbrowser.ExecuteScriptAsync(String.Format("window.scrollBy({0}, {1});", 0, height));
             return "";
         }
 
@@ -609,9 +669,10 @@ namespace AirdropBot
             Thread.Sleep(1000);
 
             var useProxyAttr = node.Attributes["proxy"];
+            var proxy = "";
             if (useProxyAttr != null)
             {
-                var proxy = ReplaceTokens(useProxyAttr.Value);
+                proxy = ReplaceTokens(useProxyAttr.Value);
 
                 if (Regex.IsMatch(proxy, @"\d+:\d+"))
                 {
@@ -624,13 +685,16 @@ namespace AirdropBot
             }
 
             loadingFinished = false;
+            cloadingFinished = false;
             browser.DocumentCompleted += browser_document_completed;
             try
             {
+                CreateCBrowser(node.Attributes["url"].Value, proxy);
+
                 browser.Navigate(node.Attributes["url"].Value);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                while (!loadingFinished)
+                while (!loadingFinished && !cloadingFinished)
                 {
                     Application.DoEvents();
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -646,8 +710,10 @@ namespace AirdropBot
             return "";
         }
 
+
         private static string SuppressCookiePersistence()
         {
+
             int flag = INTERNET_SUPPRESS_COOKIE_PERSIST;
             try
             {
@@ -734,7 +800,7 @@ namespace AirdropBot
                 {
                     result = result.Replace(ItemMatch.ToString(), localVariables[token]);
                 }
-                if(token=="Clipboard")
+                if (token == "Clipboard")
                 {
                     result = result.Replace(ItemMatch.ToString(), Clipboard.GetText());
                 }
@@ -1146,6 +1212,11 @@ namespace AirdropBot
         private void telegramUseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserTgUser}";
+
+        }
+
+        private void ContentPanel_Paint(object sender, PaintEventArgs e)
+        {
 
         }
     }
