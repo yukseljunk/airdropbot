@@ -405,7 +405,7 @@ namespace AirdropBot
                 int.TryParse(node.Attributes["y"].Value, out y);
 
             }
-            MouseOperations.SetCursorPosition(this.Left + browser.Left + x, this.Top + browser.Top + y);
+            MouseOperations.SetCursorPosition(this.Left + ContentPanel.Left + x, this.Top + ContentPanel.Top + y);
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
 
@@ -670,12 +670,14 @@ namespace AirdropBot
 
             var useProxyAttr = node.Attributes["proxy"];
             var proxy = "";
+            var c_proxy = "";
             if (useProxyAttr != null)
             {
                 proxy = ReplaceTokens(useProxyAttr.Value);
-
+                
                 if (Regex.IsMatch(proxy, @"\d+:\d+"))
                 {
+                    c_proxy = proxy;
                     WinInetHelper.EndBrowserSession();
                     WinInetHelper.SupressCookiePersist();
                     Thread.Sleep(1000);
@@ -689,7 +691,7 @@ namespace AirdropBot
             browser.DocumentCompleted += browser_document_completed;
             try
             {
-                CreateCBrowser(node.Attributes["url"].Value, proxy);
+                CreateCBrowser(node.Attributes["url"].Value, c_proxy);
 
                 browser.Navigate(node.Attributes["url"].Value);
                 Stopwatch sw = new Stopwatch();
