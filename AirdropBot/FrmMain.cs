@@ -287,7 +287,14 @@ namespace AirdropBot
                 {
                     commandResult = InfoCommand(node);
                 }
-
+                if (command == "sendkey")
+                {
+                    commandResult = SendKeyCommand(node);
+                }
+                if (command == "bringtofront")
+                {
+                    commandResult = BringToFrontCommand(node);
+                }
                 if (commandResult != "")
                 {
                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
@@ -297,6 +304,23 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string BringToFrontCommand(XmlNode node)
+        {
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = FormWindowState.Maximized;
+            return "";
+        }
+
+        private string SendKeyCommand(XmlNode node)
+        {
+
+            var xnode = node.Attributes["value"];
+            if (xnode == null) return "";
+            SendKeys.Send(ReplaceTokens(xnode.Value));
+            return "";
         }
 
         private string InfoCommand(XmlNode node)
@@ -460,8 +484,18 @@ namespace AirdropBot
             {
                 waitsecs = int.Parse(node.Attributes["for"].Value);
             }
-            Thread.Sleep(1000 * waitsecs);
-            return "";
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (true)
+            {
+                Application.DoEvents();
+                if (sw.ElapsedMilliseconds >= waitsecs * 1000)
+                {
+                    return "";
+
+                }
+            }
         }
 
         private string ClickCommand(XmlNode node)
@@ -699,6 +733,10 @@ namespace AirdropBot
                 if (localVariables.ContainsKey(token))
                 {
                     result = result.Replace(ItemMatch.ToString(), localVariables[token]);
+                }
+                if(token=="Clipboard")
+                {
+                    result = result.Replace(ItemMatch.ToString(), Clipboard.GetText());
                 }
             }
             return result;
@@ -1084,7 +1122,31 @@ namespace AirdropBot
         {
             // var xnode = node.Attributes["x"];
             txtScenario.SelectedText = "<info value=\"${Variable}\"/>";
-           
+
+        }
+
+        private void sendKeysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<sendkey value=\"\"/>";
+
+        }
+
+        private void clipboardValueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${Clipboard}";
+
+        }
+
+        private void bringWindowFronToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<bringtofront/>";
+
+        }
+
+        private void telegramUseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTgUser}";
+
         }
     }
 }
