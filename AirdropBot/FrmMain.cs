@@ -351,7 +351,7 @@ namespace AirdropBot
 
         private void cbrowser_initalize(object sender, IsBrowserInitializedChangedEventArgs e)
         {
-            if (e.IsBrowserInitialized)
+            if (e.IsBrowserInitialized && cproxy!="" && cproxy!=":")
             {
                 Cef.UIThreadTaskFactory.StartNew(delegate
                 {
@@ -713,6 +713,7 @@ namespace AirdropBot
 
         private static string SuppressCookiePersistence()
         {
+            Cef.GetGlobalCookieManager().DeleteCookies("", "");
 
             int flag = INTERNET_SUPPRESS_COOKIE_PERSIST;
             try
@@ -1121,7 +1122,7 @@ namespace AirdropBot
 
         private void clearCookiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<clearcookies/>";
+            txtScenario.SelectedText = "<navigate url=\"about:blank\"/><clearcookies/>";
 
         }
 
