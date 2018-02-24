@@ -303,7 +303,7 @@ namespace AirdropBot
                 }
                 if (commandResult != "")
                 {
-                    // MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
+                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
                     stopped = true;
                     break;
                 }
@@ -327,7 +327,6 @@ namespace AirdropBot
             {
                 Dock = DockStyle.Fill
             };
-
             ContentPanel.Controls.Add(cbrowser);
             cbrowser.IsBrowserInitializedChanged += cbrowser_initalize;
 
@@ -646,10 +645,7 @@ namespace AirdropBot
         {
             var value = node.Attributes["value"];
             if (value == null) return "No value is defined!";
-
             return SetCElement(node, ReplaceTokens(value.Value));
-
-
         }
         private int browsertimeoutSecs = 60;
 
@@ -794,22 +790,22 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null)
             {
-                string scr = string.Format("function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}} getElementByXpath(\"{0}\").value =\"{1}\"; ", xpath.Value, newValue);
-
-                cbrowser.ExecuteScriptAsync(scr);
-                /*                //string script = string.Format("document.getElementById('{0}').value;", id.Value);
-                                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                string scr = string.Format("function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; getElementByXpath(\"{0}\").value =\"{1}\";}} x(); ", xpath.Value, newValue);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                                 {
                                     var response = x.Result;
 
                                     if (response.Success && response.Result != null)
                                     {
-                                        MessageBox.Show(response.Result.ToString());
+                                        resp = response.Result.ToString();
                                         //startDate is the value of a HTML element.
                                     }
-                                });*/
+                                }).Wait();
+
+                return resp;
             }
-            return "";
+            return "Xpath not defined!";
         }
 
         private string ReplaceTokens(string value)
@@ -1241,6 +1237,11 @@ namespace AirdropBot
         private void ContentPanel_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void showDevToolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            cbrowser.ShowDevTools();
         }
     }
 }
