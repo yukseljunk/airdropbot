@@ -559,34 +559,30 @@ namespace AirdropBot
 
         private string ClickCommand(XmlNode node)
         {
-            var element = GetElement(node, new List<string>() { "tag", "param", "what", "waitforbrowser", "innertext", "regex" });
-            if (element != null)
+            //buradayiz
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null && xpath.Value != "")
             {
-                var wait4browser = node.Attributes["waitforbrowser"] != null &&
-                                   node.Attributes["waitforbrowser"].Value == "true";
-                if (wait4browser)
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click(); }} x(); ", xpath.Value, FindXPathScript);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
-                    loadingFinished = false;
-                    browser.DocumentCompleted += browser_document_completed;
-                }
-                element.InvokeMember("click");
-                if (wait4browser)
-                {
+                    var response = x.Result;
 
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    while (!loadingFinished)
+                    if (response.Success && response.Result != null)
                     {
-                        Application.DoEvents();
-                        if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
-                        {
-                            return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
-                        }
+                        resp = response.Result.ToString();
+                        //startDate is the value of a HTML element.
                     }
+                }).Wait();
+
+                if (resp == "UNDEF")
+                {
+                    return "Element cannot be found!";
                 }
-                return "";
+                return resp;
             }
-            return "Element not found!";
+            return "XPath not specified!";
         }
 
         private string GetCommand(XmlNode node)
@@ -594,8 +590,15 @@ namespace AirdropBot
             var param = node.Attributes["param"];
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
-            if (param == null || what == null) return "Param and what is not defined!";
+            var xpath = node.Attributes["xpath"];
+         
+            if (param == null || what == null || xpath==null) return "Param or what or xpath is not defined!";
+            if (param.Value == ""|| what.Value == ""|| xpath.Value == "") return "Param or what or xpath is empty!";
             var result = GetCElement(node);
+            if (result == "UNDEF")
+            {
+                return "Element cannot be found!";
+            }
 
             if (regex != null && regex.Value != "")
             {
@@ -771,7 +774,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return '-1'; return getElementByXpath(\"{0}\").{2}; }} x(); ", xpath.Value, FindXPathScript, what.Value);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", xpath.Value, FindXPathScript, what.Value);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -787,7 +790,7 @@ namespace AirdropBot
                 return resp;
 
             }
-            return "-1";
+            return "NOTFOUND";
         }
 
         private string SetCElement(XmlNode node, string newValue)
