@@ -303,7 +303,7 @@ namespace AirdropBot
                 }
                 if (commandResult != "")
                 {
-                    MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
+                    // MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
                     stopped = true;
                     break;
                 }
@@ -351,7 +351,7 @@ namespace AirdropBot
 
         private void cbrowser_initalize(object sender, IsBrowserInitializedChangedEventArgs e)
         {
-            if (e.IsBrowserInitialized && cproxy!="" && cproxy!=":")
+            if (e.IsBrowserInitialized && cproxy != "" && cproxy != ":")
             {
                 Cef.UIThreadTaskFactory.StartNew(delegate
                 {
@@ -646,13 +646,10 @@ namespace AirdropBot
         {
             var value = node.Attributes["value"];
             if (value == null) return "No value is defined!";
-            HtmlElement element = GetElement(node);
-            if (element != null)
-            {
-                element.SetAttribute("value", ReplaceTokens(value.Value));
-                return "";
-            }
-            return "Element cannot be found!";
+
+            return SetCElement(node, ReplaceTokens(value.Value));
+
+
         }
         private int browsertimeoutSecs = 60;
 
@@ -674,7 +671,7 @@ namespace AirdropBot
             if (useProxyAttr != null)
             {
                 proxy = ReplaceTokens(useProxyAttr.Value);
-                
+
                 if (Regex.IsMatch(proxy, @"\d+:\d+"))
                 {
                     c_proxy = proxy;
@@ -790,6 +787,29 @@ namespace AirdropBot
             }
             return null;
 
+        }
+
+        private string SetCElement(XmlNode node, string newValue)
+        {
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null)
+            {
+                string scr = string.Format("function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}} getElementByXpath(\"{0}\").value =\"{1}\"; ", xpath.Value, newValue);
+
+                cbrowser.ExecuteScriptAsync(scr);
+                /*                //string script = string.Format("document.getElementById('{0}').value;", id.Value);
+                                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                                {
+                                    var response = x.Result;
+
+                                    if (response.Success && response.Result != null)
+                                    {
+                                        MessageBox.Show(response.Result.ToString());
+                                        //startDate is the value of a HTML element.
+                                    }
+                                });*/
+            }
+            return "";
         }
 
         private string ReplaceTokens(string value)
@@ -957,12 +977,12 @@ namespace AirdropBot
 
         private void setFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<set value=\"\" id=\"\" name=\"\" class=\"\" tag=\"\"/>";
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"\"/>";
         }
 
         private void getFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" id=\"\" name=\"\" regex=\"\" class=\"\" tag=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
 
         }
 
