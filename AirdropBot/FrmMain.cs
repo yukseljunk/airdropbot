@@ -157,26 +157,7 @@ namespace AirdropBot
 
         }
 
-        private bool gmailbotrefreshed = false;
-        private void browser_document_completed(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            if (e.Url.AbsolutePath != (sender as WebBrowser).Url.AbsolutePath)
-                return;
-            Debug.WriteLine("loadingfinished " + DateTime.Now.ToString("hh:mm:ss"));
-            loadingFinished = true;
-            HtmlDocument doc = browser.Document;
-            if (!gmailbotrefreshed && e.Url.ToString().ToLower().Contains(GMAILBOT_OUTPUT.Replace("\\", "/")))
-            {
-                browser.Refresh();
-                Thread.Sleep(1500);
-                browser.Refresh();
-                Thread.Sleep(1500);
-                browser.Refresh();
-                gmailbotrefreshed = true;
-            }
 
-
-        }
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
@@ -187,32 +168,13 @@ namespace AirdropBot
             btnStop.Enabled = false;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            WBEmulator.SetBrowserEmulationVersion();
-            Thread.Sleep(2000);
 
-            browser.Navigate("https://stackoverflow.com/questions/18808990/get-current-webbrowser-dom-as-html");
-            browser.DocumentCompleted += browser_document_completed;
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnFindInEmail_Click(object sender, EventArgs e)
-        {
-            var content = File.ReadAllText(GMAILBOT_OUTPUT);
-
-        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private bool loadingFinished = false;
         private bool cloadingFinished = false;
 
         private bool stopped = false;
@@ -273,6 +235,11 @@ namespace AirdropBot
                     commandResult = ClickCommand(node);
                 }
 
+                if (command == "submit")
+                {
+                    commandResult = SubmitCommand(node);
+                }
+
                 if (command == "wait")
                 {
                     commandResult = WaitCommand(node);
@@ -311,6 +278,25 @@ namespace AirdropBot
             }
 
         }
+
+        private string SubmitCommand(XmlNode node)
+        {
+            cloadingFinished = false;
+            var el = GetCSubmit(node);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (!cloadingFinished)
+            {
+                Application.DoEvents();
+                if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
+                {
+                    return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
+                }
+            }
+            return el;
+        }
+
         public void Configure(string proxy)
         {
             CefSettings cfsettings = new CefSettings();
@@ -524,13 +510,7 @@ namespace AirdropBot
                 StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value) + " Find \"" + search.Value +
                                "\" \"" + GMAILBOT_OUTPUT + "\" " + maxtries.ToString());
 
-                gmailbotrefreshed = false;
-                browser.Navigate("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
-                browser.DocumentCompleted += browser_document_completed;
-                while (!gmailbotrefreshed)
-                {
-                    Application.DoEvents();
-                }
+                cbrowser.Load("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
             }
             return "";
         }
@@ -559,11 +539,67 @@ namespace AirdropBot
 
         private string ClickCommand(XmlNode node)
         {
+            var wait4browser = node.Attributes["waitforbrowser"] != null &&
+                               node.Attributes["waitforbrowser"].Value == "true";
+            if (wait4browser)
+            {
+                cloadingFinished = false;
+            }
+            var el = GetCClick(node);
+
+            if (wait4browser)
+            {
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (!cloadingFinished)
+                {
+                    Application.DoEvents();
+                    if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
+                    {
+                        return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
+                    }
+                }
+            }
+            return el;
+        }
+        
+        private string GetCSubmit(XmlNode node)
+        {
             //buradayiz
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click(); }} x(); ", xpath.Value, FindXPathScript);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").submit();}} x(); ", xpath.Value, FindXPathScript);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                {
+                    var response = x.Result;
+
+                    if (response.Success && response.Result != null)
+                    {
+                        resp = response.Result.ToString();
+                        //startDate is the value of a HTML element.
+                    }
+                }).Wait();
+
+                if (resp == "UNDEF")
+                {
+                    return "Element cannot be found!";
+                }
+                return resp;
+            }
+            return "XPath not specified!";
+        }
+
+
+        private string GetCClick(XmlNode node)
+        {
+            //buradayiz
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null && xpath.Value != "")
+            {
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click();}} x(); ", xpath.Value, FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -591,9 +627,9 @@ namespace AirdropBot
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
             var xpath = node.Attributes["xpath"];
-         
-            if (param == null || what == null || xpath==null) return "Param or what or xpath is not defined!";
-            if (param.Value == ""|| what.Value == ""|| xpath.Value == "") return "Param or what or xpath is empty!";
+
+            if (param == null || what == null || xpath == null) return "Param or what or xpath is not defined!";
+            if (param.Value == "" || what.Value == "" || xpath.Value == "") return "Param or what or xpath is empty!";
             var result = GetCElement(node);
             if (result == "UNDEF")
             {
@@ -632,15 +668,6 @@ namespace AirdropBot
 
         private string NavigateCommand(XmlNode node)
         {
-            object obj = browser.ActiveXInstance;
-            IOleObject oc = obj as IOleObject;
-            oc.SetClientSite(this as IOleClientSite);
-
-            WinInetHelper.EndBrowserSession();
-            WinInetHelper.SupressCookiePersist();
-            Thread.Sleep(1000);
-            SetProxyServer(null);
-            Thread.Sleep(1000);
 
             var useProxyAttr = node.Attributes["proxy"];
             var proxy = "";
@@ -652,25 +679,17 @@ namespace AirdropBot
                 if (Regex.IsMatch(proxy, @"\d+:\d+"))
                 {
                     c_proxy = proxy;
-                    WinInetHelper.EndBrowserSession();
-                    WinInetHelper.SupressCookiePersist();
-                    Thread.Sleep(1000);
-                    SetProxyServer(proxy);
-                    Thread.Sleep(100);
                 }
             }
 
-            loadingFinished = false;
             cloadingFinished = false;
-            browser.DocumentCompleted += browser_document_completed;
             try
             {
                 CreateCBrowser(node.Attributes["url"].Value, c_proxy);
 
-                browser.Navigate(node.Attributes["url"].Value);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                while (!loadingFinished && !cloadingFinished)
+                while (!cloadingFinished)
                 {
                     Application.DoEvents();
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -992,7 +1011,7 @@ namespace AirdropBot
 
         private void clickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<click id=\"\" name=\"\" class=\"\" tag=\"\" waitforbrowser=\"true\"/>";
+            txtScenario.SelectedText = "<click xpath=\"\" waitforbrowser=\"true\"/>";
 
         }
 
@@ -1250,6 +1269,12 @@ namespace AirdropBot
         private void showDevToolsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cbrowser.ShowDevTools();
+        }
+
+        private void submitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<submit xpath=\"\"/>";
+
         }
     }
 }
