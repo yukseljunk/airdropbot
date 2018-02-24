@@ -123,10 +123,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{62a0ed0f-1e02-4e3f-9b27-1c92c8182844}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="GmailBot\GmailBot.csproj">
       <Project>{dcc8d69a-5689-4eff-a272-978b45d4bb5d}</Project>
       <Name>GmailBot</Name>

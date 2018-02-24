@@ -10,14 +10,13 @@ using System.Windows.Forms;
 using System.Xml;
 using CefSharp;
 using CefSharp.WinForms;
-using Common;
 using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
 {
     /// <summary>
-    /// later: automize firefox, proxy and cache etc
-    /// 
+    /// gmail calismiyor
+    /// stop process de loadingwait lerde cikar
     /// </summary>
     public partial class FrmMain : Form
     {
@@ -32,7 +31,7 @@ namespace AirdropBot
 
         private Dictionary<string, User> Users { get; set; }
         private User ActiveUser { get; set; }
-        
+
 
         private void ParseCsvFile(string fileName)
         {
@@ -120,10 +119,6 @@ namespace AirdropBot
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            if (!WBEmulator.IsBrowserEmulationSet())
-            {
-                WBEmulator.SetBrowserEmulationVersion();
-            }
             btnStop.Enabled = false;
         }
 
@@ -468,7 +463,7 @@ namespace AirdropBot
                 StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value) + " Find \"" + search.Value +
                                "\" \"" + GMAILBOT_OUTPUT + "\" " + maxtries.ToString());
 
-                cbrowser.Load("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid());
+                CreateCBrowser("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid(), "");
             }
             return "";
         }
@@ -521,7 +516,7 @@ namespace AirdropBot
             }
             return el;
         }
-        
+
         private string GetCSubmit(XmlNode node)
         {
             //buradayiz
@@ -672,7 +667,7 @@ namespace AirdropBot
         }
 
 
-       
+
         private string FindXPathScript =
             "function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}}";
         private string GetCElement(XmlNode node)
@@ -751,7 +746,7 @@ namespace AirdropBot
         }
 
 
-        
+
 
         private void openUsersFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
