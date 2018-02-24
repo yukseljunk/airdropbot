@@ -105,6 +105,7 @@
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
             this.strongPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.strongPasswordWithPunctuationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -245,7 +246,8 @@
             this.clearCookiesToolStripMenuItem,
             this.scrollToolStripMenuItem,
             this.snapToolStripMenuItem,
-            this.sendKeysToolStripMenuItem});
+            this.sendKeysToolStripMenuItem,
+            this.focusToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
             this.navigateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
@@ -721,6 +723,13 @@
             this.strongPasswordWithPunctuationToolStripMenuItem.Text = "Strong Password with Punctuation";
             this.strongPasswordWithPunctuationToolStripMenuItem.Click += new System.EventHandler(this.strongPasswordWithPunctuationToolStripMenuItem_Click);
             // 
+            // focusToolStripMenuItem
+            // 
+            this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
+            this.focusToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.focusToolStripMenuItem.Text = "Focus";
+            this.focusToolStripMenuItem.Click += new System.EventHandler(this.focusToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -826,6 +835,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
         private System.Windows.Forms.ToolStripMenuItem strongPasswordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem strongPasswordWithPunctuationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
     }
 }
 

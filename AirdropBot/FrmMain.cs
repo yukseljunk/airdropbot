@@ -210,7 +210,10 @@ namespace AirdropBot
                 }
                 if (command == "telegram")
                 {
+                    this.WindowState = FormWindowState.Minimized;
                     commandResult = TelegramCommand(node);
+                    this.WindowState = FormWindowState.Maximized;
+
                 }
                 if (command == "info")
                 {
@@ -224,6 +227,11 @@ namespace AirdropBot
                 {
                     commandResult = BringToFrontCommand(node);
                 }
+                if(command=="focus")
+                {
+                    commandResult = FocusCommand(node);
+      
+                }
                 if (commandResult != "")
                 {
                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
@@ -235,6 +243,33 @@ namespace AirdropBot
 
         }
 
+        private string FocusCommand(XmlNode node)
+        {
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null && xpath.Value != "")
+            {
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").focus();}} x(); ", xpath.Value, FindXPathScript);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                {
+                    var response = x.Result;
+
+                    if (response.Success && response.Result != null)
+                    {
+                        resp = response.Result.ToString();
+                        //startDate is the value of a HTML element.
+                    }
+                }).Wait();
+
+                if (resp == "UNDEF")
+                {
+                    return "Element cannot be found!";
+                }
+                return resp;
+            }
+            return "XPath not specified!";
+        }
+
         private string SubmitCommand(XmlNode node)
         {
             cloadingFinished = false;
@@ -242,7 +277,8 @@ namespace AirdropBot
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (!cloadingFinished)
+            stopped = false;
+            while (!cloadingFinished && !stopped)
             {
                 Application.DoEvents();
                 if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -366,6 +402,7 @@ namespace AirdropBot
             return "";
         }
 
+
         private string TelegramCommand(XmlNode node)
         {
             var user = node.Attributes["user"];
@@ -373,7 +410,7 @@ namespace AirdropBot
             var group = node.Attributes["group"];
             var message = node.Attributes["message"];
             if (user == null || password == null) return "User/pass not defined";
-
+            
             try
             {
                 //close all instances of telegram first
@@ -393,7 +430,7 @@ namespace AirdropBot
             startInfo.Arguments =
                 string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
                               ReplaceTokens(user.Value),
-                              @group == null ? "" : "-- tg://resolve/?domain=" + ReplaceTokens(@group.Value));
+                              @group == null ? "" : "-- tg://resolve/?domain=" + ReplaceTokens(@group.Value).Replace("?","&"));
             process.StartInfo = startInfo;
             process.Start();
             Thread.Sleep(2000);
@@ -428,9 +465,14 @@ namespace AirdropBot
                 catch
                 {
                 }
-                Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
-                                              mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));
-                mainWindow.Mouse.Location = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
+                /*Process p = Process.GetProcessesByName("Telegram")[0];
+
+                SetForegroundWindow(p.Handle); access denied*/ 
+                /*Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
+                                              mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));*/
+                var pointToClick = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
+                
+                mainWindow.Mouse.Location = pointToClick;
                 mainWindow.Mouse.Click();
                 if (message != null && message.Value.Trim() != "")
                 {
@@ -442,6 +484,7 @@ namespace AirdropBot
             }
             return "";
         }
+
 
         private string GmailCommand(XmlNode node)
         {
@@ -507,7 +550,8 @@ namespace AirdropBot
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                while (!cloadingFinished)
+                stopped = false;
+                while (!cloadingFinished && !stopped)
                 {
                     Application.DoEvents();
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -521,7 +565,6 @@ namespace AirdropBot
 
         private string GetCSubmit(XmlNode node)
         {
-            //buradayiz
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
@@ -644,7 +687,8 @@ namespace AirdropBot
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                while (!cloadingFinished)
+                stopped = false;
+                while (!cloadingFinished && !stopped)
                 {
                     Application.DoEvents();
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -1103,6 +1147,12 @@ namespace AirdropBot
         private void strongPasswordWithPunctuationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserStrongPwdWithSign}";
+
+        }
+
+        private void focusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<focus xpath=\"\"/>";
 
         }
     }
