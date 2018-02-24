@@ -95,7 +95,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.openScenarioFile = new System.Windows.Forms.OpenFileDialog();
             this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
-            this.browser = new System.Windows.Forms.WebBrowser();
             this.btnRunRest = new System.Windows.Forms.Button();
             this.lstUsers = new System.Windows.Forms.CheckedListBox();
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
@@ -621,17 +620,6 @@
             this.saveScenarioFile.Filter = "Scenario Files|*.xml";
             this.saveScenarioFile.RestoreDirectory = true;
             // 
-            // browser
-            // 
-            this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.browser.Location = new System.Drawing.Point(410, 89);
-            this.browser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.browser.Name = "browser";
-            this.browser.ScriptErrorsSuppressed = true;
-            this.browser.Size = new System.Drawing.Size(746, 268);
-            this.browser.TabIndex = 4;
-            // 
             // btnRunRest
             // 
             this.btnRunRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -695,9 +683,9 @@
             this.ContentPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ContentPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ContentPanel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.ContentPanel.Location = new System.Drawing.Point(410, 383);
+            this.ContentPanel.Location = new System.Drawing.Point(410, 65);
             this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(746, 254);
+            this.ContentPanel.Size = new System.Drawing.Size(746, 572);
             this.ContentPanel.TabIndex = 17;
             this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
             // 
@@ -722,7 +710,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnApplyScenario);
             this.Controls.Add(this.txtScenario);
-            this.Controls.Add(this.browser);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -740,7 +727,6 @@
 
         private System.Windows.Forms.OpenFileDialog openCsvFile;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.WebBrowser browser;
         private System.Windows.Forms.TextBox txtScenario;
         private System.Windows.Forms.Button btnApplyScenario;
         private System.Windows.Forms.MenuStrip menuStrip1;

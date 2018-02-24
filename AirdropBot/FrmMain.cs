@@ -19,61 +19,20 @@ namespace AirdropBot
     /// later: automize firefox, proxy and cache etc
     /// 
     /// </summary>
-    public partial class FrmMain : Form, IOleClientSite, IServiceProvider, IAuthenticate
+    public partial class FrmMain : Form
     {
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern bool InternetSetOption(IntPtr hInternet, int dwOption,
-            IntPtr lpBuffer, int lpdwBufferLength);
-        private Guid IID_IAuthenticate = new Guid("79eac9d0-baf9-11ce-8c82-00aa004ba90b");
-        private const int INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011);
-        private const int S_OK = unchecked((int)0x00000000);
-        private const int INTERNET_OPTION_PROXY = 38;
-        private const int INTERNET_OPEN_TYPE_DIRECT = 1;
-        private const int INTERNET_OPEN_TYPE_PROXY = 3;
-        private string _currentUsername;
-        private string _currentPassword;
-
         private ChromiumWebBrowser cbrowser;
 
-
         private Dictionary<string, string> localVariables = new Dictionary<string, string>();
-        private Dictionary<string, string> attrTranslations = new Dictionary<string, string>() { { "for", "htmlfor" }, { "class", "className" } };
 
         public FrmMain()
         {
             InitializeComponent();
         }
 
-        private void SetProxyServer(string proxy)
-        {
-            //Create structure
-            INTERNET_PROXY_INFO proxyInfo = new INTERNET_PROXY_INFO();
-
-            if (proxy == null)
-            {
-                proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
-            }
-            else
-            {
-                proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_PROXY;
-                proxyInfo.proxy = Marshal.StringToHGlobalAnsi(proxy);
-                proxyInfo.proxyBypass = Marshal.StringToHGlobalAnsi("local");
-            }
-
-            // Allocate memory
-            IntPtr proxyInfoPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(proxyInfo));
-
-            // Convert structure to IntPtr
-            Marshal.StructureToPtr(proxyInfo, proxyInfoPtr, true);
-            bool returnValue = InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PROXY,
-                proxyInfoPtr, Marshal.SizeOf(proxyInfo));
-        }
         private Dictionary<string, User> Users { get; set; }
         private User ActiveUser { get; set; }
-        private void btnOpenInputFile_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void ParseCsvFile(string fileName)
         {
@@ -406,7 +365,6 @@ namespace AirdropBot
                 int.TryParse(node.Attributes["height"].Value, out height);
             }
 
-            browser.Document.Window.ScrollTo(0, height);
             cbrowser.ExecuteScriptAsync(String.Format("window.scrollBy({0}, {1});", 0, height));
             return "";
         }
@@ -710,81 +668,11 @@ namespace AirdropBot
         {
             Cef.GetGlobalCookieManager().DeleteCookies("", "");
 
-            int flag = INTERNET_SUPPRESS_COOKIE_PERSIST;
-            try
-            {
-                if (!InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SUPPRESS_BEHAVIOR, ref flag, sizeof(int)))
-                {
-                    var ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                    throw ex;
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.ToString();
-            }
             return "";
         }
 
-        const int INTERNET_OPTION_SUPPRESS_BEHAVIOR = 81;
-        const int INTERNET_SUPPRESS_COOKIE_PERSIST = 3;
 
-        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, ref int flag, int dwBufferLength);
-
-        private HtmlElement GetElement(XmlNode node, List<string> discardAttrs = null)
-        {
-            var id = node.Attributes["id"];
-            if (id != null)
-            {
-                return browser.Document.GetElementById(id.Value);
-            }
-            var defaultDiscardedAttrs = new List<string>() { "value", "tag", "param", "regex", "what", "innertext" };
-            if (discardAttrs == null)
-            {
-                discardAttrs = defaultDiscardedAttrs;
-            }
-            var tag = node.Attributes["tag"];
-            var innertextcriterion = node.Attributes["innertext"];
-            var attrs = new Dictionary<string, string>();
-            foreach (XmlAttribute attr in node.Attributes)
-            {
-                if (discardAttrs.Contains(attr.Name.ToLower())) continue;
-                attrs.Add(attr.Name, attr.Value);
-            }
-            var allElements = browser.Document.All;
-            foreach (HtmlElement element in allElements)
-            {
-                var allSatisfied = true;
-                foreach (KeyValuePair<string, string> attr in attrs)
-                {
-                    var attrName = attr.Key;
-                    if (attrTranslations.ContainsKey(attrName)) attrName = attrTranslations[attrName];
-                    if (element.GetAttribute(attrName) != attr.Value)
-                    {
-                        allSatisfied = false;
-                        break;
-                    }
-                }
-
-                if (tag != null && !string.IsNullOrEmpty(tag.Value))
-                {
-                    allSatisfied = allSatisfied && (element.TagName.ToLower() == tag.Value);
-                }
-                if (innertextcriterion != null && !string.IsNullOrEmpty(innertextcriterion.Value) && element.InnerText != null)
-                {
-                    allSatisfied = allSatisfied && (element.InnerText.Trim() == innertextcriterion.Value.Trim());
-                }
-                if (allSatisfied)
-                {
-                    return element;
-                }
-
-            }
-            return null;
-
-        }
-
+       
         private string FindXPathScript =
             "function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}}";
         private string GetCElement(XmlNode node)
@@ -863,75 +751,7 @@ namespace AirdropBot
         }
 
 
-        #region IOleClientSite Members
-
-        public void SaveObject()
-        {
-            // TODO:  Add Form1.SaveObject implementation
-        }
-
-        public void GetMoniker(uint dwAssign, uint dwWhichMoniker, object ppmk)
-        {
-            // TODO:  Add Form1.GetMoniker implementation
-        }
-
-        public void GetContainer(object ppContainer)
-        {
-            ppContainer = this;
-        }
-
-        public void ShowObject()
-        {
-            // TODO:  Add Form1.ShowObject implementation
-        }
-
-        public void OnShowWindow(bool fShow)
-        {
-            // TODO:  Add Form1.OnShowWindow implementation
-        }
-
-        public void RequestNewObjectLayout()
-        {
-            // TODO:  Add Form1.RequestNewObjectLayout implementation
-        }
-
-        #endregion
-
-        #region IServiceProvider Members
-
-        public int QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject)
-        {
-            int nRet = guidService.CompareTo(IID_IAuthenticate);
-            if (nRet == 0)
-            {
-                nRet = riid.CompareTo(IID_IAuthenticate);
-                if (nRet == 0)
-                {
-                    ppvObject = Marshal.GetComInterfaceForObject(this, typeof(IAuthenticate));
-                    return S_OK;
-                }
-            }
-
-            ppvObject = new IntPtr();
-            return INET_E_DEFAULT_ACTION;
-        }
-
-        #endregion
-
-        #region IAuthenticate Members
-
-        public int Authenticate(ref IntPtr phwnd, ref IntPtr pszUsername, ref IntPtr pszPassword)
-        {
-            IntPtr sUser = Marshal.StringToCoTaskMemAuto(_currentUsername);
-            IntPtr sPassword = Marshal.StringToCoTaskMemAuto(_currentPassword);
-
-            pszUsername = sUser;
-            pszPassword = sPassword;
-            return S_OK;
-        }
-
-        #endregion
-
+        
 
         private void openUsersFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
