@@ -303,7 +303,7 @@ namespace AirdropBot
                 }
                 if (commandResult != "")
                 {
-                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
+                    MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
                     stopped = true;
                     break;
                 }
@@ -595,50 +595,28 @@ namespace AirdropBot
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
             if (param == null || what == null) return "Param and what is not defined!";
-            var element = GetElement(node);
-            if (element != null)
-            {
-                var result = "";
-                switch (what.Value.ToLower())
-                {
-                    case "value":
-                        result = element.GetAttribute("value");
-                        break;
-                    case "innertext":
-                        result = element.InnerText;
-                        break;
-                    case "outertext":
-                        result = element.OuterText;
-                        break;
-                    case "innerhtml":
-                        result = element.InnerHtml;
-                        break;
-                    case "outerhtml":
-                        result = element.OuterHtml;
-                        break;
-                }
+            var result = GetCElement(node);
 
-                if (regex != null && regex.Value != "")
+            if (regex != null && regex.Value != "")
+            {
+                var reg = new Regex(regex.Value);
+                var match = reg.Match(result);
+                if (match.Success)
                 {
-                    var reg = new Regex(regex.Value);
-                    var match = reg.Match(result);
-                    if (match.Success)
+                    if (match.Groups.Count > 1)
                     {
-                        if (match.Groups.Count > 1)
-                        {
-                            result = match.Groups[1].Value;
-                        }
+                        result = match.Groups[1].Value;
                     }
                 }
-
-                if (!localVariables.ContainsKey(param.Value))
-                {
-                    localVariables.Add(param.Value, result);
-                }
-                localVariables[param.Value] = result;
-                return "";
             }
-            return "Element cannot be found!";
+
+            if (!localVariables.ContainsKey(param.Value))
+            {
+                localVariables.Add(param.Value, result);
+            }
+            localVariables[param.Value] = result;
+            return "";
+
         }
 
         private string SetCommand(XmlNode node)
@@ -785,12 +763,39 @@ namespace AirdropBot
 
         }
 
+        private string FindXPathScript =
+            "function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}}";
+        private string GetCElement(XmlNode node)
+        {
+            var what = node.Attributes["what"];
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null && xpath.Value != "")
+            {
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return '-1'; return getElementByXpath(\"{0}\").{2}; }} x(); ", xpath.Value, FindXPathScript, what.Value);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                {
+                    var response = x.Result;
+
+                    if (response.Success && response.Result != null)
+                    {
+                        resp = response.Result.ToString();
+                        //startDate is the value of a HTML element.
+                    }
+                }).Wait();
+
+                return resp;
+
+            }
+            return "-1";
+        }
+
         private string SetCElement(XmlNode node, string newValue)
         {
             var xpath = node.Attributes["xpath"];
-            if (xpath != null)
+            if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; getElementByXpath(\"{0}\").value =\"{1}\";}} x(); ", xpath.Value, newValue);
+                string scr = string.Format("{2} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; getElementByXpath(\"{0}\").value =\"{1}\";}} x(); ", xpath.Value, newValue, FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                                 {
