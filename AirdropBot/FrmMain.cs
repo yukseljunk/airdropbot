@@ -39,7 +39,7 @@ namespace AirdropBot
             foreach (var content in contents.Skip(1))
             {
                 var fields = content.Split(new char[] { ';', ',' }, StringSplitOptions.None);
-                if (fields.Length < 30) continue;
+                if (fields.Length < 32) continue;
                 var user = new User()
                                {
                                    Name = fields[1],
@@ -65,7 +65,9 @@ namespace AirdropBot
                                    EthPrivateKey = fields[22],
                                    EthPass = fields[23],
                                    ProxyIp = fields[29],
-                                   ProxyPort = fields[30]
+                                   ProxyPort = fields[30],
+                                   StrongPassword = fields[31],
+                                   StrongPwdWithSign = fields[32]
 
                                };
 
@@ -1089,6 +1091,18 @@ namespace AirdropBot
         private void submitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<submit xpath=\"\"/>";
+
+        }
+
+        private void strongPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserStrongPassword}";
+
+        }
+
+        private void strongPasswordWithPunctuationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserStrongPwdWithSign}";
 
         }
     }

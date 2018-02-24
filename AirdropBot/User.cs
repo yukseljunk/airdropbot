@@ -39,7 +39,10 @@ namespace AirdropBot
 
         public string ProxyIp { get; set; }
         public string ProxyPort { get; set; }
-        
+
+        public string StrongPassword { get; set; }
+        public string StrongPwdWithSign { get; set; }
+
         public void FillToDictionary(Dictionary<string,string> dict)
         {
             foreach(PropertyInfo prop in this.GetType().GetProperties())
