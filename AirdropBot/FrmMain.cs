@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml;
 using CefSharp;
 using CefSharp.WinForms;
+using Microsoft.Win32;
 using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
@@ -227,10 +228,15 @@ namespace AirdropBot
                 {
                     commandResult = BringToFrontCommand(node);
                 }
-                if(command=="focus")
+                if (command == "focus")
                 {
                     commandResult = FocusCommand(node);
-      
+
+                }
+                if (command == "createtg")
+                {
+                    commandResult = CreateTgCommand(node);
+
                 }
                 if (commandResult != "")
                 {
@@ -241,6 +247,77 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string CreateTgCommand(XmlNode node)
+        {
+            //name, password
+            var name = node.Attributes["name"];
+            var password = node.Attributes["password"];
+            if (name == null || password == null) return "name/password not defined";
+            if (name.Value == "" || password.Value == "") return "name/password empty";
+            RunasAdmin("C:\\code\\scripts\\CreateUser.bat",
+                       string.Format("{0} {1}", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
+
+/*            RunasAdmin("net", string.Format("user {0} {1} /add", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
+            RunasAdmin("runas", string.Format("/env /profile /user:{0} cmd.exe", ReplaceTokens(name.Value)));
+            RunasAdmin("mkdir", string.Format("\"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
+            RunasAdmin("copy", string.Format("\"c:\\users\\yuksel\\appdata\\roaming\\Telegram Desktop\" \"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
+*/
+            /*
+             * sendkeys did not work here :(
+             Wait(5);
+
+            // Get a handle to the Calculator application. The window class
+            // and window name were obtained using the Spy++ tool.
+            IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\System32\runas.exe");
+
+            // Verify that Calculator is a running process.
+            if (runasHandle == IntPtr.Zero)
+            {
+                return "Runas.exe is not running.";
+            }
+
+            // Make Calculator the foreground application and send it 
+            // a set of calculations.
+            SetForegroundWindow(runasHandle);
+            SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");*/
+
+
+            return "";
+        }
+
+        /// <summary>
+        /// waits for secs, without sleeping
+        /// </summary>
+        /// <param name="secs"></param>
+        private static void Wait(int secs)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (true)
+            {
+                Application.DoEvents();
+                if (sw.ElapsedMilliseconds >= secs * 1000)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void RunasAdmin(string file, string args)
+        {
+            var process = new Process();
+            var startInfo = new ProcessStartInfo
+                                {
+                                    WindowStyle = ProcessWindowStyle.Normal,
+                                    FileName = file,
+                                    Arguments = args,
+                                    Verb = "runas"
+                                };
+
+            process.StartInfo = startInfo;
+            process.Start();
         }
 
         private string FocusCommand(XmlNode node)
@@ -408,9 +485,10 @@ namespace AirdropBot
             var user = node.Attributes["user"];
             var password = node.Attributes["pass"];
             var group = node.Attributes["group"];
+            var chat = node.Attributes["chat"];
             var message = node.Attributes["message"];
             if (user == null || password == null) return "User/pass not defined";
-            
+
             try
             {
                 //close all instances of telegram first
@@ -427,10 +505,22 @@ namespace AirdropBot
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
             startInfo.FileName = "runas";
+
+            //tg://join/?invite=AAAAAE7c308RYtaVAyyomw
+            var extraArgs = "";
+            if (group != null && group.Value != "")
+            {
+                extraArgs = "-- tg://resolve/?domain=" + ReplaceTokens(group.Value).Replace("?", "&");
+            }
+            if (chat != null && chat.Value != "")
+            {
+                extraArgs = "-- tg://join/?invite=" + ReplaceTokens(chat.Value).Replace("?", "&");
+            }
             startInfo.Arguments =
-                string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
-                              ReplaceTokens(user.Value),
-                              @group == null ? "" : "-- tg://resolve/?domain=" + ReplaceTokens(@group.Value).Replace("?","&"));
+            string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
+                  ReplaceTokens(user.Value),
+                  extraArgs);
+
             process.StartInfo = startInfo;
             process.Start();
             Thread.Sleep(2000);
@@ -467,11 +557,11 @@ namespace AirdropBot
                 }
                 /*Process p = Process.GetProcessesByName("Telegram")[0];
 
-                SetForegroundWindow(p.Handle); access denied*/ 
+                SetForegroundWindow(p.Handle); access denied*/
                 /*Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
                                               mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));*/
                 var pointToClick = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
-                
+
                 mainWindow.Mouse.Location = pointToClick;
                 mainWindow.Mouse.Click();
                 if (message != null && message.Value.Trim() != "")
@@ -1022,7 +1112,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" message=\"\"/>";
+            txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" chat=\"\" message=\"\"/>";
 
         }
 
@@ -1153,6 +1243,12 @@ namespace AirdropBot
         private void focusToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<focus xpath=\"\"/>";
+
+        }
+
+        private void createTelegramProfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<createtg name=\"\" password=\"\"/>";
 
         }
     }

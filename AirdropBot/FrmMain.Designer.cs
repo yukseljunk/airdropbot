@@ -53,6 +53,7 @@
             this.scrollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.snapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,6 +92,9 @@
             this.btcTalkProfileLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
             this.telegramUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
+            this.strongPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.strongPasswordWithPunctuationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clipboardValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
@@ -102,10 +106,7 @@
             this.llUncheckAll = new System.Windows.Forms.LinkLabel();
             this.btnStop = new System.Windows.Forms.Button();
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
-            this.strongPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.strongPasswordWithPunctuationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createTelegramProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -230,7 +231,8 @@
             this.getFieldToolStripMenuItem,
             this.waitToolStripMenuItem,
             this.inoToolStripMenuItem,
-            this.bringWindowFronToolStripMenuItem});
+            this.bringWindowFronToolStripMenuItem,
+            this.createTelegramProfileToolStripMenuItem});
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.commandsToolStripMenuItem.Text = "Commands";
@@ -249,7 +251,7 @@
             this.sendKeysToolStripMenuItem,
             this.focusToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
-            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
             this.navigateToolStripMenuItem.Click += new System.EventHandler(this.navigateToolStripMenuItem_Click);
             // 
@@ -316,38 +318,45 @@
             this.sendKeysToolStripMenuItem.Text = "SendKeys";
             this.sendKeysToolStripMenuItem.Click += new System.EventHandler(this.sendKeysToolStripMenuItem_Click);
             // 
+            // focusToolStripMenuItem
+            // 
+            this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
+            this.focusToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.focusToolStripMenuItem.Text = "Focus";
+            this.focusToolStripMenuItem.Click += new System.EventHandler(this.focusToolStripMenuItem_Click);
+            // 
             // setFieldToolStripMenuItem
             // 
             this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
-            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.setFieldToolStripMenuItem.Text = "Gmail";
             this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
             // 
             // getFieldToolStripMenuItem
             // 
             this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
-            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.getFieldToolStripMenuItem.Text = "Telegram";
             this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
             // 
             // waitToolStripMenuItem
             // 
             this.waitToolStripMenuItem.Name = "waitToolStripMenuItem";
-            this.waitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.waitToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.waitToolStripMenuItem.Text = "Wait";
             this.waitToolStripMenuItem.Click += new System.EventHandler(this.waitToolStripMenuItem_Click);
             // 
             // inoToolStripMenuItem
             // 
             this.inoToolStripMenuItem.Name = "inoToolStripMenuItem";
-            this.inoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.inoToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.inoToolStripMenuItem.Text = "Info";
             this.inoToolStripMenuItem.Click += new System.EventHandler(this.inoToolStripMenuItem_Click);
             // 
             // bringWindowFronToolStripMenuItem
             // 
             this.bringWindowFronToolStripMenuItem.Name = "bringWindowFronToolStripMenuItem";
-            this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.bringWindowFronToolStripMenuItem.Text = "Bring Window Front";
             this.bringWindowFronToolStripMenuItem.Click += new System.EventHandler(this.bringWindowFronToolStripMenuItem_Click);
             // 
@@ -601,6 +610,25 @@
             this.telegramUseToolStripMenuItem.Text = "Telegram User";
             this.telegramUseToolStripMenuItem.Click += new System.EventHandler(this.telegramUseToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem11
+            // 
+            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(253, 6);
+            // 
+            // strongPasswordToolStripMenuItem
+            // 
+            this.strongPasswordToolStripMenuItem.Name = "strongPasswordToolStripMenuItem";
+            this.strongPasswordToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.strongPasswordToolStripMenuItem.Text = "Strong Password";
+            this.strongPasswordToolStripMenuItem.Click += new System.EventHandler(this.strongPasswordToolStripMenuItem_Click);
+            // 
+            // strongPasswordWithPunctuationToolStripMenuItem
+            // 
+            this.strongPasswordWithPunctuationToolStripMenuItem.Name = "strongPasswordWithPunctuationToolStripMenuItem";
+            this.strongPasswordWithPunctuationToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.strongPasswordWithPunctuationToolStripMenuItem.Text = "Strong Password with Punctuation";
+            this.strongPasswordWithPunctuationToolStripMenuItem.Click += new System.EventHandler(this.strongPasswordWithPunctuationToolStripMenuItem_Click);
+            // 
             // variableToolStripMenuItem
             // 
             this.variableToolStripMenuItem.Name = "variableToolStripMenuItem";
@@ -704,31 +732,12 @@
             this.ContentPanel.TabIndex = 17;
             this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
             // 
-            // toolStripMenuItem11
+            // createTelegramProfileToolStripMenuItem
             // 
-            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-            this.toolStripMenuItem11.Size = new System.Drawing.Size(253, 6);
-            // 
-            // strongPasswordToolStripMenuItem
-            // 
-            this.strongPasswordToolStripMenuItem.Name = "strongPasswordToolStripMenuItem";
-            this.strongPasswordToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.strongPasswordToolStripMenuItem.Text = "Strong Password";
-            this.strongPasswordToolStripMenuItem.Click += new System.EventHandler(this.strongPasswordToolStripMenuItem_Click);
-            // 
-            // strongPasswordWithPunctuationToolStripMenuItem
-            // 
-            this.strongPasswordWithPunctuationToolStripMenuItem.Name = "strongPasswordWithPunctuationToolStripMenuItem";
-            this.strongPasswordWithPunctuationToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.strongPasswordWithPunctuationToolStripMenuItem.Text = "Strong Password with Punctuation";
-            this.strongPasswordWithPunctuationToolStripMenuItem.Click += new System.EventHandler(this.strongPasswordWithPunctuationToolStripMenuItem_Click);
-            // 
-            // focusToolStripMenuItem
-            // 
-            this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
-            this.focusToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.focusToolStripMenuItem.Text = "Focus";
-            this.focusToolStripMenuItem.Click += new System.EventHandler(this.focusToolStripMenuItem_Click);
+            this.createTelegramProfileToolStripMenuItem.Name = "createTelegramProfileToolStripMenuItem";
+            this.createTelegramProfileToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.createTelegramProfileToolStripMenuItem.Text = "Create Telegram Profile";
+            this.createTelegramProfileToolStripMenuItem.Click += new System.EventHandler(this.createTelegramProfileToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -836,6 +845,7 @@
         private System.Windows.Forms.ToolStripMenuItem strongPasswordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem strongPasswordWithPunctuationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createTelegramProfileToolStripMenuItem;
     }
 }
 
