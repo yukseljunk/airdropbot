@@ -259,11 +259,11 @@ namespace AirdropBot
             RunasAdmin("C:\\code\\scripts\\CreateUser.bat",
                        string.Format("{0} {1}", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
 
-/*            RunasAdmin("net", string.Format("user {0} {1} /add", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
-            RunasAdmin("runas", string.Format("/env /profile /user:{0} cmd.exe", ReplaceTokens(name.Value)));
-            RunasAdmin("mkdir", string.Format("\"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
-            RunasAdmin("copy", string.Format("\"c:\\users\\yuksel\\appdata\\roaming\\Telegram Desktop\" \"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
-*/
+            /*            RunasAdmin("net", string.Format("user {0} {1} /add", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
+                        RunasAdmin("runas", string.Format("/env /profile /user:{0} cmd.exe", ReplaceTokens(name.Value)));
+                        RunasAdmin("mkdir", string.Format("\"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
+                        RunasAdmin("copy", string.Format("\"c:\\users\\yuksel\\appdata\\roaming\\Telegram Desktop\" \"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
+            */
             /*
              * sendkeys did not work here :(
              Wait(5);
@@ -869,7 +869,20 @@ namespace AirdropBot
                 {
                     result = result.Replace(ItemMatch.ToString(), Clipboard.GetText());
                 }
+
             }
+            //${Random(1,10)}
+            itemRegex = new Regex(@"\$\{Random\((\d+)\,(\d+)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(value))
+            {
+                var randFrom = ItemMatch.Groups[1].Value;
+                var randTo = ItemMatch.Groups[2].Value;
+                var rnd = new Random();
+                var randVal = rnd.Next(int.Parse(randFrom), int.Parse(randTo));
+                result = result.Replace(ItemMatch.ToString(), randVal.ToString());
+                
+            }
+
             return result;
         }
 
@@ -1249,6 +1262,12 @@ namespace AirdropBot
         private void createTelegramProfileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<createtg name=\"\" password=\"\"/>";
+
+        }
+
+        private void randomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${Random(1,10)}";
 
         }
     }

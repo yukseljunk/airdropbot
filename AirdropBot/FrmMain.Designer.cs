@@ -59,6 +59,7 @@
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createTelegramProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,7 +107,7 @@
             this.llUncheckAll = new System.Windows.Forms.LinkLabel();
             this.btnStop = new System.Windows.Forms.Button();
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.createTelegramProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -360,12 +361,20 @@
             this.bringWindowFronToolStripMenuItem.Text = "Bring Window Front";
             this.bringWindowFronToolStripMenuItem.Click += new System.EventHandler(this.bringWindowFronToolStripMenuItem_Click);
             // 
+            // createTelegramProfileToolStripMenuItem
+            // 
+            this.createTelegramProfileToolStripMenuItem.Name = "createTelegramProfileToolStripMenuItem";
+            this.createTelegramProfileToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.createTelegramProfileToolStripMenuItem.Text = "Create Telegram Profile";
+            this.createTelegramProfileToolStripMenuItem.Click += new System.EventHandler(this.createTelegramProfileToolStripMenuItem_Click);
+            // 
             // tokensToolStripMenuItem
             // 
             this.tokensToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.userToolStripMenuItem,
             this.variableToolStripMenuItem,
-            this.clipboardValueToolStripMenuItem});
+            this.clipboardValueToolStripMenuItem,
+            this.randomToolStripMenuItem});
             this.tokensToolStripMenuItem.Name = "tokensToolStripMenuItem";
             this.tokensToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.tokensToolStripMenuItem.Text = "Tokens";
@@ -732,12 +741,12 @@
             this.ContentPanel.TabIndex = 17;
             this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
             // 
-            // createTelegramProfileToolStripMenuItem
+            // randomToolStripMenuItem
             // 
-            this.createTelegramProfileToolStripMenuItem.Name = "createTelegramProfileToolStripMenuItem";
-            this.createTelegramProfileToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.createTelegramProfileToolStripMenuItem.Text = "Create Telegram Profile";
-            this.createTelegramProfileToolStripMenuItem.Click += new System.EventHandler(this.createTelegramProfileToolStripMenuItem_Click);
+            this.randomToolStripMenuItem.Name = "randomToolStripMenuItem";
+            this.randomToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.randomToolStripMenuItem.Text = "Random";
+            this.randomToolStripMenuItem.Click += new System.EventHandler(this.randomToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -846,6 +855,7 @@
         private System.Windows.Forms.ToolStripMenuItem strongPasswordWithPunctuationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem focusToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createTelegramProfileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem randomToolStripMenuItem;
     }
 }
 
