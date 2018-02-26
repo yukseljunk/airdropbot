@@ -603,13 +603,15 @@ namespace AirdropBot
             return "";
         }
 
-        private static string WaitCommand(XmlNode node)
+        private string WaitCommand(XmlNode node)
         {
             var waitsecs = 1;
             var secs = node.Attributes["for"];
             if (secs != null)
             {
-                waitsecs = int.Parse(node.Attributes["for"].Value);
+                var forAmount = node.Attributes["for"].Value;
+
+                waitsecs = int.Parse(ReplaceTokens(forAmount));
             }
 
             Stopwatch sw = new Stopwatch();
@@ -880,7 +882,7 @@ namespace AirdropBot
                 var rnd = new Random();
                 var randVal = rnd.Next(int.Parse(randFrom), int.Parse(randTo));
                 result = result.Replace(ItemMatch.ToString(), randVal.ToString());
-                
+
             }
 
             return result;

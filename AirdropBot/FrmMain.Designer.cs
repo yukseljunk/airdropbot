@@ -98,6 +98,7 @@
             this.strongPasswordWithPunctuationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clipboardValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.openScenarioFile = new System.Windows.Forms.OpenFileDialog();
             this.saveScenarioFile = new System.Windows.Forms.SaveFileDialog();
@@ -107,7 +108,6 @@
             this.llUncheckAll = new System.Windows.Forms.LinkLabel();
             this.btnStop = new System.Windows.Forms.Button();
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.randomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -652,6 +652,13 @@
             this.clipboardValueToolStripMenuItem.Text = "Clipboard Value";
             this.clipboardValueToolStripMenuItem.Click += new System.EventHandler(this.clipboardValueToolStripMenuItem_Click);
             // 
+            // randomToolStripMenuItem
+            // 
+            this.randomToolStripMenuItem.Name = "randomToolStripMenuItem";
+            this.randomToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.randomToolStripMenuItem.Text = "Random";
+            this.randomToolStripMenuItem.Click += new System.EventHandler(this.randomToolStripMenuItem_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -687,6 +694,7 @@
             // 
             // lstUsers
             // 
+            this.lstUsers.CheckOnClick = true;
             this.lstUsers.FormattingEnabled = true;
             this.lstUsers.Location = new System.Drawing.Point(16, 65);
             this.lstUsers.Name = "lstUsers";
@@ -740,13 +748,6 @@
             this.ContentPanel.Size = new System.Drawing.Size(746, 572);
             this.ContentPanel.TabIndex = 17;
             this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
-            // 
-            // randomToolStripMenuItem
-            // 
-            this.randomToolStripMenuItem.Name = "randomToolStripMenuItem";
-            this.randomToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.randomToolStripMenuItem.Text = "Random";
-            this.randomToolStripMenuItem.Click += new System.EventHandler(this.randomToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
