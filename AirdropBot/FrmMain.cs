@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -86,40 +87,6 @@ namespace AirdropBot
             }
         }
 
-        private const string GMAILBOT_OUTPUT = "c:\\temp\\gmailbot3.html";
-        private void StartGoogleBot(string args, bool checkOutput = false)
-        {
-            if (File.Exists(GMAILBOT_OUTPUT)) File.Delete(GMAILBOT_OUTPUT);
-
-            foreach (var p in Process.GetProcessesByName("Gmailbot"))
-            {
-                p.Kill();
-            }
-            var process = new Process();
-            // Configure the process using the StartInfo properties.
-            process.StartInfo.FileName = "Gmailbot.exe";
-            process.StartInfo.Arguments = args;
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-
-            process.Start();
-
-            this.Enabled = false;
-            //process.WaitForExit();// Waits here for the process to exit.
-            var checkCount = 0;
-            var maxTry = 60;
-            var sleep = 1000;
-            while (!File.Exists(GMAILBOT_OUTPUT))
-            {
-                checkCount++;
-                if (checkCount > maxTry) break;
-                Thread.Sleep(sleep);
-            }
-            this.Enabled = true;
-
-        }
-
-
-
         private void FrmMain_Load(object sender, EventArgs e)
         {
             btnStop.Enabled = false;
@@ -138,9 +105,15 @@ namespace AirdropBot
         private void btnApplyScenario_Click(object sender, EventArgs e)
         {
 
+            if (txtScenario.Text == "") return;
             EnDis(true);
             stopped = false;
-            Run();
+            var scenario = txtScenario.Text;
+            if(txtScenario.SelectionLength>0)
+            {
+                scenario = txtScenario.SelectedText;
+            }
+            Run(scenario);
             EnDis(false);
 
         }
@@ -153,11 +126,15 @@ namespace AirdropBot
 
         }
 
-        private void Run()
+        private void Run(string cmd)
         {
-            if (txtScenario.Text == "") return;
+            var xml = cmd;
+            if (!cmd.Contains("?xml"))
+            {
+                xml = string.Format("<?xml version=\"1.0\"?><steps>{0}</steps>", cmd);
+            }
             var doc = new XmlDocument();
-            doc.LoadXml(txtScenario.Text);
+            doc.LoadXml(xml);
             var nodeList = doc.SelectNodes("/steps/*");
             if (nodeList == null) return;
             var stepNo = 1;
@@ -187,6 +164,21 @@ namespace AirdropBot
                 {
                     commandResult = GetCommand(node);
                 }
+                if (command == "waittill")
+                {
+                    commandResult = WaitTillCommand(node);
+
+                }
+                if (command == "failif")
+                {
+                    commandResult = FailIfCommand(node);
+
+                }
+                if (command == "continueif")
+                {
+                    commandResult = ContinueIfCommand(node);
+
+                }
                 if (command == "click")
                 {
                     commandResult = ClickCommand(node);
@@ -205,6 +197,11 @@ namespace AirdropBot
                 {
                     commandResult = GmailCommand(node);
                 }
+                if (command == "gmailsignout")
+                {
+                    commandResult = GmailSignOutCommand(node);
+                }
+                
                 if (command == "clearcookies")
                 {
                     commandResult = SuppressCookiePersistence();
@@ -247,6 +244,68 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string ContinueIfCommand(XmlNode node)
+        {
+            var compare = node.Attributes["compare"];
+            var what = node.Attributes["what"];
+            var regex = node.Attributes["regex"];
+            var xpath = node.Attributes["xpath"];
+
+            if (compare == null || what == null || xpath == null) return "Compare or what or xpath is not defined!";
+            if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
+
+            var result = GetCElement(node);
+            if (regex != null && regex.Value != "")
+            {
+                var reg = new Regex(regex.Value);
+                var match = reg.Match(result);
+                if (match.Success)
+                {
+                    if (match.Groups.Count > 1)
+                    {
+                        result = match.Groups[1].Value;
+                    }
+                }
+            }
+            if (result != ReplaceTokens(compare.Value))
+            {
+                return "Criteria not met, not continuing...";
+            }
+
+            return "";
+        }
+
+        private string FailIfCommand(XmlNode node)
+        {
+            var compare = node.Attributes["compare"];
+            var what = node.Attributes["what"];
+            var regex = node.Attributes["regex"];
+            var xpath = node.Attributes["xpath"];
+
+            if (compare == null || what == null || xpath == null) return "Compare or what or xpath is not defined!";
+            if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
+
+            var result = GetCElement(node);
+            if (regex != null && regex.Value != "")
+            {
+                var reg = new Regex(regex.Value);
+                var match = reg.Match(result);
+                if (match.Success)
+                {
+                    if (match.Groups.Count > 1)
+                    {
+                        result = match.Groups[1].Value;
+                    }
+                }
+            }
+            if (result == ReplaceTokens(compare.Value))
+            {
+                return "Criteria met, failing";
+            }
+
+            return "";
         }
 
         private string CreateTgCommand(XmlNode node)
@@ -378,6 +437,7 @@ namespace AirdropBot
             ContentPanel.Controls.Clear();
             // Configure(proxy);
             cproxy = proxy;
+            if (cbrowser != null) cbrowser.Dispose();
             cbrowser = new ChromiumWebBrowser(url)
             {
                 Dock = DockStyle.Fill
@@ -582,27 +642,32 @@ namespace AirdropBot
             var user = node.Attributes["user"];
             var password = node.Attributes["pass"];
             var search = node.Attributes["search"];
-            var maxtries = 1;
-            var maxtry = node.Attributes["maxtry"];
             if (user == null || password == null) return "User/password empty or not defined";
-            if (maxtry != null)
-            {
-                int.TryParse(maxtry.Value, out maxtries);
-            }
-            if (search == null)
-            {
-                StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value));
-            }
-            else
-            {
-                StartGoogleBot(ReplaceTokens(user.Value) + " " + ReplaceTokens(password.Value) + " Find \"" + search.Value +
-                               "\" \"" + GMAILBOT_OUTPUT + "\" " + maxtries.ToString());
 
-                CreateCBrowser("file:///" + GMAILBOT_OUTPUT.Replace("\\", "/") + "?nonce=" + Guid.NewGuid(), "");
-            }
+            var gmailTemplate = File.ReadAllText(AssemblyDirectory + "\\Templates\\GmailFind.xml");
+            gmailTemplate=gmailTemplate.Replace("${0}", user.Value).Replace("${1}", password.Value).Replace("${2}", search==null? "":search.Value);
+            Run(gmailTemplate);
             return "";
         }
 
+
+        private string GmailSignOutCommand(XmlNode node)
+        {
+            var gmailTemplate = File.ReadAllText(AssemblyDirectory + "\\Templates\\GmailSignout.xml");
+            Run(gmailTemplate);
+            return "";
+        }
+
+        public static string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
+        }
         private string WaitCommand(XmlNode node)
         {
             var waitsecs = 1;
@@ -709,6 +774,49 @@ namespace AirdropBot
                 return resp;
             }
             return "XPath not specified!";
+        }
+
+
+        private string WaitTillCommand(XmlNode node)
+        {
+            var compare = node.Attributes["compare"];
+            var what = node.Attributes["what"];
+            var regex = node.Attributes["regex"];
+            var xpath = node.Attributes["xpath"];
+
+            if (compare == null || what == null || xpath == null) return "Compare or what or xpath is not defined!";
+            if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
+
+            Stopwatch sw = new Stopwatch();
+            var timeoutsecs = 60;
+            sw.Start();
+            string result = "";
+            while (true)
+            {
+                Application.DoEvents();
+                result = GetCElement(node);
+                if (regex != null && regex.Value != "")
+                {
+                    var reg = new Regex(regex.Value);
+                    var match = reg.Match(result);
+                    if (match.Success)
+                    {
+                        if (match.Groups.Count > 1)
+                        {
+                            result = match.Groups[1].Value;
+                        }
+                    }
+                }
+                if (result == ReplaceTokens(compare.Value))
+                {
+                    break;
+                }
+                if (sw.ElapsedMilliseconds >= timeoutsecs * 1000)
+                {
+                    return "TIMEOUT While waiting...";
+                }
+            }
+            return "";
         }
 
         private string GetCommand(XmlNode node)
@@ -981,11 +1089,6 @@ namespace AirdropBot
 
         }
 
-        private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\" maxtry=\"\"/>";
-
-        }
 
         private void waitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1270,6 +1373,113 @@ namespace AirdropBot
         private void randomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${Random(1,10)}";
+
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Cef.Shutdown();
+        }
+
+        private void toolStripMenuItem12_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTgPhone}";
+
+        }
+
+        private void emptyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"\"/>";
+
+        }
+
+        private void byIdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"//*[@id='']\"/>";
+
+        }
+
+        private void byNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"//*[@name='']\"/>";
+
+        }
+
+        private void byClassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"//*[@class='']\"/>";
+
+        }
+
+        private void byTagToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"//TAG\"/>";
+
+        }
+
+        private void emptyToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
+
+        }
+
+        private void byIdToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[@id='']\" regex=\"\"/>";
+
+        }
+
+        private void byNameToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[@name='']\" regex=\"\"/>";
+
+        }
+
+        private void byClassToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[@class='']\" regex=\"\"/>";
+
+        }
+
+        private void byTagToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"//TAG\" regex=\"\"/>";
+
+        }
+
+        private void waitTillToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<waittill compare=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
+
+        }
+
+        private void failIfToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<failif compare=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
+
+        }
+
+        private void continueIfToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<continueif compare=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
+
+        }
+
+        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\"/>";
+
+        }
+
+        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\"/>";
+
+        }
+
+        private void signOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<gmailsignout/>";
 
         }
     }

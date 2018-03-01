@@ -1,0 +1,5 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <wait for="2"/>
+  <click xpath="//a[text()='Sign out']" />
+</steps>
