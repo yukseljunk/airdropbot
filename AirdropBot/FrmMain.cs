@@ -109,7 +109,7 @@ namespace AirdropBot
             EnDis(true);
             stopped = false;
             var scenario = txtScenario.Text;
-            if(txtScenario.SelectionLength>0)
+            if (txtScenario.SelectionLength > 0)
             {
                 scenario = txtScenario.SelectedText;
             }
@@ -201,7 +201,7 @@ namespace AirdropBot
                 {
                     commandResult = GmailSignOutCommand(node);
                 }
-                
+
                 if (command == "clearcookies")
                 {
                     commandResult = SuppressCookiePersistence();
@@ -645,7 +645,7 @@ namespace AirdropBot
             if (user == null || password == null) return "User/password empty or not defined";
 
             var gmailTemplate = File.ReadAllText(AssemblyDirectory + "\\Templates\\GmailFind.xml");
-            gmailTemplate=gmailTemplate.Replace("${0}", user.Value).Replace("${1}", password.Value).Replace("${2}", search==null? "":search.Value);
+            gmailTemplate = gmailTemplate.Replace("${0}", user.Value).Replace("${1}", password.Value).Replace("${2}", search == null ? "" : search.Value);
             Run(gmailTemplate);
             return "";
         }
@@ -883,7 +883,7 @@ namespace AirdropBot
             cloadingFinished = false;
             try
             {
-                CreateCBrowser(node.Attributes["url"].Value, c_proxy);
+                CreateCBrowser(ReplaceTokens(node.Attributes["url"].Value), c_proxy);
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
