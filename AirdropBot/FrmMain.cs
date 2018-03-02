@@ -465,17 +465,31 @@ namespace AirdropBot
 
         private void cbrowser_initalize(object sender, IsBrowserInitializedChangedEventArgs e)
         {
-            if (e.IsBrowserInitialized && cproxy != "" && cproxy != ":")
+            if (e.IsBrowserInitialized)
             {
-                Cef.UIThreadTaskFactory.StartNew(delegate
+                string error;
+                if (cproxy != "" && cproxy != ":")
                 {
-                    var rc = cbrowser.GetBrowser().GetHost().RequestContext;
-                    var v = new Dictionary<string, object>();
-                    v["mode"] = "fixed_servers";
-                    v["server"] = "http://" + cproxy;
-                    string error;
-                    bool success = rc.SetPreference("proxy", v, out error);
-                });
+                    Cef.UIThreadTaskFactory.StartNew(delegate
+                                                         {
+                                                             var rc = cbrowser.GetBrowser().GetHost().RequestContext;
+                                                             var v = new Dictionary<string, object>();
+                                                             v["mode"] = "fixed_servers";
+                                                             v["server"] = "http://" + cproxy;
+                                                             bool success = rc.SetPreference("proxy", v, out error);
+                                                         });
+                }
+                else
+                {
+                    Cef.UIThreadTaskFactory.StartNew(delegate
+                    {
+                        var rc = cbrowser.GetBrowser().GetHost().RequestContext;
+                        var v = new Dictionary<string, object>();
+                        v["mode"] = "direct";              
+                        bool success = rc.SetPreference("proxy", v, out error);
+                    });
+
+                }
             }
         }
 
