@@ -20,9 +20,9 @@
   <wait for="5"/>
   <continueif compare="UNDEF" what="getAttribute('data-initial-value')" xpath="//input[@name='password']"/>
   <waittill compare="q" what="getAttribute('name')" xpath="//input[@name='q']"/>
-  <snap x="300" y="55"/>
-  <wait for="${Random(1,3)}"/>
-  <sendkey value="${2}{ENTER}"/>
+
+  <set value="${2}" xpath="//*[@name='q']"/>
+  <click xpath="//button[@id='gbqfb']"/>
   <wait for="${Random(1,3)}"/>
   <snap x="400" y="170"/>
 
