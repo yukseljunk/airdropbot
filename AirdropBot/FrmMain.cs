@@ -134,7 +134,15 @@ namespace AirdropBot
                 xml = string.Format("<?xml version=\"1.0\"?><steps>{0}</steps>", cmd);
             }
             var doc = new XmlDocument();
-            doc.LoadXml(xml);
+            try
+            {
+                doc.LoadXml(xml);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Invalid xml! \r\n" + xml);
+                return;
+            }
             var nodeList = doc.SelectNodes("/steps/*");
             if (nodeList == null) return;
             var stepNo = 1;
@@ -442,6 +450,8 @@ namespace AirdropBot
             {
                 Dock = DockStyle.Fill
             };
+            cbrowser.BrowserSettings.FileAccessFromFileUrls = CefState.Enabled;
+            cbrowser.BrowserSettings.UniversalAccessFromFileUrls = CefState.Enabled;
             ContentPanel.Controls.Add(cbrowser);
             cbrowser.IsBrowserInitializedChanged += cbrowser_initalize;
 
@@ -485,7 +495,7 @@ namespace AirdropBot
                     {
                         var rc = cbrowser.GetBrowser().GetHost().RequestContext;
                         var v = new Dictionary<string, object>();
-                        v["mode"] = "direct";              
+                        v["mode"] = "direct";
                         bool success = rc.SetPreference("proxy", v, out error);
                     });
 
@@ -613,22 +623,23 @@ namespace AirdropBot
             // a set of calculations.
             SetForegroundWindow(runasHandle);
             SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
+            //wait for telegram to open
+            Thread.Sleep(5000);
+
+            //this may require closing off all telegram instances
+            TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
+            var mainWindow = app.GetWindows()[0];
+            try
+            {
+                mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+            }
+            catch
+            {
+            }
+
             //join or open group/send message
             if (@group != null && @group.Value.Trim() != "")
             {
-                //wait for telegram to open
-                Thread.Sleep(5000);
-
-                //this may require closing off all telegram instances
-                TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
-                var mainWindow = app.GetWindows()[0];
-                try
-                {
-                    mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
-                }
-                catch
-                {
-                }
                 /*Process p = Process.GetProcessesByName("Telegram")[0];
 
                 SetForegroundWindow(p.Handle); access denied*/
@@ -644,6 +655,58 @@ namespace AirdropBot
                     mainWindow.Mouse.Click();
                     mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
                     mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                }
+            }
+            if (node.HasChildNodes)
+            {
+                foreach (XmlNode subNode in node.ChildNodes)
+                {
+                    if (subNode.Name == "click")
+                    {
+                        var x = subNode.Attributes["x"];
+                        var y = subNode.Attributes["y"];
+                        if (x == null || y == null) continue;
+                        var xval = x.Value;
+                        var yval = y.Value;
+                        var xnegative = xval.StartsWith("-");
+                        var ynegative = yval.StartsWith("-");
+                        var xrelative = xval.StartsWith("%");
+                        var yrelative = yval.StartsWith("%");
+                        xval = xval.Replace("-", "").Replace("%", "");
+                        yval = yval.Replace("-", "").Replace("%", "");
+                        int xpoint = int.Parse(xval);
+                        int ypoint = int.Parse(yval);
+                        if (xrelative) xpoint = Convert.ToInt32(mainWindow.Bounds.Right * xpoint / 100);
+                        if (yrelative) ypoint = Convert.ToInt32(mainWindow.Bounds.Bottom * ypoint / 100);
+                        if (xnegative) xpoint = Convert.ToInt32(mainWindow.Bounds.Right - xpoint);
+                        if (ynegative) ypoint = Convert.ToInt32(mainWindow.Bounds.Bottom - ypoint);
+
+                        var pointToClick = new System.Windows.Point(xpoint, ypoint);
+
+                        mainWindow.Mouse.Location = pointToClick;
+                        mainWindow.Mouse.Click();
+
+
+                    }
+                    if (subNode.Name == "message")
+                    {
+
+                        //<message text
+                        var text = subNode.Attributes["text"];
+
+                        if (text != null && text.Value.Trim() != "")
+                        {
+                            Thread.Sleep(1000);
+                            mainWindow.Mouse.Click();
+                            mainWindow.Keyboard.Enter(ReplaceTokens(text.Value));
+                            mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                        }
+                    }
+                    if (subNode.Name == "wait")
+                    {
+                        WaitCommand(subNode);
+                    }
+
                 }
             }
             return "";
@@ -805,9 +868,11 @@ namespace AirdropBot
             var timeoutsecs = 60;
             sw.Start();
             string result = "";
+            stopped = false;
             while (true)
             {
                 Application.DoEvents();
+                if (stopped) break;
                 result = GetCElement(node);
                 if (regex != null && regex.Value != "")
                 {
@@ -1088,18 +1153,15 @@ namespace AirdropBot
 
         private void setFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<set value=\"\" xpath=\"\"/>";
         }
 
         private void getFieldToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
 
         }
 
         private void clickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<click xpath=\"\" waitforbrowser=\"true\"/>";
 
         }
 
@@ -1244,7 +1306,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" chat=\"\" message=\"\"/>";
+            txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" chat=\"\" message=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n</telegram>";
 
         }
 
@@ -1494,6 +1556,55 @@ namespace AirdropBot
         private void signOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<gmailsignout/>";
+
+        }
+
+        private void byTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<set value=\"\" xpath=\"//*[text()='']\"/>";
+
+        }
+
+        private void byTextToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[text()='']\" regex=\"\"/>";
+
+        }
+
+
+        private void emptyToolStripMenuItem2_Click_1(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click xpath=\"\" waitforbrowser=\"true\"/>";
+
+        }
+
+        private void byIdToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click xpath=\"//*[@id='']\" waitforbrowser=\"true\"/>";
+        
+        }
+
+        private void byNameToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click xpath=\"//*[@name='']\" waitforbrowser=\"true\"/>";
+    
+        }
+
+        private void byClassToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click xpath=\"//*[@class='']\" waitforbrowser=\"true\"/>";
+
+        }
+
+        private void byTagToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click xpath=\"//TAG\" waitforbrowser=\"true\"/>";
+
+        }
+
+        private void byTextToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<click xpath=\"//*[text()='']\" waitforbrowser=\"true\"/>";
 
         }
     }
