@@ -10,10 +10,10 @@ namespace AirdropBot
 
         public string Mail { get; set; }
         public string MailPwd { get; set; }
-        public string MailPhone { get; set; }
 
         public string FBUser { get; set; }
         public string FBPwd { get; set; }
+        public string FBProfile{ get; set; }
 
         public string WinUser { get; set; }
         public string WinPwd { get; set; }
@@ -27,8 +27,7 @@ namespace AirdropBot
         public string BtcTalkProfileLink { get; set; }
 
         public string TgUser { get; set; }
-        public string TgPhone { get; set; }
-        public string TgName { get; set; }
+        public string Phone { get; set; }
 
         public string ReddUser { get; set; }
         public string ReddPwd { get; set; }
@@ -42,6 +41,9 @@ namespace AirdropBot
 
         public string StrongPassword { get; set; }
         public string StrongPwdWithSign { get; set; }
+
+        public string KucoinUser { get; set; }
+        public string KucoinPass { get; set; }
 
         public void FillToDictionary(Dictionary<string,string> dict)
         {

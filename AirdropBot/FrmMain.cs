@@ -48,7 +48,6 @@ namespace AirdropBot
                                    LastName = fields[2],
                                    Mail = fields[3],
                                    MailPwd = fields[4],
-                                   MailPhone = fields[27],
                                    FBUser = fields[5],
                                    FBPwd = fields[6],
                                    TwName = fields[8],
@@ -59,7 +58,7 @@ namespace AirdropBot
                                    BtcTalkProfileLink = fields[14],
                                    WinUser = fields[15],
                                    WinPwd = fields[16],
-                                   TgPhone = fields[17],
+                                   Phone = fields[17],
                                    TgUser = fields[18],
                                    ReddUser = fields[19],
                                    ReddPwd = fields[20],
@@ -1606,6 +1605,12 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "<click xpath=\"//*[text()='']\" waitforbrowser=\"true\"/>";
 
+        }
+
+        private void manageUsersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frmUsers = new FrmUsers();
+            frmUsers.Show(this);
         }
     }
 }
