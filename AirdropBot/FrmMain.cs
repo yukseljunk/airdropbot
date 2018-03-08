@@ -35,47 +35,7 @@ namespace AirdropBot
         private User ActiveUser { get; set; }
 
 
-        private void ParseCsvFile(string fileName)
-        {
-            var contents = File.ReadAllLines(fileName);
-            foreach (var content in contents.Skip(1))
-            {
-                var fields = content.Split(new char[] { ';', ',' }, StringSplitOptions.None);
-                if (fields.Length < 32) continue;
-                var user = new User()
-                               {
-                                   Name = fields[1],
-                                   LastName = fields[2],
-                                   Mail = fields[3],
-                                   MailPwd = fields[4],
-                                   FBUser = fields[5],
-                                   FBPwd = fields[6],
-                                   TwName = fields[8],
-                                   TwUserName = fields[9],
-                                   TwPwd = fields[10],
-                                   BtcTalkUser = fields[12],
-                                   BtcTalkPwd = fields[13],
-                                   BtcTalkProfileLink = fields[14],
-                                   WinUser = fields[15],
-                                   WinPwd = fields[16],
-                                   Phone = fields[17],
-                                   TgUser = fields[18],
-                                   ReddUser = fields[19],
-                                   ReddPwd = fields[20],
-                                   EthAddress = fields[21],
-                                   EthPrivateKey = fields[22],
-                                   EthPass = fields[23],
-                                   ProxyIp = fields[29],
-                                   ProxyPort = fields[30],
-                                   StrongPassword = fields[31],
-                                   StrongPwdWithSign = fields[32]
 
-                               };
-
-                Users.Add(user.Mail, user);
-            }
-            FillUsers();
-        }
 
         private void FillUsers()
         {
@@ -89,6 +49,8 @@ namespace AirdropBot
         private void FrmMain_Load(object sender, EventArgs e)
         {
             btnStop.Enabled = false;
+            LoadUsers();
+
         }
 
 
@@ -720,7 +682,7 @@ namespace AirdropBot
             var search = node.Attributes["search"];
             if (user == null || password == null) return "User/password empty or not defined";
 
-            var gmailTemplate = File.ReadAllText(AssemblyDirectory + "\\Templates\\GmailFind.xml");
+            var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailFind.xml");
             gmailTemplate = gmailTemplate.Replace("${0}", user.Value).Replace("${1}", password.Value).Replace("${2}", search == null ? "" : search.Value);
             Run(gmailTemplate);
             return "";
@@ -729,21 +691,11 @@ namespace AirdropBot
 
         private string GmailSignOutCommand(XmlNode node)
         {
-            var gmailTemplate = File.ReadAllText(AssemblyDirectory + "\\Templates\\GmailSignout.xml");
+            var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailSignout.xml");
             Run(gmailTemplate);
             return "";
         }
 
-        public static string AssemblyDirectory
-        {
-            get
-            {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
-                return Path.GetDirectoryName(path);
-            }
-        }
         private string WaitCommand(XmlNode node)
         {
             var waitsecs = 1;
@@ -1085,15 +1037,6 @@ namespace AirdropBot
 
 
 
-        private void openUsersFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult result = openCsvFile.ShowDialog();
-            if (result == DialogResult.OK) // Test result.
-            {
-                Users = new Dictionary<string, User>();
-                ParseCsvFile(openCsvFile.FileName);
-            }
-        }
 
         private string scenarioFileName = "";
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1134,10 +1077,12 @@ namespace AirdropBot
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            this.Text = "New Scenario";
             txtScenario.Text = "<?xml version=\"1.0\"?>\r\n<steps>\r\n\r\n\r\n</steps>";
             scenarioFileName = "";
             txtScenario.Select(32, 1);
             txtScenario.Focus();
+
         }
 
         private void navigateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1412,6 +1357,7 @@ namespace AirdropBot
 
         private void showDevToolsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (cbrowser == null) return;
             cbrowser.ShowDevTools();
         }
 
@@ -1580,13 +1526,13 @@ namespace AirdropBot
         private void byIdToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<click xpath=\"//*[@id='']\" waitforbrowser=\"true\"/>";
-        
+
         }
 
         private void byNameToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<click xpath=\"//*[@name='']\" waitforbrowser=\"true\"/>";
-    
+
         }
 
         private void byClassToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -1610,7 +1556,18 @@ namespace AirdropBot
         private void manageUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frmUsers = new FrmUsers();
-            frmUsers.Show(this);
+            frmUsers.ShowDialog(this);
+            LoadUsers();
+        }
+
+        private void LoadUsers()
+        {
+            if (File.Exists(Helper.UsersFile))
+            {
+                var userFactory = new UserFactory();
+                Users = userFactory.GetUsers(Helper.UsersFile, false);
+                FillUsers();
+            }
         }
     }
 }

@@ -55,6 +55,13 @@ namespace AirdropBot
 
             }
             dgUsers.Columns[0].ReadOnly = true;
+            if (File.Exists(Helper.UsersFile))
+            {
+                var userFactory = new UserFactory();
+                Users = userFactory.GetUsers(Helper.UsersFile, false);
+                FillUsers();
+            }
+            IsDirty = false;
         }
 
         private void dgUsers_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -91,6 +98,40 @@ namespace AirdropBot
                     "Cannot contain comma(,) character!";
                 e.Cancel = true;
             }
+            if (e.ColumnIndex == 3 && e.FormattedValue.ToString() == "")
+            {
+                dgUsers.Rows[e.RowIndex].ErrorText =
+                    "Cannot have empty email!";
+                e.Cancel = true;
+
+            }
+            if (e.ColumnIndex == 3 && e.FormattedValue.ToString() != "")
+            {
+                var emails = GetEmails();
+                var foundIndex = emails.IndexOf(e.FormattedValue.ToString());
+                if (foundIndex != -1 && foundIndex != e.RowIndex)
+                {
+                    dgUsers.Rows[e.RowIndex].ErrorText =
+                        "Duplicate email!";
+                    e.Cancel = true;
+                }
+
+            }
+        }
+
+        private List<string> GetEmails()
+        {
+            var cellVals = new List<string>();
+            foreach (DataGridViewRow row in dgUsers.Rows)
+            {
+                var rowIndex = int.Parse(row.Cells[0].Value.ToString());
+                if (rowIndex == dgUsers.Rows.Count)
+                {
+                    break;
+                }
+                cellVals.Add(row.Cells[3].Value == null ? "" : row.Cells[3].Value.ToString());
+            }
+            return cellVals;
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
@@ -98,57 +139,14 @@ namespace AirdropBot
             DialogResult result = openCsvFile.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                Users = new Dictionary<string, User>();
-                ParseCsvFile(openCsvFile.FileName);
+                var userFactory = new UserFactory();
+                Users = userFactory.GetUsers(openCsvFile.FileName, true);
+                FillUsers();
             }
 
         }
 
 
-        private void ParseCsvFile(string fileName)
-        {
-            var contents = File.ReadAllLines(fileName);
-            foreach (var content in contents.Skip(1))
-            {
-                var fields = content.Split(new [] { ';', ',' }, StringSplitOptions.None);
-                if (fields.Length < 32) continue;
-                var user = new User()
-                {
-                    Name = fields[1],
-                    LastName = fields[2],
-                    Mail = fields[3],
-                    MailPwd = fields[4],
-                    Phone = fields[5],
-                    StrongPassword = fields[6],
-                    StrongPwdWithSign = fields[7],
-                    EthAddress = fields[8],
-                    EthPrivateKey = fields[9],
-                    EthPass = fields[10],
-                    ProxyIp = fields[11],
-                    ProxyPort = fields[12],
-                    WinUser = fields[13],
-                    WinPwd = fields[14],
-                    TgUser = fields[15],
-                    TwUserName = fields[16],
-                    TwPwd = fields[17],
-                    TwName = fields[18],
-                    KucoinUser = fields[19],
-                    KucoinPass = fields[20],
-                    FBUser = fields[21],
-                    FBPwd = fields[22],
-                    FBProfile = fields[23],
-                    ReddUser = fields[24],
-                    ReddPwd = fields[25],
-                    BtcTalkUser = fields[26],
-                    BtcTalkPwd = fields[27],
-                    BtcTalkProfileLink = fields[28]
-
-                };
-
-                Users.Add(user.Mail, user);
-            }
-            FillUsers();
-        }
         private void FillUsers()
         {
             dgUsers.Rows.Clear();
@@ -168,9 +166,65 @@ namespace AirdropBot
 
         }
 
+
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            
+            SaveUsers(Helper.UsersFile);
+            IsDirty = false;
+        }
+
+        private void SaveUsers(string file)
+        {
+            File.WriteAllText(file, "");
+            foreach (DataGridViewRow row in dgUsers.Rows)
+            {
+                var rowIndex = int.Parse(row.Cells[0].Value.ToString());
+                if (rowIndex == dgUsers.Rows.Count)
+                {
+                    break;
+                }
+                var cellVals = new List<string>();
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    cellVals.Add(cell.Value == null ? "" : cell.Value.ToString());
+                }
+
+                var singleRow = string.Join(",", cellVals) + "\r\n";
+                File.AppendAllText(file, singleRow);
+            }
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = saveCsvFile.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                SaveUsers(saveCsvFile.FileName);
+            }
+        }
+
+        private bool _isDirty;
+        public bool IsDirty { get { return _isDirty; } set { _isDirty = value; } }
+
+        private void dgUsers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            IsDirty = true;
+        }
+
+        private void FrmUsers_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing && IsDirty)
+            {
+                if (MessageBox.Show("Do you want to save your changes to users?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    SaveUsers(Helper.UsersFile);
+                }
+            }
+        }
+
+        private void dgUsers_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
     }
