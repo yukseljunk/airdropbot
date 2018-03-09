@@ -260,10 +260,25 @@ namespace AirdropBot
                 var name = GetCell(index, 1);
                 var lastname = GetCell(index, 2);
 
+                SetCellChecked(index, 4, CreatePassword(name, lastname, false));
+                Thread.Sleep(45);
                 SetCellChecked(index, 6, CreatePassword(name, lastname, false));
-                Thread.Sleep(150);
+                Thread.Sleep(50);
                 SetCellChecked(index, 7, CreatePassword(name, lastname, true));
-                Thread.Sleep(220);
+                Thread.Sleep(40);
+                SetCellChecked(index, 10, CreatePassword(name, lastname, false));
+                Thread.Sleep(40);
+                SetCellChecked(index, 14, CreatePassword(name, lastname, false));
+                Thread.Sleep(40);
+                SetCellChecked(index, 17, CreatePassword(name, lastname, false));
+                Thread.Sleep(40);
+                SetCellChecked(index, 20, CreatePassword(name, lastname, false));
+                Thread.Sleep(40);
+                SetCellChecked(index, 22, CreatePassword(name, lastname, false));
+                Thread.Sleep(40);
+                SetCellChecked(index, 25, CreatePassword(name, lastname, false));
+                Thread.Sleep(40);
+                SetCellChecked(index, 27, CreatePassword(name, lastname, false));
             }
             catch (Exception exception)
             {
