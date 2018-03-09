@@ -220,5 +220,22 @@ namespace AirdropBot
 
         }
 
+        private void dgUsers_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            gbUserOps.Enabled = true;
+        }
+
+        private void btnDelUser_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                try
+                {
+                    dgUsers.Rows.RemoveAt(item.Index);
+                }
+                catch{}
+            }
+        }
+
     }
 }
