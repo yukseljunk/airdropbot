@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -504,11 +505,60 @@ namespace AirdropBot
                 int.TryParse(node.Attributes["y"].Value, out y);
 
             }
+
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null && xpath.Value != "")
+            {
+                cbrowser.ExecuteScriptAsync(String.Format("window.scrollBy({0}, {1});", -10000, -10000));
+
+
+
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; var rect= getElementByXpath(\"{0}\").getBoundingClientRect(); return rect.top + ':'+ rect.right+ ':'+ rect.bottom+ ':'+ rect.left;}} x(); ", xpath.Value, FindXPathScript);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(xabc =>
+                {
+                    var response = xabc.Result;
+
+                    if (response.Success && response.Result != null)
+                    {
+                        resp = response.Result.ToString();
+                        //startDate is the value of a HTML element.
+                    }
+                }).Wait();
+                if (!resp.Contains(":")) return resp;
+                var rect = resp.Split(new char[] { ':' });
+                if (rect.Length < 4) return "Invalid location info " + resp;
+                int top = FindIntegerPart(rect[0]);
+                int left = FindIntegerPart(rect[1]);
+                int bottom = FindIntegerPart(rect[2]);
+                int right = FindIntegerPart(rect[3]);
+                x = (left + right) / 2 + x;
+                y = (top + bottom) / 2 + y;
+
+            }
+
             MouseOperations.SetCursorPosition(this.Left + ContentPanel.Left + x, this.Top + ContentPanel.Top + y);
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
 
             return "";
+        }
+
+        private int FindIntegerPart(string s)
+        {
+            if (s.Contains(",") || s.Contains("."))
+            {
+                //var notLastItem = s.Contains(",") && s.Contains(".") ? 1 : 0;
+                var result = "";
+                var parts = s.Split(new[] { '.', ',' });
+                for (int i = 0; i < parts.Length - 1; i++)
+                {
+                    result += parts[i];
+                }
+                return int.Parse(result);
+            }
+
+            return int.Parse(s);
         }
 
         private string ScrollCommand(XmlNode node)
@@ -937,8 +987,14 @@ namespace AirdropBot
 
         private static string SuppressCookiePersistence()
         {
-            Cef.GetGlobalCookieManager().DeleteCookies("", "");
+            try
+            {
+                Cef.GetGlobalCookieManager().DeleteCookies("", "");
 
+            }
+            catch
+            {
+            }
             return "";
         }
 
@@ -1316,7 +1372,6 @@ namespace AirdropBot
 
         private void snapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap x=\"0\" y=\"0\"/>";
         }
 
         private void inoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1568,6 +1623,53 @@ namespace AirdropBot
                 Users = userFactory.GetUsers(Helper.UsersFile, false);
                 FillUsers();
             }
+        }
+
+        private void toElementToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toPointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void emptyToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap xpath=\"\" x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void byIdToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap xpath=\"*[@id='']\" x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void byNameToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap xpath=\"*[@name='']\" x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void toolStripMenuItem13_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap xpath=\"*[@class='']\" x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void byTagToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap xpath=\"TAG\" x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void byTextToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<snap xpath=\"*[text()='']\" x=\"0\" y=\"0\"/>";
+
         }
     }
 }
