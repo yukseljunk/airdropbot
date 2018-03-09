@@ -497,12 +497,12 @@ namespace AirdropBot
             var xnode = node.Attributes["x"];
             if (xnode != null)
             {
-                int.TryParse(node.Attributes["x"].Value, out x);
+                int.TryParse(xnode.Value, out x);
             }
             var ynode = node.Attributes["y"];
             if (ynode != null)
             {
-                int.TryParse(node.Attributes["y"].Value, out y);
+                int.TryParse(ynode.Value, out y);
 
             }
 
@@ -529,11 +529,27 @@ namespace AirdropBot
                 var rect = resp.Split(new char[] { ':' });
                 if (rect.Length < 4) return "Invalid location info " + resp;
                 int top = FindIntegerPart(rect[0]);
-                int left = FindIntegerPart(rect[1]);
+                int right = FindIntegerPart(rect[1]);
                 int bottom = FindIntegerPart(rect[2]);
-                int right = FindIntegerPart(rect[3]);
-                x = (left + right) / 2 + x;
-                y = (top + bottom) / 2 + y;
+                int left = FindIntegerPart(rect[3]);
+
+                var xval = xnode.Value;
+                var yval = ynode.Value;
+                var xnegative = xval.StartsWith("-");
+                var ynegative = yval.StartsWith("-");
+                var xrelative = xval.StartsWith("%");
+                var yrelative = yval.StartsWith("%");
+                xval = xval.Replace("-", "").Replace("%", "");
+                yval = yval.Replace("-", "").Replace("%", "");
+                int xpoint = int.Parse(xval);
+                int ypoint = int.Parse(yval);
+                if (xrelative) xpoint = Convert.ToInt32((right - left) * xpoint / 100);
+                if (yrelative) ypoint = Convert.ToInt32((bottom - top) * ypoint / 100);
+                if (xnegative) xpoint = -1*xpoint;
+                if (ynegative) ypoint = -1*ypoint;
+
+                x = left + xpoint;
+                y = top + ypoint;
 
             }
 
@@ -866,7 +882,7 @@ namespace AirdropBot
             if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
 
             Stopwatch sw = new Stopwatch();
-            var timeoutsecs = 60;
+            var timeoutsecs = 180;
             sw.Start();
             string result = "";
             stopped = false;
@@ -1502,19 +1518,19 @@ namespace AirdropBot
 
         private void byIdToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[@id='']\" regex=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"//*[@id='']\" regex=\"\"/>";
 
         }
 
         private void byNameToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[@name='']\" regex=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"//*[@name='']\" regex=\"\"/>";
 
         }
 
         private void byClassToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[@class='']\" regex=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"//*[@class='']\" regex=\"\"/>";
 
         }
 
@@ -1568,7 +1584,7 @@ namespace AirdropBot
 
         private void byTextToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"*[text()='']\" regex=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"//*[text()='']\" regex=\"\"/>";
 
         }
 
@@ -1645,19 +1661,19 @@ namespace AirdropBot
 
         private void byIdToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"*[@id='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[@id='']\" x=\"0\" y=\"0\"/>";
 
         }
 
         private void byNameToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"*[@name='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[@name='']\" x=\"0\" y=\"0\"/>";
 
         }
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"*[@class='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[@class='']\" x=\"0\" y=\"0\"/>";
 
         }
 
@@ -1669,7 +1685,7 @@ namespace AirdropBot
 
         private void byTextToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"*[text()='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[text()='']\" x=\"0\" y=\"0\"/>";
 
         }
 
