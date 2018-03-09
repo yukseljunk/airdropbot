@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace AirdropBot
@@ -233,9 +235,177 @@ namespace AirdropBot
                 {
                     dgUsers.Rows.RemoveAt(item.Index);
                 }
-                catch{}
+                catch { }
             }
         }
 
+        private void btnCreatePwd_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CreateStrongPasswords(item.Index);
+            }
+        }
+
+        private void CreateStrongPasswords(int index)
+        {
+
+            try
+            {
+                if (EmptyCell(index, 1) || EmptyCell(index, 2))
+                {
+                    MessageBox.Show("Cannot create password for empty name and surname for row " + (index + 1));
+                    return;
+                }
+                var name = GetCell(index, 1);
+                var lastname = GetCell(index, 2);
+
+                SetCellChecked(index, 6, CreatePassword(name, lastname, false));
+                Thread.Sleep(150);
+                SetCellChecked(index, 7, CreatePassword(name, lastname, true));
+                Thread.Sleep(220);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private string CreatePassword(string name, string lastname, bool punctuation)
+        {
+            var sname = name.Replace("i", "").Replace("I", "").ToLower();
+            var slastname = lastname.Replace("i", "").Replace("I", "").ToLower();
+
+            var result = "";
+            var rnd = new Random();
+
+            if (sname.Length + slastname.Length > 12)
+            {
+                var crop = rnd.Next(1, 2);
+                if (crop == 1)
+                {
+                    if (sname.Length > 5) sname = sname.Substring(0, rnd.Next(2, 5));
+                    if (slastname.Length > 8) slastname = slastname.Substring(0, rnd.Next(5, 8));
+                }
+                else
+                {
+                    if (sname.Length > 8) sname = sname.Substring(0, rnd.Next(5, 8));
+                    if (slastname.Length > 5) slastname = slastname.Substring(0, rnd.Next(2, 5));
+
+                }
+            }
+
+            var pos = rnd.Next(1, 4);
+            var addition = CreatePasswordNumbers(rnd.Next(1, 3));
+            if (pos == 1)
+            {
+                result = addition + sname + slastname;
+            }
+            if (pos == 2)
+            {
+                result = sname + addition + slastname;
+            }
+            if (pos == 3)
+            {
+                result = sname + slastname + addition;
+            }
+            if (pos == 4)
+            {
+                result = sname + slastname;
+                var maxrep = rnd.Next(1, 2);
+                var rep = 0;
+                var numarize = new Dictionary<string, string>() { { "o", "0" }, { "a", "6" }, { "e", "5" }, { "l", "1" }, { "s", "5" }, { "i", "1" } };
+                foreach (var num in numarize)
+                {
+                    if (result.Contains(num.Key))
+                    {
+                        result = result.Replace(num.Key, num.Value);
+                        rep++;
+                        if (rep >= maxrep) break;
+                    }
+
+                }
+            }
+
+            var digsToUp = new HashSet<int>();
+            var digitsToUpper = rnd.Next(0, result.Length - 2);
+            while (true)
+            {
+                var index = rnd.Next(0, result.Length - 1);
+                if (Char.IsNumber(result[index]))
+                {
+                    continue;
+                }
+                digsToUp.Add(rnd.Next(0, result.Length));
+                if (digsToUp.Count >= digitsToUpper)
+                {
+                    break;
+                }
+            }
+            var res = new List<char>();
+            for (int i = 0; i < result.Length; i++)
+            {
+                if (digsToUp.Contains(i))
+                {
+                    res.Add(Char.ToUpper(result[i]));
+                    continue;
+                }
+                res.Add(result[i]);
+            }
+            if (punctuation)
+            {
+                var punctLoc = rnd.Next(1, res.Count);
+                var punctiationInd = rnd.Next(0, 2);
+                var punctuations = new List<char>() { '+', '-', '*' };
+                var punctuationToAdd = punctuations[punctiationInd];
+                res.Insert(punctLoc, punctuationToAdd);
+            }
+            return string.Join("", res);
+        }
+        public string CreatePasswordSmall(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyz";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
+        }
+        public string CreatePasswordNumbers(int length)
+        {
+            const string valid = "0123456789";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
+        }
+        private void SetCellChecked(int row, int col, string val)
+        {
+            if (EmptyCell(row, col))
+            {
+                SetCell(row, col, val);
+            }
+        }
+
+
+        private void SetCell(int row, int col, string val)
+        {
+            dgUsers.Rows[row].Cells[col].Value = val;
+        }
+
+        private bool EmptyCell(int row, int col)
+        {
+            return dgUsers.Rows[row].Cells[col].Value == null || dgUsers.Rows[row].Cells[col].Value.ToString().Trim() == "";
+        }
+        private string GetCell(int row, int col)
+        {
+            if (EmptyCell(row, col)) return "";
+            return dgUsers.Rows[row].Cells[col].Value.ToString().Trim();
+        }
     }
 }
