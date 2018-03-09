@@ -8,6 +8,7 @@ namespace AirdropBot
 {
     public class User
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
 
@@ -70,9 +71,9 @@ namespace AirdropBot
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public Dictionary<string, User> GetUsers(string fileName, bool firstLineIsHeader)
+        public Dictionary<int, User> GetUsers(string fileName, bool firstLineIsHeader)
         {
-            var users = new Dictionary<string, User>();
+            var users = new Dictionary<int, User>();
             var contents = File.ReadAllLines(fileName);
             foreach (var content in contents.Skip(firstLineIsHeader ? 1 : 0))
             {
@@ -80,6 +81,7 @@ namespace AirdropBot
                 if (fields.Length < 28) continue;
                 var user = new User()
                 {
+                    Id = int.Parse(fields[0]),
                     Name = fields[1],
                     LastName = fields[2],
                     Mail = fields[3],
@@ -111,7 +113,7 @@ namespace AirdropBot
 
                 };
 
-                users.Add(user.Mail, user);
+                users.Add(user.Id, user);
             }
             return users;
         }

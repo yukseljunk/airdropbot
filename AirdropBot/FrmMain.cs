@@ -32,7 +32,7 @@ namespace AirdropBot
             InitializeComponent();
         }
 
-        private Dictionary<string, User> Users { get; set; }
+        private Dictionary<int, User> Users { get; set; }
         private User ActiveUser { get; set; }
 
 
@@ -43,7 +43,7 @@ namespace AirdropBot
             lstUsers.Items.Clear();
             foreach (var user in Users)
             {
-                lstUsers.Items.Add(user.Value.Mail);
+                lstUsers.Items.Add(new string(' ', 4 - user.Value.Id.ToString().Length) + user.Value.Id + ". " + user.Value.Name + " " + user.Value.LastName);
             }
         }
 
@@ -1084,9 +1084,10 @@ namespace AirdropBot
 
         private void lstUsers_SelectedValueChanged(object sender, EventArgs e)
         {
-            var email = lstUsers.SelectedItem.ToString();
-            if (string.IsNullOrEmpty(email)) return;
-            ActiveUser = Users[email];
+            var text = lstUsers.SelectedItem.ToString();
+            if (string.IsNullOrEmpty(text)) return;
+            var no = int.Parse(text.Substring(0, text.IndexOf(".")));
+            ActiveUser = Users[no];
             ActiveUser.FillToDictionary(localVariables);
         }
 
@@ -1669,6 +1670,11 @@ namespace AirdropBot
         private void byTextToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<snap xpath=\"*[text()='']\" x=\"0\" y=\"0\"/>";
+
+        }
+
+        private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

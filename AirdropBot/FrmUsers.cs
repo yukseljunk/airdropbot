@@ -8,7 +8,7 @@ namespace AirdropBot
 {
     public partial class FrmUsers : Form
     {
-        private Dictionary<string, User> Users = new Dictionary<string, User>();
+        private Dictionary<int, User> Users = new Dictionary<int, User>();
 
         public FrmUsers()
         {
@@ -97,13 +97,6 @@ namespace AirdropBot
                 dgUsers.Rows[e.RowIndex].ErrorText =
                     "Cannot contain comma(,) character!";
                 e.Cancel = true;
-            }
-            if (e.ColumnIndex == 3 && e.FormattedValue.ToString() == "")
-            {
-                dgUsers.Rows[e.RowIndex].ErrorText =
-                    "Cannot have empty email!";
-                e.Cancel = true;
-
             }
             if (e.ColumnIndex == 3 && e.FormattedValue.ToString() != "")
             {
