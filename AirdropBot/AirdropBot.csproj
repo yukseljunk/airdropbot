@@ -135,6 +135,9 @@
     <Content Include="Templates\GmailFind.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\GmailReg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\GmailSignout.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,8 @@ namespace AirdropBot
         private User ActiveUser { get; set; }
 
 
-
+        public bool OnlyBrowser { get; set; }
+        public string Scenario { get; set; }
 
         private void FillUsers()
         {
@@ -49,6 +51,19 @@ namespace AirdropBot
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            if (OnlyBrowser)
+            {
+                pnlUsers.Visible = false;
+                menuStrip1.Visible = false;
+                pnlScenario.Location = new Point(pnlUsers.Top, pnlScenario.Left);
+                pnlScenario.Size = new Size(pnlScenario.Width, pnlUsers.Height + pnlScenario.Height);
+                btnRunRest.Visible = false;
+                btnApplyScenario.Text = "Run Scenario";
+                btnStop.Location = btnRunRest.Location;
+                txtScenario.Text = Scenario;
+                return;
+            }
+
             btnStop.Enabled = false;
             LoadUsers();
 
@@ -354,7 +369,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").focus();}} x(); ", xpath.Value, FindXPathScript);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").focus();}} x(); ", ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -513,7 +528,7 @@ namespace AirdropBot
 
 
 
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; var rect= getElementByXpath(\"{0}\").getBoundingClientRect(); return rect.top + ':'+ rect.right+ ':'+ rect.bottom+ ':'+ rect.left;}} x(); ", xpath.Value, FindXPathScript);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; var rect= getElementByXpath(\"{0}\").getBoundingClientRect(); return rect.top + ':'+ rect.right+ ':'+ rect.bottom+ ':'+ rect.left;}} x(); ", ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(xabc =>
                 {
@@ -545,8 +560,8 @@ namespace AirdropBot
                 int ypoint = int.Parse(yval);
                 if (xrelative) xpoint = Convert.ToInt32((right - left) * xpoint / 100);
                 if (yrelative) ypoint = Convert.ToInt32((bottom - top) * ypoint / 100);
-                if (xnegative) xpoint = -1*xpoint;
-                if (ynegative) ypoint = -1*ypoint;
+                if (xnegative) xpoint = -1 * xpoint;
+                if (ynegative) ypoint = -1 * ypoint;
 
                 x = left + xpoint;
                 y = top + ypoint;
@@ -819,7 +834,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").submit();}} x(); ", xpath.Value, FindXPathScript);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").submit();}} x(); ", ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -848,7 +863,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click();}} x(); ", xpath.Value, FindXPathScript);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click();}} x(); ", ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -1024,7 +1039,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", xpath.Value, FindXPathScript, what.Value);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", ReplaceTokens(xpath.Value), FindXPathScript, what.Value);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -1048,7 +1063,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{2} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; getElementByXpath(\"{0}\").value =\"{1}\";}} x(); ", xpath.Value, newValue, FindXPathScript);
+                string scr = string.Format("{2} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; getElementByXpath(\"{0}\").value =\"{1}\";}} x(); ", ReplaceTokens(xpath.Value), newValue, FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                                 {
@@ -1358,7 +1373,6 @@ namespace AirdropBot
 
         private void llCheckAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ChkUnChkLstUserAll(true);
         }
         private void ChkUnChkLstUserAll(bool state)
         {
@@ -1691,6 +1705,18 @@ namespace AirdropBot
 
         private void lstUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void llCheckAll_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ChkUnChkLstUserAll(true);
+
+        }
+
+        private void llUncheckAll_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ChkUnChkLstUserAll(false);
 
         }
     }

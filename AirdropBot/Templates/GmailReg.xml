@@ -1,0 +1,49 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="www.gmail.com" proxy=""/>
+
+  <wait for="2"/>
+  <snap xpath="//*[text()='More options']" x="%20" y="%150"/>
+  <wait for="2"/>
+  <snap xpath="//*[text()='Create account']" x="%20" y="%150"/>
+  <wait for="2"/>
+  <set value="${0}" xpath="//input[@id='FirstName']"/>
+  <wait for="1"/>
+  <set value="${1}" xpath="//input[@id='LastName']"/>
+  <wait for="1"/>
+  <set value="${2}" xpath="//input[@id='GmailAddress']"/>
+  <wait for="1"/>
+  <set value="${3}" xpath="//input[@id='Passwd']"/>
+  <wait for="1"/>
+  <set value="${3}" xpath="//input[@id='PasswdAgain']"/>
+  <wait for="1"/>
+
+  <set value="${Random(1,28)}" xpath="//input[@id='BirthDay']"/>
+  <wait for="1"/>
+  <set value="${Random(1960,1999)}" xpath="//input[@id='BirthYear']"/>
+  <wait for="1"/>
+  <set value="" xpath="//input[@id='RecoveryPhoneNumber']"/>
+  <wait for="1"/>
+  <snap xpath="//*[@id='BirthMonth']" x="%50" y="%200"/>
+  <wait for="1"/>
+
+  <snap xpath="//*[@id='BirthMonth']/div[2]/div[${Random(1,12)}]" x="%50" y="%200"/>
+  <wait for="1"/>
+
+  <snap xpath="//*[@id='Gender']" x="%50" y="%200"/>
+  <wait for="1"/>
+  <snap xpath="//*[@id='Gender']/div[2]/div[${Random(1,4)}]" x="%50" y="%200"/>
+  <wait for="1"/>
+
+  
+  <click xpath="//*[@id='submitbutton']" />
+  <wait for="4"/>
+
+  <snap xpath="//*[@class='tos-scroll-button-content']" x="%50" y="%120"/>
+  <click xpath="//*[@id='iagreebutton']" waitforbrowser="true"/>
+
+
+
+</steps>
