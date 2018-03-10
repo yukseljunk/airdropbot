@@ -442,14 +442,41 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create gmail address for empty name, lastname, mail address and mail password! " + (index + 1));
                     return;
                 }
-                var name = GetCell(index, 1);
-                var lastname = GetCell(index, 2);
-                var email = GetCell(index, 3);
-                var emailPwd = GetCell(index, 4);
                 var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailReg.xml");
                 gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 3).Replace("@gmail.com", "")).Replace("${3}", GetCell(index, 4));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void btnTwit_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CreateTwitter(item.Index);
+                break;
+            }
+        }
+        private void CreateTwitter(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 1) || EmptyCell(index, 2) || EmptyCell(index, 3) || EmptyCell(index, 6))
+                {
+                    MessageBox.Show("Cannot create twitter address for empty name, lastname, mail address and strong password! " + (index + 1));
+                    return;
+                }
+                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterReg.xml");
+                twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 3)).Replace("${3}", GetCell(index, 6));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
 
                 frmMain.Show(this);
 

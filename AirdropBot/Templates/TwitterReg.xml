@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="https://twitter.com/signup?lang=en" proxy=""/>
+  <wait for="2"/>
+  <set value="${0} ${1}" xpath="//input[@id='full-name']"/>
+  <set value="${2}" xpath="//input[@id='email']"/>
+  <set value="${3}" xpath="//input[@id='password']"/>
+  <wait for="5"/>
+  <click xpath="//input[@id='submit_button']" waitforbrowser="true"/>
+
+</steps>
