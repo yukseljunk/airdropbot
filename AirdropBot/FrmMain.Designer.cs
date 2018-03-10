@@ -144,6 +144,8 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
+            this.ifToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -284,7 +286,9 @@
             this.toolStripSeparator1,
             this.waitTillToolStripMenuItem,
             this.failIfToolStripMenuItem,
-            this.continueIfToolStripMenuItem});
+            this.continueIfToolStripMenuItem,
+            this.toolStripMenuItem14,
+            this.ifToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
             this.navigateToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
@@ -612,21 +616,21 @@
             // loginToolStripMenuItem
             // 
             this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            this.loginToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loginToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.loginToolStripMenuItem.Text = "Login";
             this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
             // 
             // searchToolStripMenuItem
             // 
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.searchToolStripMenuItem.Text = "Search";
             this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
             // 
             // signOutToolStripMenuItem
             // 
             this.signOutToolStripMenuItem.Name = "signOutToolStripMenuItem";
-            this.signOutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.signOutToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.signOutToolStripMenuItem.Text = "Sign Out";
             this.signOutToolStripMenuItem.Click += new System.EventHandler(this.signOutToolStripMenuItem_Click);
             // 
@@ -1087,6 +1091,18 @@
             this.pnlScenario.Size = new System.Drawing.Size(364, 264);
             this.pnlScenario.TabIndex = 19;
             // 
+            // ifToolStripMenuItem
+            // 
+            this.ifToolStripMenuItem.Name = "ifToolStripMenuItem";
+            this.ifToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ifToolStripMenuItem.Text = "If";
+            this.ifToolStripMenuItem.Click += new System.EventHandler(this.ifToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem14
+            // 
+            this.toolStripMenuItem14.Name = "toolStripMenuItem14";
+            this.toolStripMenuItem14.Size = new System.Drawing.Size(149, 6);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1232,6 +1248,8 @@
         private System.Windows.Forms.LinkLabel llCheckAll;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pnlScenario;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
+        private System.Windows.Forms.ToolStripMenuItem ifToolStripMenuItem;
     }
 }
 

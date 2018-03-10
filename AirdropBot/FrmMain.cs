@@ -220,6 +220,10 @@ namespace AirdropBot
                     commandResult = CreateTgCommand(node);
 
                 }
+                if(command == "if")
+                {
+                    commandResult = IfCommand(node);
+                }
                 if (commandResult != "")
                 {
                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
@@ -229,6 +233,37 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string IfCommand(XmlNode node)
+        {
+            var compare = node.Attributes["compare"];
+            var what = node.Attributes["what"];
+            var regex = node.Attributes["regex"];
+            var xpath = node.Attributes["xpath"];
+
+            if (compare == null || what == null || xpath == null) return "Compare or what or xpath is not defined!";
+            if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
+
+            var result = GetCElement(node);
+            if (regex != null && regex.Value != "")
+            {
+                var reg = new Regex(regex.Value);
+                var match = reg.Match(result);
+                if (match.Success)
+                {
+                    if (match.Groups.Count > 1)
+                    {
+                        result = match.Groups[1].Value;
+                    }
+                }
+            }
+            if (result == ReplaceTokens(compare.Value))//criteria met
+            {
+                Run(node.InnerXml);
+            }
+
+            return "";
         }
 
         private string ContinueIfCommand(XmlNode node)
@@ -258,6 +293,7 @@ namespace AirdropBot
             {
                 return "Criteria not met, not continuing...";
             }
+           
 
             return "";
         }
@@ -1717,6 +1753,12 @@ namespace AirdropBot
         private void llUncheckAll_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ChkUnChkLstUserAll(false);
+
+        }
+
+        private void ifToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<if compare=\"\" what=\"\" xpath=\"\" regex=\"\">\r\n\r\n</if>";
 
         }
     }
