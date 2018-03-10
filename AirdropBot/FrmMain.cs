@@ -54,7 +54,7 @@ namespace AirdropBot
             if (OnlyBrowser)
             {
                 pnlUsers.Visible = false;
-                menuStrip1.Visible = false;
+                //menuStrip1.Visible = false;
                 pnlScenario.Location = new Point(pnlUsers.Top, pnlScenario.Left);
                 pnlScenario.Size = new Size(pnlScenario.Width, pnlUsers.Height + pnlScenario.Height);
                 btnRunRest.Visible = false;

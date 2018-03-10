@@ -138,6 +138,7 @@
     </Content>
     <Content Include="Templates\GmailReg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Templates\GmailSignout.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
