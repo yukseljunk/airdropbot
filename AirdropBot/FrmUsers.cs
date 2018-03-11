@@ -468,13 +468,13 @@ namespace AirdropBot
         {
             try
             {
-                if (EmptyCell(index, 1) || EmptyCell(index, 2) || EmptyCell(index, 3) || EmptyCell(index, 6))
+                if (EmptyCell(index, 1) || EmptyCell(index, 2) || EmptyCell(index, 16) || EmptyCell(index, 17) || EmptyCell(index, 18))
                 {
-                    MessageBox.Show("Cannot create twitter address for empty name, lastname, mail address and strong password! " + (index + 1));
+                    MessageBox.Show("Cannot create twitter address for empty name, lastname, twitter user, twitter password and twitter name! " + (index + 1));
                     return;
                 }
                 var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterReg.xml");
-                twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 3)).Replace("${3}", GetCell(index, 6));
+                twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 16)).Replace("${3}", GetCell(index, 17)).Replace("${4}", GetCell(index, 18));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
 
