@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +45,9 @@
             this.btnKucoin = new System.Windows.Forms.Button();
             this.gbUserOps = new System.Windows.Forms.GroupBox();
             this.btnDelUser = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbUserOps.SuspendLayout();
@@ -52,10 +55,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -153,7 +156,7 @@
             // 
             // btnMew
             // 
-            this.btnMew.Location = new System.Drawing.Point(503, 21);
+            this.btnMew.Location = new System.Drawing.Point(758, 19);
             this.btnMew.Name = "btnMew";
             this.btnMew.Size = new System.Drawing.Size(228, 25);
             this.btnMew.TabIndex = 6;
@@ -162,7 +165,7 @@
             // 
             // btnTwit
             // 
-            this.btnTwit.Location = new System.Drawing.Point(252, 65);
+            this.btnTwit.Location = new System.Drawing.Point(511, 21);
             this.btnTwit.Name = "btnTwit";
             this.btnTwit.Size = new System.Drawing.Size(228, 25);
             this.btnTwit.TabIndex = 7;
@@ -172,9 +175,9 @@
             // 
             // btnKucoin
             // 
-            this.btnKucoin.Location = new System.Drawing.Point(503, 65);
+            this.btnKucoin.Location = new System.Drawing.Point(1010, 19);
             this.btnKucoin.Name = "btnKucoin";
-            this.btnKucoin.Size = new System.Drawing.Size(228, 25);
+            this.btnKucoin.Size = new System.Drawing.Size(172, 25);
             this.btnKucoin.TabIndex = 8;
             this.btnKucoin.Text = "Create kucoin account";
             this.btnKucoin.UseVisualStyleBackColor = true;
@@ -183,6 +186,9 @@
             // 
             this.gbUserOps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbUserOps.Controls.Add(this.button3);
+            this.gbUserOps.Controls.Add(this.button2);
+            this.gbUserOps.Controls.Add(this.button1);
             this.gbUserOps.Controls.Add(this.btnDelUser);
             this.gbUserOps.Controls.Add(this.btnCreatePwd);
             this.gbUserOps.Controls.Add(this.btnKucoin);
@@ -206,6 +212,36 @@
             this.btnDelUser.Text = "Delete Selected Users";
             this.btnDelUser.UseVisualStyleBackColor = true;
             this.btnDelUser.Click += new System.EventHandler(this.btnDelUser_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(252, 65);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(228, 25);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Check gmail account";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(511, 65);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(228, 25);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "Create twitter followers";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(758, 65);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(228, 25);
+            this.button3.TabIndex = 12;
+            this.button3.Text = "Check balance";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // FrmUsers
             // 
@@ -248,6 +284,9 @@
         private System.Windows.Forms.Button btnKucoin;
         private System.Windows.Forms.GroupBox gbUserOps;
         private System.Windows.Forms.Button btnDelUser;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
 
     }
 }

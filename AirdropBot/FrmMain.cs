@@ -220,7 +220,7 @@ namespace AirdropBot
                     commandResult = CreateTgCommand(node);
 
                 }
-                if(command == "if")
+                if (command == "if")
                 {
                     commandResult = IfCommand(node);
                 }
@@ -293,7 +293,7 @@ namespace AirdropBot
             {
                 return "Criteria not met, not continuing...";
             }
-           
+
 
             return "";
         }
@@ -529,7 +529,10 @@ namespace AirdropBot
 
             var xnode = node.Attributes["value"];
             if (xnode == null) return "";
-            SendKeys.Send(ReplaceTokens(xnode.Value));
+
+            string txt = Regex.Replace(ReplaceTokens(xnode.Value), "[+^%~()]", "{$0}");
+
+            SendKeys.Send(txt);
             return "";
         }
 
@@ -928,12 +931,19 @@ namespace AirdropBot
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
             var xpath = node.Attributes["xpath"];
+            var timeout = node.Attributes["timeout"];
 
             if (compare == null || what == null || xpath == null) return "Compare or what or xpath is not defined!";
             if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
 
+
             Stopwatch sw = new Stopwatch();
             var timeoutsecs = 180;
+            if (timeout != null && timeout.Value != "")
+            {
+                int.TryParse(timeout.Value, out timeoutsecs);
+            }
+
             sw.Start();
             string result = "";
             stopped = false;
@@ -958,7 +968,7 @@ namespace AirdropBot
                 {
                     break;
                 }
-                if (sw.ElapsedMilliseconds >= timeoutsecs * 1000)
+                if (timeoutsecs > 0 && sw.ElapsedMilliseconds >= timeoutsecs * 1000)
                 {
                     return "TIMEOUT While waiting...";
                 }
@@ -1521,7 +1531,14 @@ namespace AirdropBot
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Cef.Shutdown();
+            if (cbrowser != null) cbrowser.Dispose();
+            try
+            {
+                if (!OnlyBrowser) Cef.Shutdown();
+            }
+            catch
+            {
+            }
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
@@ -1592,7 +1609,7 @@ namespace AirdropBot
 
         private void waitTillToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<waittill compare=\"\" what=\"\" xpath=\"\" regex=\"\"/>";
+            txtScenario.SelectedText = "<waittill compare=\"\" what=\"\" timeout=\"0\" xpath=\"\" regex=\"\"/>";
 
         }
 

@@ -486,5 +486,103 @@ namespace AirdropBot
                 MessageBox.Show(exception.ToString());
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CheckGmail(item.Index);
+                break;
+            }
+        }
+        private void CheckGmail(int index)
+        {
+            try
+            {
+                if ( EmptyCell(index, 3) || EmptyCell(index, 4))
+                {
+                    MessageBox.Show("Cannot check gmail address for empty mail address and mail password! " + (index + 1));
+                    return;
+                }
+                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailCheck.xml");
+                gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 4));
+                
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CheckEthBalance(item.Index);
+                break;
+            }
+        }
+
+        private void CheckEthBalance(int index)
+        {
+
+            try
+            {
+                if (EmptyCell(index, 8) )
+                {
+                    MessageBox.Show("Cannot show balance for empty address! " + (index + 1));
+                    return;
+                }
+                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\EthBalance.xml");
+                gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 8));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CreateTwitterFollower(item.Index);
+                break;
+            }
+        }
+
+        private void CreateTwitterFollower(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 1) || EmptyCell(index, 2) || EmptyCell(index, 18))
+                {
+                    MessageBox.Show("Cannot create twitter followers for empty name, lastname, twitter name! " + (index + 1));
+                    return;
+                }
+                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterFollower.xml");
+                twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 18));
+                
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+
     }
 }

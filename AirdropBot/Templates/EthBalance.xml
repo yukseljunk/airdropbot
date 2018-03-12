@@ -1,0 +1,4 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="https://ethplorer.io/address/${0}" proxy=""/>
+</steps>

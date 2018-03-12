@@ -1,0 +1,6 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <gmail user="${0}" pass="${1}"/>
+  <wait for="30"/>
+  <gmailsignout/>
+</steps>

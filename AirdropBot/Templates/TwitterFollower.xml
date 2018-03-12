@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="http://www.letsallfollowback.com/add.php" proxy=""/>
+
+
+  <set value="${0}${1}" xpath="//input[@id='nameField']"/>
+  <set value="@${2}" xpath="//input[@id='twitField']"/>
+  <wait for="2"/>
+  <submit xpath="//form"/>
+</steps>
