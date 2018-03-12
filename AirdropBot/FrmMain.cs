@@ -745,8 +745,10 @@ namespace AirdropBot
             }
             if (node.HasChildNodes)
             {
+                stopped = false;
                 foreach (XmlNode subNode in node.ChildNodes)
                 {
+                    if (stopped) break;
                     if (subNode.Name == "click")
                     {
                         var x = subNode.Attributes["x"];

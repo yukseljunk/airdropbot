@@ -229,21 +229,39 @@ namespace AirdropBot
 
         private void btnDelUser_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            var indexes = GetSelectedRows();
+
+            foreach (var rowIndex in indexes)
             {
                 try
                 {
-                    dgUsers.Rows.RemoveAt(item.Index);
+                    if (MessageBox.Show("Are you sure you want to delete row " + (rowIndex + 1).ToString() + "?", "Confirm Deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        dgUsers.Rows.RemoveAt(rowIndex);
+
+                    }
                 }
                 catch { }
             }
         }
 
-        private void btnCreatePwd_Click(object sender, EventArgs e)
+        private HashSet<int> GetSelectedRows()
         {
+            var indexes = new HashSet<int>() { };
+            indexes.Add(ActiveRowIndex);
             foreach (DataGridViewRow item in dgUsers.SelectedRows)
             {
-                CreateStrongPasswords(item.Index);
+                indexes.Add(item.Index);
+            }
+            return indexes;
+        }
+
+        private void btnCreatePwd_Click(object sender, EventArgs e)
+        {
+            var indexes = GetSelectedRows();
+            foreach (var rowIndex in indexes)
+            {
+                CreateStrongPasswords(rowIndex);
             }
         }
 
@@ -425,12 +443,16 @@ namespace AirdropBot
 
         private void btnGmail_Click(object sender, EventArgs e)
         {
+            CreateGmail(GetSelectedRow());
+        }
+
+        private int GetSelectedRow()
+        {
             foreach (DataGridViewRow item in dgUsers.SelectedRows)
             {
-                CreateGmail(item.Index);
-                break;
+                return item.Index;
             }
-
+            return ActiveRowIndex;
         }
 
         private void CreateGmail(int index)
@@ -458,11 +480,7 @@ namespace AirdropBot
 
         private void btnTwit_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                CreateTwitter(item.Index);
-                break;
-            }
+            CreateTwitter(GetSelectedRow());
         }
         private void CreateTwitter(int index)
         {
@@ -489,11 +507,7 @@ namespace AirdropBot
 
         private void button1_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                CheckGmail(item.Index);
-                break;
-            }
+            CheckGmail(GetSelectedRow());
         }
         private void CheckGmail(int index)
         {
@@ -520,11 +534,8 @@ namespace AirdropBot
 
         private void button3_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                CheckEthBalance(item.Index);
-                break;
-            }
+            CheckEthBalance(GetSelectedRow());
+         
         }
 
         private void CheckEthBalance(int index)
@@ -553,11 +564,7 @@ namespace AirdropBot
 
         private void button2_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                CreateTwitterFollower(item.Index);
-                break;
-            }
+            CreateTwitterFollower(GetSelectedRow());
         }
 
         private void CreateTwitterFollower(int index)
@@ -585,11 +592,8 @@ namespace AirdropBot
 
         private void btnMew_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                CreateMew(item.Index);
-                break;
-            }
+            CreateMew(GetSelectedRow());
+          
         }
 
         private void CreateMew(int index)
@@ -634,11 +638,8 @@ namespace AirdropBot
 
         private void btnKucoin_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                CreateKuCoin(item.Index);
-                break;
-            }
+            CreateKuCoin(GetSelectedRow());
+         
         }
 
         private void CreateKuCoin(int index)
@@ -655,16 +656,12 @@ namespace AirdropBot
 
             frmMain.ShowDialog(this);
 
-          
+
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dgUsers.SelectedRows)
-            {
-                LoginKuCoin(item.Index);
-                break;
-            }
+            LoginKuCoin(GetSelectedRow());
         }
 
         private void LoginKuCoin(int index)
@@ -676,10 +673,121 @@ namespace AirdropBot
             }
             var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinLogin.xml");
             mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 19)).Replace("${1}", GetCell(index, 20)).Replace("${2}", GetCell(index, 11) + ":" + GetCell(index, 12));
-                
+
             var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
 
             frmMain.ShowDialog(this);
+        }
+
+        private int ActiveRowIndex { get; set; }
+
+        private void dgUsers_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ActiveRowIndex = e.RowIndex;
+        }
+
+        private void gbUserOps_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        private void CopyToClipboard()
+        {
+            //Copy to clipboard
+            DataObject dataObj = dgUsers.GetClipboardContent();
+            if (dataObj != null)
+                Clipboard.SetDataObject(dataObj);
+        }
+
+        private void PasteClipboard()
+        {
+            try
+            {
+                string s = Clipboard.GetText();
+                string[] lines = s.Split('\n');
+
+                int iRow = dgUsers.CurrentCell.RowIndex;
+                int iCol = dgUsers.CurrentCell.ColumnIndex;
+                DataGridViewCell oCell;
+                if (iRow + lines.Length > dgUsers.Rows.Count - 1)
+                {
+                    bool bFlag = false;
+                    foreach (string sEmpty in lines)
+                    {
+                        if (sEmpty == "")
+                        {
+                            bFlag = true;
+                        }
+                    }
+
+                    int iNewRows = iRow + lines.Length - dgUsers.Rows.Count;
+                    if (iNewRows > 0)
+                    {
+                        if (bFlag)
+                            dgUsers.Rows.Add(iNewRows);
+                        else
+                            dgUsers.Rows.Add(iNewRows + 1);
+                    }
+                    else
+                        dgUsers.Rows.Add(iNewRows + 1);
+                }
+                foreach (string line in lines)
+                {
+                    if (iRow < dgUsers.RowCount && line.Length > 0)
+                    {
+                        string[] sCells = line.Split('\t');
+                        for (int i = 0; i < sCells.GetLength(0); ++i)
+                        {
+                            if (iCol + i < this.dgUsers.ColumnCount)
+                            {
+                                oCell = dgUsers[iCol + i, iRow];
+                                oCell.Value = Convert.ChangeType(sCells[i].Replace("\r", ""), oCell.ValueType);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        iRow++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                Clipboard.Clear();
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("The data you pasted is in the wrong format for the cell");
+                return;
+            }
+        }
+
+        private void dgUsers_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Modifiers == Keys.Control)
+                {
+                    switch (e.KeyCode)
+                    {
+                        case Keys.C:
+                            CopyToClipboard();
+                            break;
+
+                        case Keys.V:
+                            PasteClipboard();
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Copy/paste operation failed. " + ex.Message, "Copy/Paste", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,11 +44,11 @@
             this.btnTwit = new System.Windows.Forms.Button();
             this.btnKucoin = new System.Windows.Forms.Button();
             this.gbUserOps = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnDelUser = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbUserOps.SuspendLayout();
@@ -56,10 +56,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -68,6 +68,7 @@
             this.dgUsers.Name = "dgUsers";
             this.dgUsers.Size = new System.Drawing.Size(1200, 530);
             this.dgUsers.TabIndex = 0;
+            this.dgUsers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUsers_CellClick);
             this.dgUsers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUsers_CellContentClick);
             this.dgUsers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUsers_CellEndEdit);
             this.dgUsers.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgUsers_CellValidating);
@@ -75,6 +76,7 @@
             this.dgUsers.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUsers_RowEnter);
             this.dgUsers.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgUsers_RowsAdded);
             this.dgUsers.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgUsers_RowsRemoved);
+            this.dgUsers.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgUsers_KeyDown);
             // 
             // menuStrip1
             // 
@@ -206,6 +208,17 @@
             this.gbUserOps.TabIndex = 10;
             this.gbUserOps.TabStop = false;
             this.gbUserOps.Text = "User Operations";
+            this.gbUserOps.Enter += new System.EventHandler(this.gbUserOps_Enter);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(1010, 65);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(172, 25);
+            this.button4.TabIndex = 13;
+            this.button4.Text = "Check Kucoin Account";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -246,16 +259,6 @@
             this.btnDelUser.Text = "Delete Selected Users";
             this.btnDelUser.UseVisualStyleBackColor = true;
             this.btnDelUser.Click += new System.EventHandler(this.btnDelUser_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(1010, 65);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(172, 25);
-            this.button4.TabIndex = 13;
-            this.button4.Text = "Check Kucoin Account";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // FrmUsers
             // 
