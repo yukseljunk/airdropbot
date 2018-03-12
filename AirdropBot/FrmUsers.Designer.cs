@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,10 +44,10 @@
             this.btnTwit = new System.Windows.Forms.Button();
             this.btnKucoin = new System.Windows.Forms.Button();
             this.gbUserOps = new System.Windows.Forms.GroupBox();
-            this.btnDelUser = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnDelUser = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbUserOps.SuspendLayout();
@@ -55,10 +55,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -162,6 +162,7 @@
             this.btnMew.TabIndex = 6;
             this.btnMew.Text = "Create mew account";
             this.btnMew.UseVisualStyleBackColor = true;
+            this.btnMew.Click += new System.EventHandler(this.btnMew_Click);
             // 
             // btnTwit
             // 
@@ -203,25 +204,15 @@
             this.gbUserOps.TabStop = false;
             this.gbUserOps.Text = "User Operations";
             // 
-            // btnDelUser
+            // button3
             // 
-            this.btnDelUser.Location = new System.Drawing.Point(7, 65);
-            this.btnDelUser.Name = "btnDelUser";
-            this.btnDelUser.Size = new System.Drawing.Size(228, 25);
-            this.btnDelUser.TabIndex = 9;
-            this.btnDelUser.Text = "Delete Selected Users";
-            this.btnDelUser.UseVisualStyleBackColor = true;
-            this.btnDelUser.Click += new System.EventHandler(this.btnDelUser_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(252, 65);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(228, 25);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Check gmail account";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button3.Location = new System.Drawing.Point(758, 65);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(228, 25);
+            this.button3.TabIndex = 12;
+            this.button3.Text = "Check balance";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -233,15 +224,25 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // button1
             // 
-            this.button3.Location = new System.Drawing.Point(758, 65);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(228, 25);
-            this.button3.TabIndex = 12;
-            this.button3.Text = "Check balance";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button1.Location = new System.Drawing.Point(252, 65);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(228, 25);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Check gmail account";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnDelUser
+            // 
+            this.btnDelUser.Location = new System.Drawing.Point(7, 65);
+            this.btnDelUser.Name = "btnDelUser";
+            this.btnDelUser.Size = new System.Drawing.Size(228, 25);
+            this.btnDelUser.TabIndex = 9;
+            this.btnDelUser.Text = "Delete Selected Users";
+            this.btnDelUser.UseVisualStyleBackColor = true;
+            this.btnDelUser.Click += new System.EventHandler(this.btnDelUser_Click);
             // 
             // FrmUsers
             // 

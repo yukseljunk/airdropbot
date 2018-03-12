@@ -499,14 +499,14 @@ namespace AirdropBot
         {
             try
             {
-                if ( EmptyCell(index, 3) || EmptyCell(index, 4))
+                if (EmptyCell(index, 3) || EmptyCell(index, 4))
                 {
                     MessageBox.Show("Cannot check gmail address for empty mail address and mail password! " + (index + 1));
                     return;
                 }
                 var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailCheck.xml");
                 gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 4));
-                
+
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
 
                 frmMain.Show(this);
@@ -532,7 +532,7 @@ namespace AirdropBot
 
             try
             {
-                if (EmptyCell(index, 8) )
+                if (EmptyCell(index, 8))
                 {
                     MessageBox.Show("Cannot show balance for empty address! " + (index + 1));
                     return;
@@ -571,7 +571,7 @@ namespace AirdropBot
                 }
                 var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterFollower.xml");
                 twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 18));
-                
+
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
 
                 frmMain.Show(this);
@@ -583,6 +583,53 @@ namespace AirdropBot
             }
         }
 
+        private void btnMew_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CreateMew(item.Index);
+                break;
+            }
+        }
 
+        private void CreateMew(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 10))
+                {
+                    MessageBox.Show("Cannot create mew address for empty eth password! " + (index + 1));
+                    return;
+                }
+                var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\MewReg.xml");
+                mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 10));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
+
+                frmMain.ShowDialog(this);
+
+                try
+                {
+                    if (frmMain.Variables.ContainsKey("prkey") && EmptyCell(index, 9))
+                    {
+                        SetCell(index, 9, frmMain.Variables["prkey"]);
+                    }
+
+                    if (frmMain.Variables.ContainsKey("pbkey") && EmptyCell(index, 8))
+                    {
+                        SetCell(index, 8, frmMain.Variables["pbkey"]);
+                    }
+                }
+                catch
+                {
+                }
+
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
     }
 }

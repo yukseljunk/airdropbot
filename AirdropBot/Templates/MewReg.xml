@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="https://www.myetherwallet.com/"/>
+  <wait for="2"/>
+  <snap xpath="//*[@name='password']" x="-50" y="%140"/>
+  <wait for="2"/>
+  <snap xpath="//*[@name='password']" x="-100" y="%140"/>
+  <wait for="2"/>
+  <snap xpath="//*[@name='password']" x="-150" y="%140"/>
+  <wait for="2"/>
+  <snap xpath="//*[@name='password']" x="%25" y="%140"/>
+  <wait for="2"/>
+  <sendkey value="${0}"/>
+  <wait for="2"/>
+  <snap  xpath="//a[text()='Create New Wallet']" x="%50" y="%140"/>
+  <wait for="2"/>
+  <snap xpath="//*[text()='Download']" x="%50" y="%140"/>
+  <wait for="2"/>
+  <snap xpath="//*[text()='I understand. Continue.']" x="%50" y="%140"/>
+  <wait for="2"/>
+  <get param="prkey" what="value" xpath="//textarea" regex=""/>
+  <wait for="2"/>
+  <snap xpath="//*[text()='Save Your Address.']" x="%50" y="%140"/>
+  <wait for="2"/>
+  <snap xpath="//span[text()='Private Key']" x="%50" y="%150"/>
+  <wait for="2"/>
+  <snap xpath="//*[@id='aria6']" x="%50" y="%100"/>
+  <wait for="2"/>
+  <sendkey value="${prkey}"/>
+
+  <wait for="2"/>
+  <snap xpath="//*[text()='Unlock']" x="%50" y="%100"/>
+  <wait for="2"/>
+
+
+  <get param="pbkey" what="innerText" xpath="//ul[@class='account-info']/span" />
+
+</steps>

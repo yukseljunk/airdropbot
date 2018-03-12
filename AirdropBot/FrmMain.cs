@@ -26,6 +26,10 @@ namespace AirdropBot
     {
         private ChromiumWebBrowser cbrowser;
 
+        public Dictionary<string, string> Variables
+        {
+            get { return localVariables; }
+        }
         private Dictionary<string, string> localVariables = new Dictionary<string, string>();
 
         public FrmMain()
@@ -53,6 +57,7 @@ namespace AirdropBot
         {
             if (OnlyBrowser)
             {
+                this.WindowState = FormWindowState.Maximized;
                 pnlUsers.Visible = false;
                 //menuStrip1.Visible = false;
                 pnlScenario.Location = new Point(pnlUsers.Top, pnlScenario.Left);
