@@ -1,0 +1,28 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+
+  <navigate url="about:blank"/>
+  <clearcookies/>
+
+  <navigate url="https://www.kucoin.com/#/login" proxy="${2}"/>
+
+  <wait for="8"/>
+
+  <set value="" xpath="//*[@id='username']" />
+  <snap xpath="//*[@id='username']"  x="%50" y="%160"/>
+
+  <sendkey value="${0}"/>
+  <wait for="2"/>
+  <snap xpath="//*[@id='password']"  x="%50" y="%160"/>
+  <sendkey value="${1}"/>
+  <wait for="3"/>
+
+
+  <snap xpath="//span[text()='Log in']" x="%50" y="%160"/>
+  <wait for="8"/>
+  <click xpath="//*[contains(@class,'iconOut')]" waitforbrowser="true"/>
+  <wait for="3"/>
+
+
+</steps>

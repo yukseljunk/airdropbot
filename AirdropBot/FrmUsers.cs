@@ -631,5 +631,55 @@ namespace AirdropBot
                 MessageBox.Show(exception.ToString());
             }
         }
+
+        private void btnKucoin_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                CreateKuCoin(item.Index);
+                break;
+            }
+        }
+
+        private void CreateKuCoin(int index)
+        {
+            if (EmptyCell(index, 3) || EmptyCell(index, 4) || EmptyCell(index, 20))
+            {
+                MessageBox.Show("Cannot create kucoin address for empty email, email pwd or kucoin password! " + (index + 1));//email, pass, proxy
+                return;
+            }
+            var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinReg.xml");
+            mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 20)).Replace("${2}", GetCell(index, 11) + ":" + GetCell(index, 12)).Replace("${3}", GetCell(index, 4));
+
+            var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
+
+            frmMain.ShowDialog(this);
+
+          
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dgUsers.SelectedRows)
+            {
+                LoginKuCoin(item.Index);
+                break;
+            }
+        }
+
+        private void LoginKuCoin(int index)
+        {
+            if (EmptyCell(index, 19) || EmptyCell(index, 20))
+            {
+                MessageBox.Show("Cannot create kucoin address for empty kucoin user or kucoin password! " + (index + 1));//email, pass, proxy
+                return;
+            }
+            var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinLogin.xml");
+            mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 19)).Replace("${1}", GetCell(index, 20)).Replace("${2}", GetCell(index, 11) + ":" + GetCell(index, 12));
+                
+            var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
+
+            frmMain.ShowDialog(this);
+        }
     }
 }
