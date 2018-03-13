@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -535,7 +536,7 @@ namespace AirdropBot
         private void button3_Click(object sender, EventArgs e)
         {
             CheckEthBalance(GetSelectedRow());
-         
+
         }
 
         private void CheckEthBalance(int index)
@@ -593,7 +594,7 @@ namespace AirdropBot
         private void btnMew_Click(object sender, EventArgs e)
         {
             CreateMew(GetSelectedRow());
-          
+
         }
 
         private void CreateMew(int index)
@@ -639,7 +640,7 @@ namespace AirdropBot
         private void btnKucoin_Click(object sender, EventArgs e)
         {
             CreateKuCoin(GetSelectedRow());
-         
+
         }
 
         private void CreateKuCoin(int index)
@@ -788,6 +789,71 @@ namespace AirdropBot
             {
                 MessageBox.Show("Copy/paste operation failed. " + ex.Message, "Copy/Paste", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+       
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            CreateWinUser(GetSelectedRow());
+
+        }
+
+        private void CreateWinUser(int index)
+        {
+            if (EmptyCell(index, 13) || EmptyCell(index, 14))
+            {
+                MessageBox.Show("Cannot create windows account for empty win user or win pwd ! " + (index + 1));//email, pass, proxy
+                return;
+            }
+            RunasAdmin("C:\\code\\scripts\\CreateUser.bat",
+                     string.Format("{0} {1}", GetCell(index, 13), GetCell(index, 14)));
+        }
+
+        private void RunasAdmin(string file, string args)
+        {
+            var process = new Process();
+            var startInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Normal,
+                FileName = file,
+                Arguments = args,
+                Verb = "runas"
+            };
+
+            process.StartInfo = startInfo;
+            process.Start();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+            HideWinUser(GetSelectedRow());
+        }
+
+        private void HideWinUser(int index)
+        {
+            if (EmptyCell(index, 13))
+            {
+                MessageBox.Show("Cannot hide windows account for empty win user !" + (index + 1));//email, pass, proxy
+                return;
+            }
+            RunasAdmin("C:\\code\\scripts\\HideUser.bat",
+                     string.Format("{0}", GetCell(index, 13)));
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            OpenTelegram(GetSelectedRow());
+        }
+
+        private void OpenTelegram(int index)
+        {
+            if (EmptyCell(index, 13) || EmptyCell(index, 14))
+            {
+                MessageBox.Show("Cannot open telegram for empty win user or win pwd !" + (index + 1));//email, pass, proxy
+                return;
+            }
+            Helper.OpenTelegram(GetCell(index, 13), "", GetCell(index, 14));
         }
     }
 }

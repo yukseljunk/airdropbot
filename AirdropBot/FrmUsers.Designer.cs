@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,6 +49,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnDelUser = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbUserOps.SuspendLayout();
@@ -56,17 +59,17 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgUsers.Location = new System.Drawing.Point(12, 38);
             this.dgUsers.Name = "dgUsers";
-            this.dgUsers.Size = new System.Drawing.Size(1200, 530);
+            this.dgUsers.Size = new System.Drawing.Size(1361, 512);
             this.dgUsers.TabIndex = 0;
             this.dgUsers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUsers_CellClick);
             this.dgUsers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUsers_CellContentClick);
@@ -84,7 +87,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1238, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1399, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -139,9 +142,9 @@
             // 
             // btnGmail
             // 
-            this.btnGmail.Location = new System.Drawing.Point(252, 21);
+            this.btnGmail.Location = new System.Drawing.Point(190, 21);
             this.btnGmail.Name = "btnGmail";
-            this.btnGmail.Size = new System.Drawing.Size(228, 25);
+            this.btnGmail.Size = new System.Drawing.Size(182, 25);
             this.btnGmail.TabIndex = 4;
             this.btnGmail.Text = "Create gmail account";
             this.btnGmail.UseVisualStyleBackColor = true;
@@ -151,7 +154,7 @@
             // 
             this.btnCreatePwd.Location = new System.Drawing.Point(7, 21);
             this.btnCreatePwd.Name = "btnCreatePwd";
-            this.btnCreatePwd.Size = new System.Drawing.Size(228, 25);
+            this.btnCreatePwd.Size = new System.Drawing.Size(169, 25);
             this.btnCreatePwd.TabIndex = 5;
             this.btnCreatePwd.Text = "Create strong passwords";
             this.btnCreatePwd.UseVisualStyleBackColor = true;
@@ -159,9 +162,9 @@
             // 
             // btnMew
             // 
-            this.btnMew.Location = new System.Drawing.Point(758, 19);
+            this.btnMew.Location = new System.Drawing.Point(594, 19);
             this.btnMew.Name = "btnMew";
-            this.btnMew.Size = new System.Drawing.Size(228, 25);
+            this.btnMew.Size = new System.Drawing.Size(182, 25);
             this.btnMew.TabIndex = 6;
             this.btnMew.Text = "Create mew account";
             this.btnMew.UseVisualStyleBackColor = true;
@@ -169,9 +172,9 @@
             // 
             // btnTwit
             // 
-            this.btnTwit.Location = new System.Drawing.Point(511, 21);
+            this.btnTwit.Location = new System.Drawing.Point(390, 21);
             this.btnTwit.Name = "btnTwit";
-            this.btnTwit.Size = new System.Drawing.Size(228, 25);
+            this.btnTwit.Size = new System.Drawing.Size(182, 25);
             this.btnTwit.TabIndex = 7;
             this.btnTwit.Text = "Create twitter account";
             this.btnTwit.UseVisualStyleBackColor = true;
@@ -179,9 +182,9 @@
             // 
             // btnKucoin
             // 
-            this.btnKucoin.Location = new System.Drawing.Point(1010, 19);
+            this.btnKucoin.Location = new System.Drawing.Point(794, 19);
             this.btnKucoin.Name = "btnKucoin";
-            this.btnKucoin.Size = new System.Drawing.Size(172, 25);
+            this.btnKucoin.Size = new System.Drawing.Size(126, 25);
             this.btnKucoin.TabIndex = 8;
             this.btnKucoin.Text = "Create kucoin account";
             this.btnKucoin.UseVisualStyleBackColor = true;
@@ -191,6 +194,9 @@
             // 
             this.gbUserOps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbUserOps.Controls.Add(this.button7);
+            this.gbUserOps.Controls.Add(this.button6);
+            this.gbUserOps.Controls.Add(this.button5);
             this.gbUserOps.Controls.Add(this.button4);
             this.gbUserOps.Controls.Add(this.button3);
             this.gbUserOps.Controls.Add(this.button2);
@@ -202,9 +208,9 @@
             this.gbUserOps.Controls.Add(this.btnGmail);
             this.gbUserOps.Controls.Add(this.btnTwit);
             this.gbUserOps.Enabled = false;
-            this.gbUserOps.Location = new System.Drawing.Point(12, 574);
+            this.gbUserOps.Location = new System.Drawing.Point(12, 556);
             this.gbUserOps.Name = "gbUserOps";
-            this.gbUserOps.Size = new System.Drawing.Size(1200, 112);
+            this.gbUserOps.Size = new System.Drawing.Size(1361, 112);
             this.gbUserOps.TabIndex = 10;
             this.gbUserOps.TabStop = false;
             this.gbUserOps.Text = "User Operations";
@@ -212,9 +218,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(1010, 65);
+            this.button4.Location = new System.Drawing.Point(794, 65);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(172, 25);
+            this.button4.Size = new System.Drawing.Size(126, 25);
             this.button4.TabIndex = 13;
             this.button4.Text = "Check Kucoin Account";
             this.button4.UseVisualStyleBackColor = true;
@@ -222,9 +228,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(758, 65);
+            this.button3.Location = new System.Drawing.Point(594, 65);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(228, 25);
+            this.button3.Size = new System.Drawing.Size(182, 25);
             this.button3.TabIndex = 12;
             this.button3.Text = "Check balance";
             this.button3.UseVisualStyleBackColor = true;
@@ -232,9 +238,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(511, 65);
+            this.button2.Location = new System.Drawing.Point(390, 65);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(228, 25);
+            this.button2.Size = new System.Drawing.Size(182, 25);
             this.button2.TabIndex = 11;
             this.button2.Text = "Create twitter followers";
             this.button2.UseVisualStyleBackColor = true;
@@ -242,9 +248,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(252, 65);
+            this.button1.Location = new System.Drawing.Point(190, 65);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(228, 25);
+            this.button1.Size = new System.Drawing.Size(182, 25);
             this.button1.TabIndex = 10;
             this.button1.Text = "Check gmail account";
             this.button1.UseVisualStyleBackColor = true;
@@ -254,17 +260,47 @@
             // 
             this.btnDelUser.Location = new System.Drawing.Point(7, 65);
             this.btnDelUser.Name = "btnDelUser";
-            this.btnDelUser.Size = new System.Drawing.Size(228, 25);
+            this.btnDelUser.Size = new System.Drawing.Size(169, 25);
             this.btnDelUser.TabIndex = 9;
             this.btnDelUser.Text = "Delete Selected Users";
             this.btnDelUser.UseVisualStyleBackColor = true;
             this.btnDelUser.Click += new System.EventHandler(this.btnDelUser_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(953, 19);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(150, 25);
+            this.button5.TabIndex = 14;
+            this.button5.Text = "Create windows user";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(953, 65);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(150, 25);
+            this.button6.TabIndex = 15;
+            this.button6.Text = "Hide windows user in login";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(1126, 19);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(150, 25);
+            this.button7.TabIndex = 16;
+            this.button7.Text = "Open telegram";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // FrmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1238, 698);
+            this.ClientSize = new System.Drawing.Size(1399, 680);
             this.Controls.Add(this.gbUserOps);
             this.Controls.Add(this.dgUsers);
             this.Controls.Add(this.menuStrip1);
@@ -305,6 +341,9 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button5;
 
     }
 }

@@ -337,36 +337,6 @@ namespace AirdropBot
         private string CreateTgCommand(XmlNode node)
         {
             //name, password
-            var name = node.Attributes["name"];
-            var password = node.Attributes["password"];
-            if (name == null || password == null) return "name/password not defined";
-            if (name.Value == "" || password.Value == "") return "name/password empty";
-            RunasAdmin("C:\\code\\scripts\\CreateUser.bat",
-                       string.Format("{0} {1}", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
-
-            /*            RunasAdmin("net", string.Format("user {0} {1} /add", ReplaceTokens(name.Value), ReplaceTokens(password.Value)));
-                        RunasAdmin("runas", string.Format("/env /profile /user:{0} cmd.exe", ReplaceTokens(name.Value)));
-                        RunasAdmin("mkdir", string.Format("\"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
-                        RunasAdmin("copy", string.Format("\"c:\\users\\yuksel\\appdata\\roaming\\Telegram Desktop\" \"c:\\users\\{0}\\appdata\\roaming\\Telegram Desktop\\\"", ReplaceTokens(name.Value)));
-            */
-            /*
-             * sendkeys did not work here :(
-             Wait(5);
-
-            // Get a handle to the Calculator application. The window class
-            // and window name were obtained using the Spy++ tool.
-            IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\System32\runas.exe");
-
-            // Verify that Calculator is a running process.
-            if (runasHandle == IntPtr.Zero)
-            {
-                return "Runas.exe is not running.";
-            }
-
-            // Make Calculator the foreground application and send it 
-            // a set of calculations.
-            SetForegroundWindow(runasHandle);
-            SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");*/
 
 
             return "";
@@ -390,20 +360,7 @@ namespace AirdropBot
             }
         }
 
-        private void RunasAdmin(string file, string args)
-        {
-            var process = new Process();
-            var startInfo = new ProcessStartInfo
-                                {
-                                    WindowStyle = ProcessWindowStyle.Normal,
-                                    FileName = file,
-                                    Arguments = args,
-                                    Verb = "runas"
-                                };
 
-            process.StartInfo = startInfo;
-            process.Start();
-        }
 
         private string FocusCommand(XmlNode node)
         {
@@ -659,22 +616,6 @@ namespace AirdropBot
             var message = node.Attributes["message"];
             if (user == null || password == null) return "User/pass not defined";
 
-            try
-            {
-                //close all instances of telegram first
-                foreach (var p in Process.GetProcessesByName("Telegram"))
-                {
-                    p.Kill();
-                }
-            }
-            catch
-            {
-            }
-
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-            startInfo.FileName = "runas";
 
             //tg://join/?invite=AAAAAE7c308RYtaVAyyomw
             var extraArgs = "";
@@ -686,31 +627,8 @@ namespace AirdropBot
             {
                 extraArgs = "-- tg://join/?invite=" + ReplaceTokens(chat.Value).Replace("?", "&");
             }
-            startInfo.Arguments =
-            string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
-                  ReplaceTokens(user.Value),
-                  extraArgs);
 
-            process.StartInfo = startInfo;
-            process.Start();
-            Thread.Sleep(2000);
-
-            // Get a handle to the Calculator application. The window class
-            // and window name were obtained using the Spy++ tool.
-            IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
-
-            // Verify that Calculator is a running process.
-            if (runasHandle == IntPtr.Zero)
-            {
-                return "Runas.exe is not running.";
-            }
-
-            // Make Calculator the foreground application and send it 
-            // a set of calculations.
-            SetForegroundWindow(runasHandle);
-            SendKeys.SendWait(ReplaceTokens(password.Value) + "{ENTER}");
-            //wait for telegram to open
-            Thread.Sleep(5000);
+            if (Helper.OpenTelegram(ReplaceTokens(user.Value), extraArgs, ReplaceTokens(password.Value)) != "") return "Runas exe is not running!";
 
             //this may require closing off all telegram instances
             TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
@@ -799,6 +717,8 @@ namespace AirdropBot
             }
             return "";
         }
+
+
 
 
         private string GmailCommand(XmlNode node)
@@ -1402,14 +1322,6 @@ namespace AirdropBot
         }
 
 
-        // Get a handle to an application window.
-        [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
-        public static extern IntPtr FindWindow(string lpClassName,
-            string lpWindowName);
-
-        // Activate an application window.
-        [DllImport("USER32.DLL")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         private void btnRunRest_Click(object sender, EventArgs e)
         {
