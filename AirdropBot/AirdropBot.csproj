@@ -140,6 +140,7 @@
   <ItemGroup>
     <Content Include="Templates\TwitterSearch.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Templates\TwitterLogin.xml">
       <SubType>Designer</SubType>
@@ -179,6 +180,7 @@
     </Content>
     <Content Include="Templates\TwitterFollower.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Templates\TwitterReg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
