@@ -647,7 +647,10 @@ namespace AirdropBot
                     }
                     else if (subNode.Name == "follow")
                     {
-
+                        var addressNode = subNode.Attributes["address"];
+                        if (addressNode == null) continue;
+                        if (addressNode.Value == "") continue;
+                        RunTemplate("TwitterFollow", ReplaceTokens(addressNode.Value));
                     }
                     else if (subNode.Name == "like")
                     {

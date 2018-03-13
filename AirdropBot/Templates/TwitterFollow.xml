@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="https://twitter.com/${0}" />
+  <wait for="2"/>
+
+  <if compare="DIV" what="tagName"  xpath="//div[@class='ProfileNav']//div[contains(@class,'not-following')]" >
+    <scroll height="-10000"/>
+    <wait for="3"/>
+    <snap xpath="//div[@class='ProfileNav']//div[contains(@class,'not-following')]" x="%50" y="%100"/>
+  </if>
+
+</steps>
