@@ -805,7 +805,7 @@ namespace AirdropBot
                 MessageBox.Show("Cannot create windows account for empty win user or win pwd ! " + (index + 1));//email, pass, proxy
                 return;
             }
-            RunasAdmin("C:\\code\\scripts\\CreateUser.bat",
+            RunasAdmin(Helper.AssemblyDirectory+ "\\CreateUser.bat",
                      string.Format("{0} {1}", GetCell(index, 13), GetCell(index, 14)));
         }
 
@@ -837,7 +837,7 @@ namespace AirdropBot
                 MessageBox.Show("Cannot hide windows account for empty win user !" + (index + 1));//email, pass, proxy
                 return;
             }
-            RunasAdmin("C:\\code\\scripts\\HideUser.bat",
+            RunasAdmin(Helper.AssemblyDirectory + "\\HideUser.bat",
                      string.Format("{0}", GetCell(index, 13)));
         }
 
