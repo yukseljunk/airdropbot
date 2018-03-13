@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="https://twitter.com/login?lang=en" proxy=""/>
+
+  <wait for="2"/>
+  <set value="${0}" xpath="//fieldset/div/input"/>
+  <set value="${1}" xpath="//fieldset/div[2]/input"/>
+  <wait for="2"/>
+  <click xpath="//button[@type='submit']" waitforbrowser="true"/>
+  <wait for="2"/>
+
+</steps>

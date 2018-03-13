@@ -7,4 +7,5 @@
   <set value="@${2}" xpath="//input[@id='twitField']"/>
   <wait for="2"/>
   <submit xpath="//form"/>
+
 </steps>

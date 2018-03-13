@@ -1,0 +1,8 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <set value="${0}" xpath="//*[@id='search-query']"/>
+  <wait for="2"/>
+  <click xpath="//*[@id='global-nav-search']//button" />
+  <wait for="5"/>
+  
+</steps>

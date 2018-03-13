@@ -191,7 +191,10 @@ namespace AirdropBot
                 {
                     commandResult = GmailSignOutCommand(node);
                 }
-
+                if (command == "twitter")
+                {
+                    commandResult = TwitterCommand(node);
+                }
                 if (command == "clearcookies")
                 {
                     commandResult = SuppressCookiePersistence();
@@ -239,6 +242,7 @@ namespace AirdropBot
             }
 
         }
+
 
         private string IfCommand(XmlNode node)
         {
@@ -603,6 +607,66 @@ namespace AirdropBot
             }
 
             cbrowser.ExecuteScriptAsync(String.Format("window.scrollBy({0}, {1});", 0, height));
+            return "";
+        }
+        private void RunTemplate(string templateName, params  string[] args)
+        {
+            var template = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\" + templateName + ".xml");
+            var argIndex = 0;
+            foreach (var s in args)
+            {
+                template = template.Replace("${" + argIndex + "}", s);
+                argIndex++;
+            }
+            Run(template);
+        }
+
+        private string TwitterCommand(XmlNode node)
+        {
+            //user, pass, search
+            var user = node.Attributes["user"];
+            var password = node.Attributes["pass"];
+            if (user == null || password == null) return "User/password empty or not defined";
+            RunTemplate("TwitterLogin", user.Value, password.Value);
+
+            //txtScenario.SelectedText = "<twitter user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow address=\"\"/>\r\n<like post=\"\"/>\r\n<retweet post=\"\"/>\r\n</twitter>";
+
+            if (node.HasChildNodes)
+            {
+                stopped = false;
+                foreach (XmlNode subNode in node.ChildNodes)
+                {
+                    if (stopped) break;
+                    if (subNode.Name == "search")
+                    {
+                        var textNode = subNode.Attributes["text"];
+                        if (textNode == null) continue;
+                        if (textNode.Value == "") continue;
+                        RunTemplate("TwitterSearch", ReplaceTokens(textNode.Value));
+ 
+                    }
+                    else if (subNode.Name == "follow")
+                    {
+
+                    }
+                    else if (subNode.Name == "like")
+                    {
+
+                    }
+                    else if (subNode.Name == "retweet")
+                    {
+
+                    }
+                    else
+                    {
+                        Run(subNode.OuterXml);
+                    }
+
+
+                }
+            }
+            //logout
+
             return "";
         }
 
@@ -1696,6 +1760,11 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "<if compare=\"\" what=\"\" xpath=\"\" regex=\"\">\r\n\r\n</if>";
 
+        }
+
+        private void twitterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<twitter user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow address=\"\"/>\r\n<like post=\"\"/>\r\n<retweet post=\"\"/>\r\n</twitter>";
         }
     }
 }

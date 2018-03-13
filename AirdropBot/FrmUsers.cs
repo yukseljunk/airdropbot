@@ -132,14 +132,18 @@ namespace AirdropBot
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+        }
+
+        private void ImportUsers(bool ignoreHeader)
+        {
             DialogResult result = openCsvFile.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
                 var userFactory = new UserFactory();
-                Users = userFactory.GetUsers(openCsvFile.FileName, true);
+                Users = userFactory.GetUsers(openCsvFile.FileName, ignoreHeader);
                 FillUsers();
             }
-
         }
 
 
@@ -854,6 +858,16 @@ namespace AirdropBot
                 return;
             }
             Helper.OpenTelegram(GetCell(index, 13), "", GetCell(index, 14));
+        }
+
+        private void byIgnoringFirstLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportUsers(true);
+        }
+
+        private void doNotIgnoreAnyLinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportUsers(false);
         }
     }
 }

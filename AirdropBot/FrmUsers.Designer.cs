@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,14 +44,16 @@
             this.btnTwit = new System.Windows.Forms.Button();
             this.btnKucoin = new System.Windows.Forms.Button();
             this.gbUserOps = new System.Windows.Forms.GroupBox();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnDelUser = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.byIgnoringFirstLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.doNotIgnoreAnyLinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbUserOps.SuspendLayout();
@@ -59,10 +61,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -106,26 +108,29 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(129, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem2.Text = "Save Users";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(126, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // importToolStripMenuItem
             // 
+            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.byIgnoringFirstLineToolStripMenuItem,
+            this.doNotIgnoreAnyLinToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importToolStripMenuItem.Text = "Import...";
             this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export...";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
@@ -216,6 +221,36 @@
             this.gbUserOps.Text = "User Operations";
             this.gbUserOps.Enter += new System.EventHandler(this.gbUserOps_Enter);
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(1126, 19);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(150, 25);
+            this.button7.TabIndex = 16;
+            this.button7.Text = "Open telegram";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(953, 65);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(150, 25);
+            this.button6.TabIndex = 15;
+            this.button6.Text = "Hide windows user in login";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(953, 19);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(150, 25);
+            this.button5.TabIndex = 14;
+            this.button5.Text = "Create windows user";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(794, 65);
@@ -266,35 +301,19 @@
             this.btnDelUser.UseVisualStyleBackColor = true;
             this.btnDelUser.Click += new System.EventHandler(this.btnDelUser_Click);
             // 
-            // button5
+            // byIgnoringFirstLineToolStripMenuItem
             // 
-            this.button5.Location = new System.Drawing.Point(953, 19);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(150, 25);
-            this.button5.TabIndex = 14;
-            this.button5.Text = "Create windows user";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            this.byIgnoringFirstLineToolStripMenuItem.Name = "byIgnoringFirstLineToolStripMenuItem";
+            this.byIgnoringFirstLineToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.byIgnoringFirstLineToolStripMenuItem.Text = "By ignoring first line";
+            this.byIgnoringFirstLineToolStripMenuItem.Click += new System.EventHandler(this.byIgnoringFirstLineToolStripMenuItem_Click);
             // 
-            // button6
+            // doNotIgnoreAnyLinToolStripMenuItem
             // 
-            this.button6.Location = new System.Drawing.Point(953, 65);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(150, 25);
-            this.button6.TabIndex = 15;
-            this.button6.Text = "Hide windows user in login";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(1126, 19);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(150, 25);
-            this.button7.TabIndex = 16;
-            this.button7.Text = "Open telegram";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.doNotIgnoreAnyLinToolStripMenuItem.Name = "doNotIgnoreAnyLinToolStripMenuItem";
+            this.doNotIgnoreAnyLinToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.doNotIgnoreAnyLinToolStripMenuItem.Text = "Do not ignore any line";
+            this.doNotIgnoreAnyLinToolStripMenuItem.Click += new System.EventHandler(this.doNotIgnoreAnyLinToolStripMenuItem_Click);
             // 
             // FrmUsers
             // 
@@ -344,6 +363,8 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ToolStripMenuItem byIgnoringFirstLineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem doNotIgnoreAnyLinToolStripMenuItem;
 
     }
 }

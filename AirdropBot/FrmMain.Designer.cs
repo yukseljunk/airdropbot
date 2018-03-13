@@ -93,6 +93,7 @@
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -145,7 +146,6 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
-            this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -261,11 +261,11 @@
             this.commandsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.navigateToolStripMenuItem,
             this.setFieldToolStripMenuItem,
+            this.twitterToolStripMenuItem,
             this.getFieldToolStripMenuItem,
             this.waitToolStripMenuItem,
             this.inoToolStripMenuItem,
-            this.bringWindowFronToolStripMenuItem,
-            this.twitterToolStripMenuItem});
+            this.bringWindowFronToolStripMenuItem});
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.commandsToolStripMenuItem.Text = "Commands";
@@ -290,7 +290,7 @@
             this.toolStripMenuItem14,
             this.ifToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
-            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.navigateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
             this.navigateToolStripMenuItem.Click += new System.EventHandler(this.navigateToolStripMenuItem_Click);
             // 
@@ -622,7 +622,7 @@
             this.searchToolStripMenuItem,
             this.signOutToolStripMenuItem});
             this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
-            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setFieldToolStripMenuItem.Text = "Gmail";
             // 
             // loginToolStripMenuItem
@@ -649,30 +649,37 @@
             // getFieldToolStripMenuItem
             // 
             this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
-            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.getFieldToolStripMenuItem.Text = "Telegram";
             this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
             // 
             // waitToolStripMenuItem
             // 
             this.waitToolStripMenuItem.Name = "waitToolStripMenuItem";
-            this.waitToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.waitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.waitToolStripMenuItem.Text = "Wait";
             this.waitToolStripMenuItem.Click += new System.EventHandler(this.waitToolStripMenuItem_Click);
             // 
             // inoToolStripMenuItem
             // 
             this.inoToolStripMenuItem.Name = "inoToolStripMenuItem";
-            this.inoToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.inoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.inoToolStripMenuItem.Text = "Info";
             this.inoToolStripMenuItem.Click += new System.EventHandler(this.inoToolStripMenuItem_Click);
             // 
             // bringWindowFronToolStripMenuItem
             // 
             this.bringWindowFronToolStripMenuItem.Name = "bringWindowFronToolStripMenuItem";
-            this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bringWindowFronToolStripMenuItem.Text = "Bring Window Front";
             this.bringWindowFronToolStripMenuItem.Click += new System.EventHandler(this.bringWindowFronToolStripMenuItem_Click);
+            // 
+            // twitterToolStripMenuItem
+            // 
+            this.twitterToolStripMenuItem.Name = "twitterToolStripMenuItem";
+            this.twitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.twitterToolStripMenuItem.Text = "Twitter";
+            this.twitterToolStripMenuItem.Click += new System.EventHandler(this.twitterToolStripMenuItem_Click);
             // 
             // tokensToolStripMenuItem
             // 
@@ -1094,12 +1101,6 @@
             this.pnlScenario.Name = "pnlScenario";
             this.pnlScenario.Size = new System.Drawing.Size(364, 264);
             this.pnlScenario.TabIndex = 19;
-            // 
-            // twitterToolStripMenuItem
-            // 
-            this.twitterToolStripMenuItem.Name = "twitterToolStripMenuItem";
-            this.twitterToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.twitterToolStripMenuItem.Text = "Twitter";
             // 
             // FrmMain
             // 
