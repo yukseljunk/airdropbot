@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -232,6 +233,14 @@ namespace AirdropBot
                 {
                     commandResult = IfCommand(node);
                 }
+                if (command == "ifnot")
+                {
+                    commandResult = IfNotCommand(node);
+                }
+                if (command == "screenshot")
+                {
+                    commandResult = ScreenShotCommand(node);
+                }
                 if (commandResult != "")
                 {
                     MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
@@ -243,6 +252,58 @@ namespace AirdropBot
 
         }
 
+        private string ScreenShotCommand(XmlNode node)
+        {
+            var fileNode = node.Attributes["file"];
+            var fileName = "c:\\temp\\test.jpg";
+            if(fileNode!=null && fileNode.Value!="")
+            {
+                fileName = fileNode.Value;
+            }
+            Rectangle bounds = ContentPanel.Bounds;
+            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                    
+                }
+                bitmap.Save(fileName, ImageFormat.Jpeg);
+            }
+            return "";
+        }
+
+
+        private string IfNotCommand(XmlNode node)
+        {
+            var compare = node.Attributes["compare"];
+            var what = node.Attributes["what"];
+            var regex = node.Attributes["regex"];
+            var xpath = node.Attributes["xpath"];
+
+            if (compare == null || what == null || xpath == null) return "Compare or what or xpath is not defined!";
+            if (compare.Value == "" || what.Value == "" || xpath.Value == "") return "Compare or what or xpath is empty!";
+
+            var result = GetCElement(node);
+            if (regex != null && regex.Value != "")
+            {
+                var reg = new Regex(regex.Value);
+                var match = reg.Match(result);
+                if (match.Success)
+                {
+                    if (match.Groups.Count > 1)
+                    {
+                        result = match.Groups[1].Value;
+                    }
+                }
+            }
+            if (result != ReplaceTokens(compare.Value))//criteria not met
+            {
+                Run(node.InnerXml);
+            }
+
+            return "";
+        }
 
         private string IfCommand(XmlNode node)
         {
@@ -643,7 +704,7 @@ namespace AirdropBot
                         if (textNode == null) continue;
                         if (textNode.Value == "") continue;
                         RunTemplate("TwitterSearch", ReplaceTokens(textNode.Value));
- 
+
                     }
                     else if (subNode.Name == "follow")
                     {
@@ -654,11 +715,22 @@ namespace AirdropBot
                     }
                     else if (subNode.Name == "like")
                     {
-
+                        var postNode = subNode.Attributes["post"];
+                        if (postNode == null) continue;
+                        if (postNode.Value == "") continue;
+                        var url = ReplaceTokens(postNode.Value);
+                        if (!url.StartsWith("http")) url = "https://twitter.com/" + url;
+                        RunTemplate("TwitterLike", url);
                     }
                     else if (subNode.Name == "retweet")
                     {
-
+                        //https://twitter.com/JonErlichman/status/971536891924439040
+                        var postNode = subNode.Attributes["post"];
+                        if (postNode == null) continue;
+                        if (postNode.Value == "") continue;
+                        var url = ReplaceTokens(postNode.Value);
+                        if (!url.StartsWith("http")) url = "https://twitter.com/" + url;
+                        RunTemplate("TwitterRetweet", url);
                     }
                     else
                     {
@@ -669,7 +741,7 @@ namespace AirdropBot
                 }
             }
             //logout
-
+            RunTemplate("TwitterLogout");
             return "";
         }
 
@@ -1768,6 +1840,16 @@ namespace AirdropBot
         private void twitterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<twitter user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow address=\"\"/>\r\n<like post=\"\"/>\r\n<retweet post=\"\"/>\r\n</twitter>";
+        }
+
+        private void ifnotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<ifnot compare=\"\" what=\"\" xpath=\"\" regex=\"\">\r\n\r\n</ifnot>";
+        }
+
+        private void toolStripMenuItem15_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<screenshot file=\"\"/>";
         }
     }
 }

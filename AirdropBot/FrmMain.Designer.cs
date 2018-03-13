@@ -79,21 +79,23 @@
             this.byTextToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.sendKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.focusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.waitTillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.failIfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.continueIfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
             this.ifToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ifnotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -283,12 +285,14 @@
             this.snapToolStripMenuItem,
             this.sendKeysToolStripMenuItem,
             this.focusToolStripMenuItem,
+            this.toolStripMenuItem15,
             this.toolStripSeparator1,
             this.waitTillToolStripMenuItem,
             this.failIfToolStripMenuItem,
             this.continueIfToolStripMenuItem,
             this.toolStripMenuItem14,
-            this.ifToolStripMenuItem});
+            this.ifToolStripMenuItem,
+            this.ifnotToolStripMenuItem});
             this.navigateToolStripMenuItem.Name = "navigateToolStripMenuItem";
             this.navigateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.navigateToolStripMenuItem.Text = "Browser";
@@ -577,6 +581,13 @@
             this.focusToolStripMenuItem.Text = "Focus";
             this.focusToolStripMenuItem.Click += new System.EventHandler(this.focusToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem15
+            // 
+            this.toolStripMenuItem15.Name = "toolStripMenuItem15";
+            this.toolStripMenuItem15.Size = new System.Drawing.Size(146, 22);
+            this.toolStripMenuItem15.Text = "Screenshot";
+            this.toolStripMenuItem15.Click += new System.EventHandler(this.toolStripMenuItem15_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -615,6 +626,13 @@
             this.ifToolStripMenuItem.Text = "If";
             this.ifToolStripMenuItem.Click += new System.EventHandler(this.ifToolStripMenuItem_Click);
             // 
+            // ifnotToolStripMenuItem
+            // 
+            this.ifnotToolStripMenuItem.Name = "ifnotToolStripMenuItem";
+            this.ifnotToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.ifnotToolStripMenuItem.Text = "Ifnot";
+            this.ifnotToolStripMenuItem.Click += new System.EventHandler(this.ifnotToolStripMenuItem_Click);
+            // 
             // setFieldToolStripMenuItem
             // 
             this.setFieldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -646,6 +664,13 @@
             this.signOutToolStripMenuItem.Text = "Sign Out";
             this.signOutToolStripMenuItem.Click += new System.EventHandler(this.signOutToolStripMenuItem_Click);
             // 
+            // twitterToolStripMenuItem
+            // 
+            this.twitterToolStripMenuItem.Name = "twitterToolStripMenuItem";
+            this.twitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.twitterToolStripMenuItem.Text = "Twitter";
+            this.twitterToolStripMenuItem.Click += new System.EventHandler(this.twitterToolStripMenuItem_Click);
+            // 
             // getFieldToolStripMenuItem
             // 
             this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
@@ -673,13 +698,6 @@
             this.bringWindowFronToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bringWindowFronToolStripMenuItem.Text = "Bring Window Front";
             this.bringWindowFronToolStripMenuItem.Click += new System.EventHandler(this.bringWindowFronToolStripMenuItem_Click);
-            // 
-            // twitterToolStripMenuItem
-            // 
-            this.twitterToolStripMenuItem.Name = "twitterToolStripMenuItem";
-            this.twitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.twitterToolStripMenuItem.Text = "Twitter";
-            this.twitterToolStripMenuItem.Click += new System.EventHandler(this.twitterToolStripMenuItem_Click);
             // 
             // tokensToolStripMenuItem
             // 
@@ -1249,6 +1267,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
         private System.Windows.Forms.ToolStripMenuItem ifToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem twitterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ifnotToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem15;
     }
 }
 

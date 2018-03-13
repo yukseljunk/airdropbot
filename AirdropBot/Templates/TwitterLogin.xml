@@ -1,16 +1,21 @@
 ﻿<?xml version="1.0"?>
 <steps>
   <navigate url="https://twitter.com/login?lang=en" proxy=""/>
-  <wait for="2"/>
-  <snap xpath="//fieldset/div/input" x="%50" y="%150"/>
-  <wait for="${Random(1,3)}"/>
-  <sendkey value="${0}"/>
-  <wait for="${Random(1,3)}"/>
-  <snap xpath="//fieldset/div[2]/input" x="%50" y="%150"/>
-  <wait for="${Random(1,3)}"/>
-  <sendkey value="${1}" />
-  <wait for="${Random(1,3)}"/>
-  <snap xpath="//button[@type='submit']" x="%50" y="%150"/>
-  <wait for="${Random(4,8)}"/>
+  <wait for="5"/>
+  <if compare="INPUT" what="tagName" xpath="//fieldset/div/input">
+    <snap xpath="//fieldset/div/input" x="%50" y="%150"/>
+    <wait for="${Random(1,3)}"/>
+    <sendkey value="${0}"/>
+    <wait for="${Random(1,3)}"/>
+    <snap xpath="//fieldset/div[2]/input" x="%50" y="%150"/>
+    <wait for="${Random(1,3)}"/>
+    <sendkey value="${1}" />
+    <wait for="${Random(1,3)}"/>
+    <snap xpath="//button[@type='submit']" x="%50" y="%150"/>
+    <wait for="${Random(4,8)}"/>
 
+  </if>
+
+
+  
 </steps>

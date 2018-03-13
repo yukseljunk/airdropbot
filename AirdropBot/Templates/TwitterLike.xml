@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <navigate url="${0}" proxy=""/>
+
+  <wait for="2"/>
+
+
+  <ifnot compare="DIV" what="tagName"  xpath="//div[@class='permalink-inner permalink-tweet-container']/div[contains(@class,'favorited')]" >
+
+    <wait for="2"/>
+
+    <info value="NOT liked!"/>
+    <click  xpath="//div[@class='permalink-inner permalink-tweet-container']//div[contains(@class,'ProfileTweet-action--favorite')]/button"  />
+  </ifnot>
+
+</steps>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <navigate url="${0}" proxy=""/>
+
+  <wait for="2"/>
+
+  <ifnot compare="DIV" what="tagName"  xpath="//div[@class='permalink-inner permalink-tweet-container']/div[contains(@class,'retweeted')]" >
+
+    <click  xpath="//div[@class='permalink-inner permalink-tweet-container']//div[contains(@class,'ProfileTweet-action--retweet')]/button"  />
+    <wait for="2"/>
+    <click xpath="//span[@class='RetweetDialog-retweetActionLabel']" />
+  </ifnot>
+
+
+</steps>

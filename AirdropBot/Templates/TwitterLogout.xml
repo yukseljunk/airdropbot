@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <wait for="2"/>
+  <if compare="signout-button" what="id" xpath="//*[@id='signout-button']">
+
+    <click xpath="//*[@id='signout-button']" waitforbrowser="true"/>
+
+  </if>
+  <wait for="2"/>
+
+</steps>
