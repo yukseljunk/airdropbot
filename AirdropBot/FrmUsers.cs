@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -132,7 +133,7 @@ namespace AirdropBot
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void ImportUsers(bool ignoreHeader)
@@ -169,8 +170,7 @@ namespace AirdropBot
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            SaveUsers(Helper.UsersFile);
-            IsDirty = false;
+
         }
 
         private void SaveUsers(string file)
@@ -229,7 +229,7 @@ namespace AirdropBot
 
         private void dgUsers_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            gbUserOps.Enabled = true;
+            // gbUserOps.Enabled = true;
         }
 
         private void btnDelUser_Click(object sender, EventArgs e)
@@ -795,7 +795,7 @@ namespace AirdropBot
             }
         }
 
-       
+
         private void button5_Click_1(object sender, EventArgs e)
         {
             CreateWinUser(GetSelectedRow());
@@ -809,7 +809,7 @@ namespace AirdropBot
                 MessageBox.Show("Cannot create windows account for empty win user or win pwd ! " + (index + 1));//email, pass, proxy
                 return;
             }
-            RunasAdmin(Helper.AssemblyDirectory+ "\\CreateUser.bat",
+            RunasAdmin(Helper.AssemblyDirectory + "\\CreateUser.bat",
                      string.Format("{0} {1}", GetCell(index, 13), GetCell(index, 14)));
         }
 
@@ -868,6 +868,216 @@ namespace AirdropBot
         private void doNotIgnoreAnyLinToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ImportUsers(false);
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveUsers(Helper.UsersFile);
+            IsDirty = false;
+        }
+
+        private void createStrongPasswordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var indexes = GetSelectedRows();
+            foreach (var rowIndex in indexes)
+            {
+                CreateStrongPasswords(rowIndex);
+            }
+        }
+
+        private void deleteSelectedOnesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var indexes = GetSelectedRows();
+
+            foreach (var rowIndex in indexes)
+            {
+                try
+                {
+                    if (MessageBox.Show("Are you sure you want to delete row " + (rowIndex + 1).ToString() + "?", "Confirm Deletion", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        dgUsers.Rows.RemoveAt(rowIndex);
+
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void createGmailAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateGmail(GetSelectedRow());
+        }
+
+        private void checkGmailAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckGmail(GetSelectedRow());
+        }
+
+        private void createTwitterAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateTwitter(GetSelectedRow());
+        }
+
+        private void createTwitterFollowersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateTwitterFollower(GetSelectedRow());
+        }
+
+        private void createMewAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateMew(GetSelectedRow());
+        }
+
+        private void checkBalanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckEthBalance(GetSelectedRow());
+        }
+
+        private void createKucoinAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateKuCoin(GetSelectedRow());
+        }
+
+        private void checkKucoinAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoginKuCoin(GetSelectedRow());
+        }
+
+        private void createWindowsUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateWinUser(GetSelectedRow());
+        }
+
+        private void hideWindowsUserInLoginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HideWinUser(GetSelectedRow());
+        }
+
+        private void openTelegramForSelectedUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenTelegram(GetSelectedRow());
+        }
+
+        private void dgUsers_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
+        }
+
+        private void dgUsers_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int currentMouseOverRow = dgUsers.HitTest(e.X, e.Y).RowIndex;
+
+                if (currentMouseOverRow >= 0)
+                {
+                    contextMenuStrip1.Show(dgUsers, new Point(e.X, e.Y));
+                    contextMenuStrip1.Tag = currentMouseOverRow;
+
+                }
+
+
+            }
+        }
+
+        private void sallaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            dgUsers.Rows.RemoveAt(rowIndex);
+        }
+
+        private int GetRowIndexForContextMenu()
+        {
+            if (contextMenuStrip1.Tag == null) return -1;
+            if (contextMenuStrip1.Tag.ToString() == "") return -1;
+            var rowIndex = int.Parse(contextMenuStrip1.Tag.ToString());
+            if (rowIndex == dgUsers.Rows.Count - 1) return -1;
+            return rowIndex;
+        }
+
+        private void createStrongPasswordsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateStrongPasswords(rowIndex);
+        }
+
+        private void hideWindowsUToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            HideWinUser(rowIndex);
+        }
+
+        private void createToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateGmail(rowIndex);
+        }
+
+        private void checkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CheckGmail(rowIndex);
+        }
+
+        private void createAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateTwitter(rowIndex);
+        }
+
+        private void createFollowersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateTwitterFollower(rowIndex);
+        }
+
+        private void createToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateMew(rowIndex);
+        }
+
+        private void checkToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CheckEthBalance(rowIndex);
+        }
+
+        private void createToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateKuCoin(rowIndex);
+        }
+
+        private void checkToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            LoginKuCoin(rowIndex);
+        }
+
+        private void createWindowsUserToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateWinUser(rowIndex);
+        }
+
+        private void openTelegramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            OpenTelegram(rowIndex);
         }
     }
 }
