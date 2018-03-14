@@ -138,11 +138,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Templates\FBShare.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\FBFollow.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\FBLikePost.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\FBLikePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Templates\FBLogin.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

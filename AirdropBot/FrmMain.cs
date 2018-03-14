@@ -825,10 +825,12 @@ namespace AirdropBot
                     }
                     else if (subNode.Name == "follow")
                     {
-                        var addressNode = subNode.Attributes["page"];
-                        if (addressNode == null) continue;
-                        if (addressNode.Value == "") continue;
-                        RunTemplate("TwitterFollow", ReplaceTokens(addressNode.Value));
+                        var pageNod = subNode.Attributes["page"];
+                        if (pageNod == null) continue;
+                        if (pageNod.Value == "") continue;
+                        var url = ReplaceTokens(pageNod.Value);
+                        if (!url.StartsWith("http")) url = "https://www.facebook.com/" + url;
+                        RunTemplate("FBFollow", url);
                     }
                     else if (subNode.Name == "like")
                     {
@@ -852,13 +854,17 @@ namespace AirdropBot
                     }
                     else if (subNode.Name == "share")
                     {
-                        //https://twitter.com/JonErlichman/status/971536891924439040
+                        
                         var postNode = subNode.Attributes["post"];
                         if (postNode == null) continue;
                         if (postNode.Value == "") continue;
                         var url = ReplaceTokens(postNode.Value);
-                        if (!url.StartsWith("http")) url = "https://twitter.com/" + url;
-                        RunTemplate("TwitterRetweet", url);
+                        if (!url.StartsWith("http")) url = "https://www.facebook.com/" + url;
+                        RunTemplate("FBShare", url);
+                        /*
+                        
+                         
+                         */
                     }
                     else
                     {

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="${0}/" />
+  <wait for="2"/>
+  <if compare="BUTTON" what="tagName"  xpath="//button[@data-testid='page_profile_follow_button_test_id']">
+
+    <click xpath="//button[@data-testid='page_profile_follow_button_test_id']"   />
+
+  </if>
+
+</steps>

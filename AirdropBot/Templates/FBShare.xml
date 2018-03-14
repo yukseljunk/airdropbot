@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="${0}/" />
+  <wait for="2"/>
+
+  <wait for="2"/>
+  <click xpath="//a[contains(@class,'share_action_link')]" />
+  <wait for="2"/>
+  <click xpath="//*[text()='Share Now (Public)']"/>
+  <wait for="4"/>
+</steps>
