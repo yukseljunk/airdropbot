@@ -1079,5 +1079,33 @@ namespace AirdropBot
             if (rowIndex == -1) return;
             OpenTelegram(rowIndex);
         }
+
+        private void checkFBAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoginFBAccount(GetSelectedRow());
+        }
+
+        private void LoginFBAccount(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 21) || EmptyCell(index, 22))
+                {
+                    MessageBox.Show("Cannot check fb for empty fb user and fb password! " + (index + 1));
+                    return;
+                }
+                var fbTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\FBLogin.xml");
+                fbTemplate = fbTemplate.Replace("${0}", GetCell(index, 21)).Replace("${1}", GetCell(index, 22));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = fbTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
     }
 }

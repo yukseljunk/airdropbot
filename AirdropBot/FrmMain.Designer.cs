@@ -93,6 +93,7 @@
             this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kucoinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -151,7 +152,7 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
-            this.kucoinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.facebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -268,6 +269,7 @@
             this.navigateToolStripMenuItem,
             this.setFieldToolStripMenuItem,
             this.twitterToolStripMenuItem,
+            this.facebookToolStripMenuItem,
             this.getFieldToolStripMenuItem,
             this.kucoinToolStripMenuItem,
             this.waitToolStripMenuItem,
@@ -682,6 +684,13 @@
             this.getFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.getFieldToolStripMenuItem.Text = "Telegram";
             this.getFieldToolStripMenuItem.Click += new System.EventHandler(this.getFieldToolStripMenuItem_Click);
+            // 
+            // kucoinToolStripMenuItem
+            // 
+            this.kucoinToolStripMenuItem.Name = "kucoinToolStripMenuItem";
+            this.kucoinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.kucoinToolStripMenuItem.Text = "Kucoin";
+            this.kucoinToolStripMenuItem.Click += new System.EventHandler(this.kucoinToolStripMenuItem_Click);
             // 
             // waitToolStripMenuItem
             // 
@@ -1147,12 +1156,12 @@
             this.pnlScenario.Size = new System.Drawing.Size(364, 264);
             this.pnlScenario.TabIndex = 19;
             // 
-            // kucoinToolStripMenuItem
+            // facebookToolStripMenuItem
             // 
-            this.kucoinToolStripMenuItem.Name = "kucoinToolStripMenuItem";
-            this.kucoinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.kucoinToolStripMenuItem.Text = "Kucoin";
-            this.kucoinToolStripMenuItem.Click += new System.EventHandler(this.kucoinToolStripMenuItem_Click);
+            this.facebookToolStripMenuItem.Name = "facebookToolStripMenuItem";
+            this.facebookToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.facebookToolStripMenuItem.Text = "Facebook";
+            this.facebookToolStripMenuItem.Click += new System.EventHandler(this.facebookToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -1307,6 +1316,7 @@
         private System.Windows.Forms.ToolStripMenuItem kucoinUserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem kucoinPasswordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem kucoinToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem facebookToolStripMenuItem;
     }
 }
 

@@ -196,6 +196,10 @@ namespace AirdropBot
                 {
                     commandResult = TwitterCommand(node);
                 }
+                if (command == "facebook")
+                {
+                    commandResult = FacebookCommand(node);
+                }
                 if (command == "clearcookies")
                 {
                     commandResult = SuppressCookiePersistence();
@@ -774,6 +778,79 @@ namespace AirdropBot
                         RunTemplate("TwitterLike", url);
                     }
                     else if (subNode.Name == "retweet")
+                    {
+                        //https://twitter.com/JonErlichman/status/971536891924439040
+                        var postNode = subNode.Attributes["post"];
+                        if (postNode == null) continue;
+                        if (postNode.Value == "") continue;
+                        var url = ReplaceTokens(postNode.Value);
+                        if (!url.StartsWith("http")) url = "https://twitter.com/" + url;
+                        RunTemplate("TwitterRetweet", url);
+                    }
+                    else
+                    {
+                        Run(subNode.OuterXml);
+                    }
+
+
+                }
+            }
+            //logout
+            RunTemplate("TwitterLogout");
+            return "";
+        }
+        private string FacebookCommand(XmlNode node)
+        {
+            //user, pass, search
+            var user = node.Attributes["user"];
+            var password = node.Attributes["pass"];
+            if (user == null || password == null) return "User/password empty or not defined";
+            RunTemplate("FBLogin", user.Value, password.Value);
+
+            //txtScenario.SelectedText = "<facebook user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow page=\"\"/>\r\n<like post=\"\"/>\r\n<like page=\"\"/>\r\n<share post=\"\"/>\r\n</facebook>";
+       
+            if (node.HasChildNodes)
+            {
+                stopped = false;
+                foreach (XmlNode subNode in node.ChildNodes)
+                {
+                    if (stopped) break;
+                    if (subNode.Name == "search")
+                    {
+                        var textNode = subNode.Attributes["text"];
+                        if (textNode == null) continue;
+                        if (textNode.Value == "") continue;
+                        RunTemplate("FBSearch", ReplaceTokens(textNode.Value));
+
+                    }
+                    else if (subNode.Name == "follow")
+                    {
+                        var addressNode = subNode.Attributes["page"];
+                        if (addressNode == null) continue;
+                        if (addressNode.Value == "") continue;
+                        RunTemplate("TwitterFollow", ReplaceTokens(addressNode.Value));
+                    }
+                    else if (subNode.Name == "like")
+                    {
+                        var pageNode = subNode.Attributes["page"];
+                        if (pageNode != null)
+                        {
+                            if (pageNode.Value == "") continue;
+                            var url = ReplaceTokens(pageNode.Value);
+                            if (!url.StartsWith("http")) url = "https://www.facebook.com/" + url;
+                            RunTemplate("FBLikePage", url);
+                        }
+                        var postNode = subNode.Attributes["post"];
+                        if (postNode != null)
+                        {
+                            if (postNode.Value == "") continue;
+                            var url = ReplaceTokens(postNode.Value);
+                            if (!url.StartsWith("http")) url = "https://www.facebook.com/" + url;
+                            RunTemplate("FBLikePost", url);
+                        }
+                        
+                    }
+                    else if (subNode.Name == "share")
                     {
                         //https://twitter.com/JonErlichman/status/971536891924439040
                         var postNode = subNode.Attributes["post"];
@@ -1917,6 +1994,12 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "<kucoin postno=\"\" twitterlogin=\"\" twitterpass=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
 
+        }
+
+        private void facebookToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<facebook user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow page=\"\"/>\r\n<like page=\"\"/>\r\n<like post=\"\"/>\r\n<share post=\"\"/>\r\n</facebook>";
+       
         }
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sallaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,10 +92,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle17.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle17;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -129,7 +129,7 @@
             this.kucoinToolStripMenuItem1,
             this.telegramToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 192);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 170);
             // 
             // sallaToolStripMenuItem
             // 
@@ -372,19 +372,20 @@
             this.facebookToolStripMenuItem.Name = "facebookToolStripMenuItem";
             this.facebookToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.facebookToolStripMenuItem.Text = "Facebook";
-            this.facebookToolStripMenuItem.Visible = false;
             // 
             // createFBAccountToolStripMenuItem
             // 
             this.createFBAccountToolStripMenuItem.Name = "createFBAccountToolStripMenuItem";
             this.createFBAccountToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.createFBAccountToolStripMenuItem.Text = "Create FB account";
+            this.createFBAccountToolStripMenuItem.Visible = false;
             // 
             // checkFBAccountToolStripMenuItem
             // 
             this.checkFBAccountToolStripMenuItem.Name = "checkFBAccountToolStripMenuItem";
             this.checkFBAccountToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.checkFBAccountToolStripMenuItem.Text = "Check FB account";
+            this.checkFBAccountToolStripMenuItem.Click += new System.EventHandler(this.checkFBAccountToolStripMenuItem_Click);
             // 
             // openCsvFile
             // 

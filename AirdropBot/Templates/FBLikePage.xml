@@ -1,0 +1,8 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="${0}/" />
+  <wait for="2"/>
+  <if compare="BUTTON" what="tagName"  xpath="//button[contains(@class,'likeButton')]">
+    <click xpath="//*[contains(@class,'likeButton')]" />
+  </if>
+</steps>

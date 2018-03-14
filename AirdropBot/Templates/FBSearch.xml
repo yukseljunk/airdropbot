@@ -1,0 +1,8 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <set value="" xpath="//*[@name='q']"/>
+  <wait for="2"/>
+  <snap xpath="//*[@name='q']" x="%50" y="%150"/>
+  <sendkey value="${0}{enter}"/>
+  <wait for="2"/>
+</steps>
