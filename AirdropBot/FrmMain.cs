@@ -1851,5 +1851,15 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "<screenshot file=\"\"/>";
         }
+
+        private void kucoinUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserKucoinUser}";
+        }
+
+        private void kucoinPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserKucoinPass}";
+        }
     }
 }
