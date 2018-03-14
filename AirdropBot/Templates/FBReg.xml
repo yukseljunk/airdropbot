@@ -1,0 +1,35 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="http://www.facebook.com/signup" />
+  <wait for="2"/>
+  
+  <snap xpath="//*[@name='firstname']" x="%50" y="%150"/>
+  <sendkey value="${0}"/>
+  <wait for="2"/>
+  
+  <snap xpath="//*[@name='lastname']" x="%50" y="%150"/>
+  <sendkey value="${1}"/>
+  <wait for="2"/>
+
+  <snap xpath="//*[@name='reg_email__']" x="%50" y="%150"/>
+  <sendkey value="${2}"/>
+  <wait for="2"/>
+
+  <snap xpath="//*[@name='reg_passwd__']" x="%50" y="%150"/>
+  <sendkey value="${3}"/>
+  <wait for="2"/>
+
+  <set value="${Random(1,28)}" xpath="//select[@id='day']"/>
+  <wait for="1"/>
+  <set value="${Random(1,12)}" xpath="//select[@id='month']"/>
+  <wait for="1"/>
+
+  <set value="${Random(1960,1999)}" xpath="//select[@id='year']"/>
+  <wait for="1"/>
+  <click xpath="//*[@data-name='gender_wrapper']/span[${Random(1,3)}]/input" />
+  <wait for="1"/>
+  <click xpath="//button[@name='websubmit']" waitforbrowser="true"/>
+  <wait for="1"/>
+</steps>

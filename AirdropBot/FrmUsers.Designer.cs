@@ -29,10 +29,29 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sallaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.createStrongPasswordsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.gmailToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twitterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createFollowersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mEWToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.kucoinToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.telegramToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createWindowsUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideWindowsUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTelegramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,25 +85,9 @@
             this.checkFBAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openCsvFile = new System.Windows.Forms.OpenFileDialog();
             this.saveCsvFile = new System.Windows.Forms.SaveFileDialog();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.createStrongPasswordsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.gmailToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.twitterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mEWToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.kucoinToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.telegramToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createFollowersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.createToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.createWindowsUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideWindowsUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openTelegramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.facebookToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -92,10 +95,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle17.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -127,9 +130,10 @@
             this.twitterToolStripMenuItem1,
             this.mEWToolStripMenuItem1,
             this.kucoinToolStripMenuItem1,
-            this.telegramToolStripMenuItem1});
+            this.telegramToolStripMenuItem1,
+            this.facebookToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 214);
             // 
             // sallaToolStripMenuItem
             // 
@@ -137,6 +141,146 @@
             this.sallaToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.sallaToolStripMenuItem.Text = "Delete";
             this.sallaToolStripMenuItem.Click += new System.EventHandler(this.sallaToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(201, 6);
+            // 
+            // createStrongPasswordsToolStripMenuItem1
+            // 
+            this.createStrongPasswordsToolStripMenuItem1.Name = "createStrongPasswordsToolStripMenuItem1";
+            this.createStrongPasswordsToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.createStrongPasswordsToolStripMenuItem1.Text = "Create Strong Passwords";
+            this.createStrongPasswordsToolStripMenuItem1.Click += new System.EventHandler(this.createStrongPasswordsToolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(201, 6);
+            // 
+            // gmailToolStripMenuItem1
+            // 
+            this.gmailToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem,
+            this.checkToolStripMenuItem});
+            this.gmailToolStripMenuItem1.Name = "gmailToolStripMenuItem1";
+            this.gmailToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.gmailToolStripMenuItem1.Text = "Gmail";
+            // 
+            // createToolStripMenuItem
+            // 
+            this.createToolStripMenuItem.Name = "createToolStripMenuItem";
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem.Text = "Create";
+            this.createToolStripMenuItem.Click += new System.EventHandler(this.createToolStripMenuItem_Click);
+            // 
+            // checkToolStripMenuItem
+            // 
+            this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
+            this.checkToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.checkToolStripMenuItem.Text = "Check";
+            this.checkToolStripMenuItem.Click += new System.EventHandler(this.checkToolStripMenuItem_Click);
+            // 
+            // twitterToolStripMenuItem1
+            // 
+            this.twitterToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createAccountToolStripMenuItem,
+            this.createFollowersToolStripMenuItem});
+            this.twitterToolStripMenuItem1.Name = "twitterToolStripMenuItem1";
+            this.twitterToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.twitterToolStripMenuItem1.Text = "Twitter";
+            // 
+            // createAccountToolStripMenuItem
+            // 
+            this.createAccountToolStripMenuItem.Name = "createAccountToolStripMenuItem";
+            this.createAccountToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.createAccountToolStripMenuItem.Text = "Create account";
+            this.createAccountToolStripMenuItem.Click += new System.EventHandler(this.createAccountToolStripMenuItem_Click);
+            // 
+            // createFollowersToolStripMenuItem
+            // 
+            this.createFollowersToolStripMenuItem.Name = "createFollowersToolStripMenuItem";
+            this.createFollowersToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.createFollowersToolStripMenuItem.Text = "Create Followers";
+            this.createFollowersToolStripMenuItem.Click += new System.EventHandler(this.createFollowersToolStripMenuItem_Click);
+            // 
+            // mEWToolStripMenuItem1
+            // 
+            this.mEWToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem1,
+            this.checkToolStripMenuItem1});
+            this.mEWToolStripMenuItem1.Name = "mEWToolStripMenuItem1";
+            this.mEWToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.mEWToolStripMenuItem1.Text = "MEW";
+            // 
+            // createToolStripMenuItem1
+            // 
+            this.createToolStripMenuItem1.Name = "createToolStripMenuItem1";
+            this.createToolStripMenuItem1.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem1.Text = "Create";
+            this.createToolStripMenuItem1.Click += new System.EventHandler(this.createToolStripMenuItem1_Click);
+            // 
+            // checkToolStripMenuItem1
+            // 
+            this.checkToolStripMenuItem1.Name = "checkToolStripMenuItem1";
+            this.checkToolStripMenuItem1.Size = new System.Drawing.Size(108, 22);
+            this.checkToolStripMenuItem1.Text = "Check";
+            this.checkToolStripMenuItem1.Click += new System.EventHandler(this.checkToolStripMenuItem1_Click);
+            // 
+            // kucoinToolStripMenuItem1
+            // 
+            this.kucoinToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem2,
+            this.checkToolStripMenuItem2});
+            this.kucoinToolStripMenuItem1.Name = "kucoinToolStripMenuItem1";
+            this.kucoinToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.kucoinToolStripMenuItem1.Text = "Kucoin";
+            // 
+            // createToolStripMenuItem2
+            // 
+            this.createToolStripMenuItem2.Name = "createToolStripMenuItem2";
+            this.createToolStripMenuItem2.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem2.Text = "Create";
+            this.createToolStripMenuItem2.Click += new System.EventHandler(this.createToolStripMenuItem2_Click);
+            // 
+            // checkToolStripMenuItem2
+            // 
+            this.checkToolStripMenuItem2.Name = "checkToolStripMenuItem2";
+            this.checkToolStripMenuItem2.Size = new System.Drawing.Size(108, 22);
+            this.checkToolStripMenuItem2.Text = "Check";
+            this.checkToolStripMenuItem2.Click += new System.EventHandler(this.checkToolStripMenuItem2_Click);
+            // 
+            // telegramToolStripMenuItem1
+            // 
+            this.telegramToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createWindowsUserToolStripMenuItem1,
+            this.hideWindowsUToolStripMenuItem,
+            this.openTelegramToolStripMenuItem});
+            this.telegramToolStripMenuItem1.Name = "telegramToolStripMenuItem1";
+            this.telegramToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.telegramToolStripMenuItem1.Text = "Telegram";
+            // 
+            // createWindowsUserToolStripMenuItem1
+            // 
+            this.createWindowsUserToolStripMenuItem1.Name = "createWindowsUserToolStripMenuItem1";
+            this.createWindowsUserToolStripMenuItem1.Size = new System.Drawing.Size(186, 22);
+            this.createWindowsUserToolStripMenuItem1.Text = "Create Windows User";
+            this.createWindowsUserToolStripMenuItem1.Click += new System.EventHandler(this.createWindowsUserToolStripMenuItem1_Click);
+            // 
+            // hideWindowsUToolStripMenuItem
+            // 
+            this.hideWindowsUToolStripMenuItem.Name = "hideWindowsUToolStripMenuItem";
+            this.hideWindowsUToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.hideWindowsUToolStripMenuItem.Text = "Hide Windows User";
+            this.hideWindowsUToolStripMenuItem.Click += new System.EventHandler(this.hideWindowsUToolStripMenuItem_Click);
+            // 
+            // openTelegramToolStripMenuItem
+            // 
+            this.openTelegramToolStripMenuItem.Name = "openTelegramToolStripMenuItem";
+            this.openTelegramToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.openTelegramToolStripMenuItem.Text = "Open Telegram";
+            this.openTelegramToolStripMenuItem.Click += new System.EventHandler(this.openTelegramToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -378,7 +522,7 @@
             this.createFBAccountToolStripMenuItem.Name = "createFBAccountToolStripMenuItem";
             this.createFBAccountToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.createFBAccountToolStripMenuItem.Text = "Create FB account";
-            this.createFBAccountToolStripMenuItem.Visible = false;
+            this.createFBAccountToolStripMenuItem.Click += new System.EventHandler(this.createFBAccountToolStripMenuItem_Click);
             // 
             // checkFBAccountToolStripMenuItem
             // 
@@ -398,145 +542,28 @@
             this.saveCsvFile.Filter = "CSV Files|*.csv";
             this.saveCsvFile.RestoreDirectory = true;
             // 
-            // toolStripMenuItem2
+            // facebookToolStripMenuItem1
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(201, 6);
+            this.facebookToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem3,
+            this.checkToolStripMenuItem3});
+            this.facebookToolStripMenuItem1.Name = "facebookToolStripMenuItem1";
+            this.facebookToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.facebookToolStripMenuItem1.Text = "Facebook";
             // 
-            // createStrongPasswordsToolStripMenuItem1
+            // createToolStripMenuItem3
             // 
-            this.createStrongPasswordsToolStripMenuItem1.Name = "createStrongPasswordsToolStripMenuItem1";
-            this.createStrongPasswordsToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.createStrongPasswordsToolStripMenuItem1.Text = "Create Strong Passwords";
-            this.createStrongPasswordsToolStripMenuItem1.Click += new System.EventHandler(this.createStrongPasswordsToolStripMenuItem1_Click);
+            this.createToolStripMenuItem3.Name = "createToolStripMenuItem3";
+            this.createToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.createToolStripMenuItem3.Text = "Create";
+            this.createToolStripMenuItem3.Click += new System.EventHandler(this.createToolStripMenuItem3_Click);
             // 
-            // toolStripMenuItem3
+            // checkToolStripMenuItem3
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(201, 6);
-            // 
-            // gmailToolStripMenuItem1
-            // 
-            this.gmailToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createToolStripMenuItem,
-            this.checkToolStripMenuItem});
-            this.gmailToolStripMenuItem1.Name = "gmailToolStripMenuItem1";
-            this.gmailToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.gmailToolStripMenuItem1.Text = "Gmail";
-            // 
-            // twitterToolStripMenuItem1
-            // 
-            this.twitterToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createAccountToolStripMenuItem,
-            this.createFollowersToolStripMenuItem});
-            this.twitterToolStripMenuItem1.Name = "twitterToolStripMenuItem1";
-            this.twitterToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.twitterToolStripMenuItem1.Text = "Twitter";
-            // 
-            // mEWToolStripMenuItem1
-            // 
-            this.mEWToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createToolStripMenuItem1,
-            this.checkToolStripMenuItem1});
-            this.mEWToolStripMenuItem1.Name = "mEWToolStripMenuItem1";
-            this.mEWToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.mEWToolStripMenuItem1.Text = "MEW";
-            // 
-            // kucoinToolStripMenuItem1
-            // 
-            this.kucoinToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createToolStripMenuItem2,
-            this.checkToolStripMenuItem2});
-            this.kucoinToolStripMenuItem1.Name = "kucoinToolStripMenuItem1";
-            this.kucoinToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.kucoinToolStripMenuItem1.Text = "Kucoin";
-            // 
-            // telegramToolStripMenuItem1
-            // 
-            this.telegramToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createWindowsUserToolStripMenuItem1,
-            this.hideWindowsUToolStripMenuItem,
-            this.openTelegramToolStripMenuItem});
-            this.telegramToolStripMenuItem1.Name = "telegramToolStripMenuItem1";
-            this.telegramToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.telegramToolStripMenuItem1.Text = "Telegram";
-            // 
-            // createToolStripMenuItem
-            // 
-            this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.createToolStripMenuItem.Text = "Create";
-            this.createToolStripMenuItem.Click += new System.EventHandler(this.createToolStripMenuItem_Click);
-            // 
-            // checkToolStripMenuItem
-            // 
-            this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
-            this.checkToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.checkToolStripMenuItem.Text = "Check";
-            this.checkToolStripMenuItem.Click += new System.EventHandler(this.checkToolStripMenuItem_Click);
-            // 
-            // createAccountToolStripMenuItem
-            // 
-            this.createAccountToolStripMenuItem.Name = "createAccountToolStripMenuItem";
-            this.createAccountToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.createAccountToolStripMenuItem.Text = "Create account";
-            this.createAccountToolStripMenuItem.Click += new System.EventHandler(this.createAccountToolStripMenuItem_Click);
-            // 
-            // createFollowersToolStripMenuItem
-            // 
-            this.createFollowersToolStripMenuItem.Name = "createFollowersToolStripMenuItem";
-            this.createFollowersToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.createFollowersToolStripMenuItem.Text = "Create Followers";
-            this.createFollowersToolStripMenuItem.Click += new System.EventHandler(this.createFollowersToolStripMenuItem_Click);
-            // 
-            // createToolStripMenuItem1
-            // 
-            this.createToolStripMenuItem1.Name = "createToolStripMenuItem1";
-            this.createToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.createToolStripMenuItem1.Text = "Create";
-            this.createToolStripMenuItem1.Click += new System.EventHandler(this.createToolStripMenuItem1_Click);
-            // 
-            // checkToolStripMenuItem1
-            // 
-            this.checkToolStripMenuItem1.Name = "checkToolStripMenuItem1";
-            this.checkToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.checkToolStripMenuItem1.Text = "Check";
-            this.checkToolStripMenuItem1.Click += new System.EventHandler(this.checkToolStripMenuItem1_Click);
-            // 
-            // createToolStripMenuItem2
-            // 
-            this.createToolStripMenuItem2.Name = "createToolStripMenuItem2";
-            this.createToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
-            this.createToolStripMenuItem2.Text = "Create";
-            this.createToolStripMenuItem2.Click += new System.EventHandler(this.createToolStripMenuItem2_Click);
-            // 
-            // checkToolStripMenuItem2
-            // 
-            this.checkToolStripMenuItem2.Name = "checkToolStripMenuItem2";
-            this.checkToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
-            this.checkToolStripMenuItem2.Text = "Check";
-            this.checkToolStripMenuItem2.Click += new System.EventHandler(this.checkToolStripMenuItem2_Click);
-            // 
-            // createWindowsUserToolStripMenuItem1
-            // 
-            this.createWindowsUserToolStripMenuItem1.Name = "createWindowsUserToolStripMenuItem1";
-            this.createWindowsUserToolStripMenuItem1.Size = new System.Drawing.Size(186, 22);
-            this.createWindowsUserToolStripMenuItem1.Text = "Create Windows User";
-            this.createWindowsUserToolStripMenuItem1.Click += new System.EventHandler(this.createWindowsUserToolStripMenuItem1_Click);
-            // 
-            // hideWindowsUToolStripMenuItem
-            // 
-            this.hideWindowsUToolStripMenuItem.Name = "hideWindowsUToolStripMenuItem";
-            this.hideWindowsUToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.hideWindowsUToolStripMenuItem.Text = "Hide Windows User";
-            this.hideWindowsUToolStripMenuItem.Click += new System.EventHandler(this.hideWindowsUToolStripMenuItem_Click);
-            // 
-            // openTelegramToolStripMenuItem
-            // 
-            this.openTelegramToolStripMenuItem.Name = "openTelegramToolStripMenuItem";
-            this.openTelegramToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.openTelegramToolStripMenuItem.Text = "Open Telegram";
-            this.openTelegramToolStripMenuItem.Click += new System.EventHandler(this.openTelegramToolStripMenuItem_Click);
+            this.checkToolStripMenuItem3.Name = "checkToolStripMenuItem3";
+            this.checkToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.checkToolStripMenuItem3.Text = "Check";
+            this.checkToolStripMenuItem3.Click += new System.EventHandler(this.checkToolStripMenuItem3_Click);
             // 
             // FrmUsers
             // 
@@ -617,6 +644,9 @@
         private System.Windows.Forms.ToolStripMenuItem createWindowsUserToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem hideWindowsUToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openTelegramToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem facebookToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem3;
 
     }
 }

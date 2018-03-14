@@ -1107,5 +1107,48 @@ namespace AirdropBot
                 MessageBox.Show(exception.ToString());
             }
         }
+
+        private void createFBAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateFBAccount(GetSelectedRow());
+        }
+
+        private void CreateFBAccount(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 1) || EmptyCell(index, 2) || EmptyCell(index, 21) || EmptyCell(index, 22))
+                {
+                    MessageBox.Show("Cannot create facebook address for empty name, lastname, fb user and fb password! " + (index + 1));
+                    return;
+                }
+                var fbTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\FBReg.xml");
+                fbTemplate = fbTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).
+                    Replace("${2}", GetCell(index, 21)).Replace("${3}", GetCell(index, 22));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = fbTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void createToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateFBAccount(rowIndex);
+        }
+
+        private void checkToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            LoginFBAccount(rowIndex);
+        }
     }
 }
