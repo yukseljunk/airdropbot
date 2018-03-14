@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="${0}/" />
+  <wait for="2"/>
+
+  <if compare="A" what="tagName" xpath="//*[@data-testid='fb-ufi-likelink']">
+    <click xpath="//*[@data-testid='fb-ufi-likelink']" />
+  </if>
+</steps>

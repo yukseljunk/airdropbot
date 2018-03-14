@@ -138,6 +138,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Templates\FBLikePost.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\FBLikePage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
