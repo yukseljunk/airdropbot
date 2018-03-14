@@ -140,6 +140,7 @@
   <ItemGroup>
     <Content Include="Templates\KucoinRetweet.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Templates\TwitterLogout.xml">
       <SubType>Designer</SubType>

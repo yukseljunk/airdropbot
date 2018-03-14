@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
 <steps>
-  <navigate url="https://twitter.com/kucoincom/status/{0}" proxy=""/>
+  <navigate url="https://twitter.com/kucoincom/status/${0}" proxy=""/>
   <wait for="2"/>
   <get param="formlink" what="getAttribute('title')" xpath="//a[contains(@title,'mikecrm')]" regex=""/>
   <wait for="2"/>
@@ -9,13 +9,13 @@
   <twitter user="${1}" pass="${2}">
     <follow address="kucoincom"/>
     <wait for="2"/>
-    <retweet post="https://twitter.com/kucoincom/status/{0}"/>
+    <retweet post="https://twitter.com/kucoincom/status/${0}"/>
     <wait for="5"/>
     <navigate url="https://www.twitter.com" proxy=""/>
     <wait for="2"/>
     <click xpath="//*[contains(@class,'DashboardProfileCard-name')]/a" waitforbrowser="true"/>
     <wait for="2"/>
-    <screenshot file="c:\temp\{3}.jpg"/>
+    <screenshot file="c:\temp\${3}.jpg"/>
     <wait for="2"/>
   </twitter>
 
