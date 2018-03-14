@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <snap xpath="//*[@id='logoutMenu']" x="%50" y="%150"/>
+  <wait for="1"/>
+  <click xpath="//a[contains(@data-gt,'menu_logout')]"/>
+  <wait for="3"/>
+
+  <if compare="BUTTON" what="tagName" xpath="//button[contains(text(),'Save Password and Log Out')]">
+    <click xpath="//button[contains(text(),'Save Password and Log Out')]" />
+  </if>
+  <wait for="3"/>
+</steps>

@@ -875,7 +875,7 @@ namespace AirdropBot
                 }
             }
             //logout
-            RunTemplate("TwitterLogout");
+            RunTemplate("FBLogout");
             return "";
         }
 
