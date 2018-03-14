@@ -237,6 +237,10 @@ namespace AirdropBot
                 {
                     commandResult = IfNotCommand(node);
                 }
+                if(command=="kucoin")
+                {
+                    commandResult = KucoinRetweet(node);
+                }
                 if (command == "screenshot")
                 {
                     commandResult = ScreenShotCommand(node);
@@ -249,6 +253,53 @@ namespace AirdropBot
                 }
                 stepNo++;
             }
+
+        }
+
+        private string KucoinRetweet(XmlNode node)
+        {
+            //            txtScenario.SelectedText = "<kucoin postno=\"\" twitterlogin=\"\" twitterpass=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
+            var postno = node.Attributes["postno"];
+            if (postno == null) return "Post number is not defined!";
+            if (postno.Value == "") return "Post number is empty!";
+            var twLogin = ActiveUser.TwUserName;
+            var twLoginNode = node.Attributes["twitterlogin"];
+            if(twLoginNode!=null && twLoginNode.Value!="")
+            {
+                twLogin = twLoginNode.Value;
+            }
+
+            var twPass = ActiveUser.TwPwd;
+            var twPassNode = node.Attributes["twitterpass"];
+            if (twPassNode != null && twPassNode.Value != "")
+            {
+                twPass = twPassNode.Value;
+            }
+
+            var twUser = ActiveUser.TwUserName;
+            var twUserNode = node.Attributes["twitteruser"];
+            if (twUserNode != null && twUserNode.Value != "")
+            {
+                twUser = twUserNode.Value;
+            }
+
+            var fullName = ActiveUser.TwUserName;
+            var fullNameNode = node.Attributes["fullname"];
+            if (fullNameNode != null && fullNameNode.Value != "")
+            {
+                fullName = fullNameNode.Value;
+            }
+            var kucoinUser = ActiveUser.KucoinUser;
+            var kucoinemailnode = node.Attributes["kucoinemail"];
+            if (kucoinemailnode != null && kucoinemailnode.Value != "")
+            {
+                kucoinUser = kucoinemailnode.Value;
+            }
+
+            var kucoinTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinRetweet.xml");
+            kucoinTemplate = kucoinTemplate.Replace("${0}", postno.Value).Replace("${1}", twLogin).Replace("${2}", twPass).Replace("${3}", twUser).Replace("${4}", fullName).Replace("${5}", kucoinUser);
+            Run(kucoinTemplate);
+            return "";
 
         }
 
@@ -1860,6 +1911,12 @@ namespace AirdropBot
         private void kucoinPasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserKucoinPass}";
+        }
+
+        private void kucoinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<kucoin postno=\"\" twitterlogin=\"\" twitterpass=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
+
         }
     }
 }

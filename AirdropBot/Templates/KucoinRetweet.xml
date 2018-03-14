@@ -1,0 +1,45 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="https://twitter.com/kucoincom/status/{0}" proxy=""/>
+  <wait for="2"/>
+  <get param="formlink" what="getAttribute('title')" xpath="//a[contains(@title,'mikecrm')]" regex=""/>
+  <wait for="2"/>
+
+
+  <twitter user="${1}" pass="${2}">
+    <follow address="kucoincom"/>
+    <wait for="2"/>
+    <retweet post="https://twitter.com/kucoincom/status/{0}"/>
+    <wait for="5"/>
+    <navigate url="https://www.twitter.com" proxy=""/>
+    <wait for="2"/>
+    <click xpath="//*[contains(@class,'DashboardProfileCard-name')]/a" waitforbrowser="true"/>
+    <wait for="2"/>
+    <screenshot file="c:\temp\{3}.jpg"/>
+    <wait for="2"/>
+  </twitter>
+
+  <wait for="2"/>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="${formlink}" />
+  <wait for="5"/>
+  <snap xpath="//div[@class='fb_componentWrapper']/div[2]//input"  x="%50" y="%150"/>
+  <wait for="2"/>
+  <set value="${4}" xpath="//div[@class='fb_componentWrapper']/div[2]//input"/>
+
+
+  <wait for="2"/>
+
+  <snap xpath="//div[@class='fb_componentWrapper']/div[3]//input"   x="%50" y="%150"/>
+  <wait for="1"/>
+  <set value="${5}" xpath="//div[@class='fb_componentWrapper']/div[3]//input"  />
+  <wait for="1"/>
+  <snap  xpath="//div[@class='fb_componentWrapper']/div[4]//input"  x="%50" y="%150"/>
+  <wait for="1"/>
+  <set value="https://twitter.com/${3}" xpath="//div[@class='fb_componentWrapper']/div[4]//input" />
+
+  <scroll height="1000"/>
+  <snap xpath="//*[@class='fbc_paContentInfo']" x="30" y="-30" />
+
+</steps>
