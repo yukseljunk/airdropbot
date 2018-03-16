@@ -31,7 +31,7 @@ namespace AirdropBot
         // Get a handle to an application window.
         [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
         public static extern IntPtr FindWindow(string lpClassName,
-            string lpWindowName);
+                                               string lpWindowName);
 
         // Activate an application window.
         [DllImport("USER32.DLL")]
@@ -52,18 +52,11 @@ namespace AirdropBot
             {
             }
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-            startInfo.FileName = "runas";
-
-            startInfo.Arguments =
-                string.Format("/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
-                              user,
-                              args);
-
-            process.StartInfo = startInfo;
-            process.Start();
+            StartProcess("runas",
+                         string.Format(
+                             "/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
+                             user,
+                             args));
             Thread.Sleep(2000);
 
             // Get a handle to the Calculator application. The window class
@@ -86,5 +79,37 @@ namespace AirdropBot
             Thread.Sleep(5000);
             return "";
         }
+
+        public static string StartProcess(string app, string args, bool output = false)
+        {
+            var process = new Process();
+            var startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            startInfo.FileName = app;
+
+            if (output)
+            {
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.CreateNoWindow = true;
+            }
+
+            startInfo.Arguments = args;
+
+            process.StartInfo = startInfo;
+            process.Start();
+            var result = "";
+            if (output)
+            {
+                var res = new List<string>();
+                while (!process.StandardOutput.EndOfStream)
+                {
+                    res.Add(process.StandardOutput.ReadLine());
+                }
+                result = string.Join("\r\n", res);
+            }
+            return result;
+        }
     }
 }
+

@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using CefSharp;
 using CefSharp.WinForms;
-using Microsoft.Win32;
 using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
@@ -739,13 +735,44 @@ namespace AirdropBot
 
         private string TwitterCommand(XmlNode node)
         {
+            /*            
+             <twitter user=\"\" pass=\"\" consumerkey=\"\" consumersecret=\"\" accesstoken=\"\" accesstokensecret=\"\">";
+*/
             //user, pass, search
             var user = node.Attributes["user"];
             var password = node.Attributes["pass"];
-            if (user == null || password == null) return "User/password empty or not defined";
-            RunTemplate("TwitterLogin", user.Value, password.Value);
+            if (user == null || password == null) return "User/password not defined";
+            if (user.Value == "" || password.Value == "") return "User/password empty";
 
-            //txtScenario.SelectedText = "<twitter user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow address=\"\"/>\r\n<like post=\"\"/>\r\n<retweet post=\"\"/>\r\n</twitter>";
+            var consumerkey = node.Attributes["consumerkey"];
+            var consumersecret = node.Attributes["consumersecret"];
+            var accesstoken = node.Attributes["accesstoken"];
+            var accesstokensecret = node.Attributes["accesstokensecret"];
+
+
+            var commands = new HashSet<string>();
+            if (node.HasChildNodes)
+            {
+                foreach (XmlNode subNode in node.ChildNodes)
+                {
+                    commands.Add(subNode.Name);
+                }
+            }
+            commands.Remove("wait");
+            var apiCommands = new HashSet<string>() { "follow", "like", "retweet" };
+            var onlyAPI = commands.Any() && commands.IsSubsetOf(apiCommands);
+            var someAPI = commands.Intersect(apiCommands).Any();
+
+            if (someAPI) //only validate API params when there is a call to API
+            {
+
+                if (consumerkey == null || consumersecret == null || accesstoken == null || accesstokensecret == null)
+                    return "API Keys not defined";
+                if (consumerkey.Value == "" || consumersecret.Value == "" || accesstoken.Value == "" ||
+                    accesstokensecret.Value == "") return "API Keys empty";
+            }
+
+            if (!onlyAPI) RunTemplate("TwitterLogin", user.Value, password.Value);//only use browser when there is some other call then API
 
             if (node.HasChildNodes)
             {
@@ -766,16 +793,15 @@ namespace AirdropBot
                         var addressNode = subNode.Attributes["address"];
                         if (addressNode == null) continue;
                         if (addressNode.Value == "") continue;
-                        RunTemplate("TwitterFollow", ReplaceTokens(addressNode.Value));
+
+                        RunTweetApi("follow", ReplaceTokens(addressNode.Value), consumerkey.Value, consumersecret.Value, accesstoken.Value, accesstokensecret.Value);
                     }
                     else if (subNode.Name == "like")
                     {
                         var postNode = subNode.Attributes["post"];
                         if (postNode == null) continue;
                         if (postNode.Value == "") continue;
-                        var url = ReplaceTokens(postNode.Value);
-                        if (!url.StartsWith("http")) url = "https://twitter.com/" + url;
-                        RunTemplate("TwitterLike", url);
+                        RunTweetApi("like", ReplaceTokens(postNode.Value), consumerkey.Value, consumersecret.Value, accesstoken.Value, accesstokensecret.Value);
                     }
                     else if (subNode.Name == "retweet")
                     {
@@ -783,22 +809,31 @@ namespace AirdropBot
                         var postNode = subNode.Attributes["post"];
                         if (postNode == null) continue;
                         if (postNode.Value == "") continue;
-                        var url = ReplaceTokens(postNode.Value);
-                        if (!url.StartsWith("http")) url = "https://twitter.com/" + url;
-                        RunTemplate("TwitterRetweet", url);
+                        RunTweetApi("retweet", ReplaceTokens(postNode.Value), consumerkey.Value, consumersecret.Value, accesstoken.Value, accesstokensecret.Value);
                     }
                     else
                     {
                         Run(subNode.OuterXml);
                     }
-
-
                 }
             }
             //logout
-            RunTemplate("TwitterLogout");
+            if (!onlyAPI) RunTemplate("TwitterLogout");
             return "";
         }
+
+        private void RunTweetApi(string command, string commandarg, string consumerkey, string consumersecret, string accesstoken, string accesstokensecret)
+        {
+            var botExe = Helper.AssemblyDirectory + "\\TwitterBot\\TwitterBot.exe";
+            var output = Helper.StartProcess(botExe,
+                                string.Format("{0} {1} {2} {3} {4} {5}", ReplaceTokens(consumerkey), ReplaceTokens(consumersecret), ReplaceTokens(accesstoken),
+                                              ReplaceTokens(accesstokensecret), command, commandarg), true);
+            //wait for bot to respond
+            Thread.Sleep(5000);
+            Debug.WriteLine(output);
+        }
+
+
         private string FacebookCommand(XmlNode node)
         {
             //user, pass, search
@@ -1723,7 +1758,13 @@ namespace AirdropBot
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (cbrowser != null) cbrowser.Dispose();
+            try
+            {
+                if (cbrowser != null) cbrowser.Dispose();
+            }
+            catch
+            {
+            }
             try
             {
                 if (!OnlyBrowser) Cef.Shutdown();
@@ -1973,7 +2014,7 @@ namespace AirdropBot
 
         private void twitterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<twitter user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow address=\"\"/>\r\n<like post=\"\"/>\r\n<retweet post=\"\"/>\r\n</twitter>";
+            txtScenario.SelectedText = "<twitter user=\"${UserTwName}\" pass=\"${UserTwPwd}\" consumerkey=\"${UserTwConsumerKey}\" consumersecret=\"${UserTwConsumerSecret}\" accesstoken=\"${UserTwAccessToken}\" accesstokensecret=\"${UserTwAccessTokenSecret}\">\r\n<search text=\"\"/>\r\n<follow address=\"\"/>\r\n<like post=\"\"/>\r\n<retweet post=\"\"/>\r\n</twitter>";
         }
 
         private void ifnotToolStripMenuItem_Click(object sender, EventArgs e)
