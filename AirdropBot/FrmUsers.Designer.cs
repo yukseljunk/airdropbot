@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sallaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +52,9 @@
             this.createWindowsUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.hideWindowsUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTelegramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.facebookToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,9 +88,12 @@
             this.checkFBAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openCsvFile = new System.Windows.Forms.OpenFileDialog();
             this.saveCsvFile = new System.Windows.Forms.SaveFileDialog();
-            this.facebookToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.createToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkTwitterAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.createAPIKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.createAPIKeysToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -95,10 +101,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -186,7 +192,10 @@
             // 
             this.twitterToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createAccountToolStripMenuItem,
-            this.createFollowersToolStripMenuItem});
+            this.createFollowersToolStripMenuItem,
+            this.createAPIKeysToolStripMenuItem1,
+            this.toolStripMenuItem5,
+            this.checkToolStripMenuItem4});
             this.twitterToolStripMenuItem1.Name = "twitterToolStripMenuItem1";
             this.twitterToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
             this.twitterToolStripMenuItem1.Text = "Twitter";
@@ -281,6 +290,29 @@
             this.openTelegramToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.openTelegramToolStripMenuItem.Text = "Open Telegram";
             this.openTelegramToolStripMenuItem.Click += new System.EventHandler(this.openTelegramToolStripMenuItem_Click);
+            // 
+            // facebookToolStripMenuItem1
+            // 
+            this.facebookToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem3,
+            this.checkToolStripMenuItem3});
+            this.facebookToolStripMenuItem1.Name = "facebookToolStripMenuItem1";
+            this.facebookToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.facebookToolStripMenuItem1.Text = "Facebook";
+            // 
+            // createToolStripMenuItem3
+            // 
+            this.createToolStripMenuItem3.Name = "createToolStripMenuItem3";
+            this.createToolStripMenuItem3.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem3.Text = "Create";
+            this.createToolStripMenuItem3.Click += new System.EventHandler(this.createToolStripMenuItem3_Click);
+            // 
+            // checkToolStripMenuItem3
+            // 
+            this.checkToolStripMenuItem3.Name = "checkToolStripMenuItem3";
+            this.checkToolStripMenuItem3.Size = new System.Drawing.Size(108, 22);
+            this.checkToolStripMenuItem3.Text = "Check";
+            this.checkToolStripMenuItem3.Click += new System.EventHandler(this.checkToolStripMenuItem3_Click);
             // 
             // menuStrip1
             // 
@@ -406,7 +438,10 @@
             // 
             this.twitterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createTwitterAccountToolStripMenuItem,
-            this.createTwitterFollowersToolStripMenuItem});
+            this.createTwitterFollowersToolStripMenuItem,
+            this.createAPIKeysToolStripMenuItem,
+            this.toolStripMenuItem4,
+            this.checkTwitterAccountToolStripMenuItem});
             this.twitterToolStripMenuItem.Name = "twitterToolStripMenuItem";
             this.twitterToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.twitterToolStripMenuItem.Text = "Twitter";
@@ -542,28 +577,43 @@
             this.saveCsvFile.Filter = "CSV Files|*.csv";
             this.saveCsvFile.RestoreDirectory = true;
             // 
-            // facebookToolStripMenuItem1
+            // checkTwitterAccountToolStripMenuItem
             // 
-            this.facebookToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createToolStripMenuItem3,
-            this.checkToolStripMenuItem3});
-            this.facebookToolStripMenuItem1.Name = "facebookToolStripMenuItem1";
-            this.facebookToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
-            this.facebookToolStripMenuItem1.Text = "Facebook";
+            this.checkTwitterAccountToolStripMenuItem.Name = "checkTwitterAccountToolStripMenuItem";
+            this.checkTwitterAccountToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.checkTwitterAccountToolStripMenuItem.Text = "Check twitter account";
+            this.checkTwitterAccountToolStripMenuItem.Click += new System.EventHandler(this.checkTwitterAccountToolStripMenuItem_Click);
             // 
-            // createToolStripMenuItem3
+            // checkToolStripMenuItem4
             // 
-            this.createToolStripMenuItem3.Name = "createToolStripMenuItem3";
-            this.createToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
-            this.createToolStripMenuItem3.Text = "Create";
-            this.createToolStripMenuItem3.Click += new System.EventHandler(this.createToolStripMenuItem3_Click);
+            this.checkToolStripMenuItem4.Name = "checkToolStripMenuItem4";
+            this.checkToolStripMenuItem4.Size = new System.Drawing.Size(161, 22);
+            this.checkToolStripMenuItem4.Text = "Check";
+            this.checkToolStripMenuItem4.Click += new System.EventHandler(this.checkToolStripMenuItem4_Click);
             // 
-            // checkToolStripMenuItem3
+            // createAPIKeysToolStripMenuItem
             // 
-            this.checkToolStripMenuItem3.Name = "checkToolStripMenuItem3";
-            this.checkToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
-            this.checkToolStripMenuItem3.Text = "Check";
-            this.checkToolStripMenuItem3.Click += new System.EventHandler(this.checkToolStripMenuItem3_Click);
+            this.createAPIKeysToolStripMenuItem.Name = "createAPIKeysToolStripMenuItem";
+            this.createAPIKeysToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.createAPIKeysToolStripMenuItem.Text = "Create API Keys";
+            this.createAPIKeysToolStripMenuItem.Click += new System.EventHandler(this.createAPIKeysToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(193, 6);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(158, 6);
+            // 
+            // createAPIKeysToolStripMenuItem1
+            // 
+            this.createAPIKeysToolStripMenuItem1.Name = "createAPIKeysToolStripMenuItem1";
+            this.createAPIKeysToolStripMenuItem1.Size = new System.Drawing.Size(161, 22);
+            this.createAPIKeysToolStripMenuItem1.Text = "Create API Keys";
+            this.createAPIKeysToolStripMenuItem1.Click += new System.EventHandler(this.createAPIKeysToolStripMenuItem1_Click);
             // 
             // FrmUsers
             // 
@@ -647,6 +697,12 @@
         private System.Windows.Forms.ToolStripMenuItem facebookToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem checkTwitterAccountToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createAPIKeysToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem createAPIKeysToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 
     }
 }
