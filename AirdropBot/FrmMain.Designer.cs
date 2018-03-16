@@ -92,6 +92,7 @@
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.facebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kucoinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -152,7 +153,10 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
-            this.facebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem17 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -678,6 +682,13 @@
             this.twitterToolStripMenuItem.Text = "Twitter";
             this.twitterToolStripMenuItem.Click += new System.EventHandler(this.twitterToolStripMenuItem_Click);
             // 
+            // facebookToolStripMenuItem
+            // 
+            this.facebookToolStripMenuItem.Name = "facebookToolStripMenuItem";
+            this.facebookToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.facebookToolStripMenuItem.Text = "Facebook";
+            this.facebookToolStripMenuItem.Click += new System.EventHandler(this.facebookToolStripMenuItem_Click);
+            // 
             // getFieldToolStripMenuItem
             // 
             this.getFieldToolStripMenuItem.Name = "getFieldToolStripMenuItem";
@@ -742,6 +753,10 @@
             this.twitterNameToolStripMenuItem,
             this.twitterEmailToolStripMenuItem,
             this.twitterPasswordToolStripMenuItem,
+            this.toolStripMenuItem17,
+            this.toolStripMenuItem20,
+            this.toolStripMenuItem19,
+            this.toolStripMenuItem18,
             this.toolStripMenuItem5,
             this.ethAddressToolStripMenuItem,
             this.ethPassToolStripMenuItem,
@@ -1156,12 +1171,33 @@
             this.pnlScenario.Size = new System.Drawing.Size(364, 264);
             this.pnlScenario.TabIndex = 19;
             // 
-            // facebookToolStripMenuItem
+            // toolStripMenuItem17
             // 
-            this.facebookToolStripMenuItem.Name = "facebookToolStripMenuItem";
-            this.facebookToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.facebookToolStripMenuItem.Text = "Facebook";
-            this.facebookToolStripMenuItem.Click += new System.EventHandler(this.facebookToolStripMenuItem_Click);
+            this.toolStripMenuItem17.Name = "toolStripMenuItem17";
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem17.Text = "Twitter Consumer Key";
+            this.toolStripMenuItem17.Click += new System.EventHandler(this.toolStripMenuItem17_Click);
+            // 
+            // toolStripMenuItem18
+            // 
+            this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+            this.toolStripMenuItem18.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem18.Text = "Twitter Access Token Secret";
+            this.toolStripMenuItem18.Click += new System.EventHandler(this.toolStripMenuItem18_Click);
+            // 
+            // toolStripMenuItem19
+            // 
+            this.toolStripMenuItem19.Name = "toolStripMenuItem19";
+            this.toolStripMenuItem19.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem19.Text = "Twitter Access Token";
+            this.toolStripMenuItem19.Click += new System.EventHandler(this.toolStripMenuItem19_Click);
+            // 
+            // toolStripMenuItem20
+            // 
+            this.toolStripMenuItem20.Name = "toolStripMenuItem20";
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem20.Text = "Twitter Consumer Secret";
+            this.toolStripMenuItem20.Click += new System.EventHandler(this.toolStripMenuItem20_Click);
             // 
             // FrmMain
             // 
@@ -1317,6 +1353,10 @@
         private System.Windows.Forms.ToolStripMenuItem kucoinPasswordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem kucoinToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem facebookToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem17;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem20;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem19;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem18;
     }
 }
 

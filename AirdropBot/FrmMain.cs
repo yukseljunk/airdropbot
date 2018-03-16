@@ -241,7 +241,7 @@ namespace AirdropBot
                 {
                     commandResult = IfNotCommand(node);
                 }
-                if(command=="kucoin")
+                if (command == "kucoin")
                 {
                     commandResult = KucoinRetweet(node);
                 }
@@ -268,7 +268,7 @@ namespace AirdropBot
             if (postno.Value == "") return "Post number is empty!";
             var twLogin = ActiveUser.TwUserName;
             var twLoginNode = node.Attributes["twitterlogin"];
-            if(twLoginNode!=null && twLoginNode.Value!="")
+            if (twLoginNode != null && twLoginNode.Value != "")
             {
                 twLogin = twLoginNode.Value;
             }
@@ -311,7 +311,7 @@ namespace AirdropBot
         {
             var fileNode = node.Attributes["file"];
             var fileName = "c:\\temp\\test.jpg";
-            if(fileNode!=null && fileNode.Value!="")
+            if (fileNode != null && fileNode.Value != "")
             {
                 fileName = fileNode.Value;
             }
@@ -321,7 +321,7 @@ namespace AirdropBot
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
                     g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                    
+
                 }
                 bitmap.Save(fileName, ImageFormat.Jpeg);
             }
@@ -808,7 +808,7 @@ namespace AirdropBot
             RunTemplate("FBLogin", user.Value, password.Value);
 
             //txtScenario.SelectedText = "<facebook user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow page=\"\"/>\r\n<like post=\"\"/>\r\n<like page=\"\"/>\r\n<share post=\"\"/>\r\n</facebook>";
-       
+
             if (node.HasChildNodes)
             {
                 stopped = false;
@@ -850,11 +850,11 @@ namespace AirdropBot
                             if (!url.StartsWith("http")) url = "https://www.facebook.com/" + url;
                             RunTemplate("FBLikePost", url);
                         }
-                        
+
                     }
                     else if (subNode.Name == "share")
                     {
-                        
+
                         var postNode = subNode.Attributes["post"];
                         if (postNode == null) continue;
                         if (postNode.Value == "") continue;
@@ -2005,7 +2005,31 @@ namespace AirdropBot
         private void facebookToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<facebook user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow page=\"\"/>\r\n<like page=\"\"/>\r\n<like post=\"\"/>\r\n<share post=\"\"/>\r\n</facebook>";
-       
+
+        }
+
+        private void toolStripMenuItem17_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwConsumerKey}";
+
+        }
+
+        private void toolStripMenuItem20_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwConsumerSecret}";
+
+        }
+
+        private void toolStripMenuItem19_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwAccessToken}";
+
+        }
+
+        private void toolStripMenuItem18_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserTwAccessTokenSecret}";
+
         }
     }
 }

@@ -51,7 +51,12 @@ namespace AirdropBot
                              "reddit pwd",
                              "btctalk usr",
                              "btctalk pwd",
-                             "btctalk profile"
+                             "btctalk profile",
+                             "Twitter Consumer Key",
+                             "Twitter Consumer Secret",
+                            "Twitter Access Token",
+                            "Twitter Access Token Secret"
+
                            };
             foreach (var col in cols)
             {
@@ -158,7 +163,7 @@ namespace AirdropBot
                                  u.EthAddress, u.EthPrivateKey, u.EthPass, u.ProxyIp, u.ProxyPort,
                                  u.WinUser, u.WinPwd, u.TgUser, u.TwUserName, u.TwPwd, u.TwName, u.KucoinUser,
                                  u.KucoinPass, u.FBUser, u.FBPwd, u.FBProfile, u.ReddUser, u.ReddPwd, u.BtcTalkUser,
-                                 u.BtcTalkPwd, u.BtcTalkProfileLink);
+                                 u.BtcTalkPwd, u.BtcTalkProfileLink, u.TwConsumerKey,u.TwConsumerSecret,u.TwAccessToken,u.TwAccessTokenSecret);
             }
         }
 

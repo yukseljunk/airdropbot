@@ -26,6 +26,12 @@ namespace AirdropBot
         public string TwUserName { get; set; }
         public string TwPwd { get; set; }
 
+        public string TwConsumerKey { get; set; }
+        public string TwConsumerSecret { get; set; }
+        public string TwAccessToken { get; set; }
+        public string TwAccessTokenSecret { get; set; }
+        
+
         public string BtcTalkUser { get; set; }
         public string BtcTalkPwd { get; set; }
         public string BtcTalkProfileLink { get; set; }
@@ -109,9 +115,16 @@ namespace AirdropBot
                     ReddPwd = fields[25],
                     BtcTalkUser = fields[26],
                     BtcTalkPwd = fields[27],
-                    BtcTalkProfileLink = fields[28]
-
+                    BtcTalkProfileLink = fields[28],
                 };
+
+                if(fields.Length>32)
+                {
+                    user.TwConsumerKey = fields[29];
+                    user.TwConsumerSecret = fields[30];
+                    user.TwAccessToken = fields[31];
+                    user.TwAccessTokenSecret = fields[32];
+                }
 
                 users.Add(user.Id, user);
             }
