@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0"?>
 <steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
   <navigate url="https://twitter.com/login?lang=en" proxy=""/>
   <wait for="5"/>
   <if compare="INPUT" what="tagName" xpath="//fieldset/div/input">

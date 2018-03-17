@@ -255,26 +255,32 @@ namespace AirdropBot
             }
 
         }
+        
 
         private string KucoinRetweet(XmlNode node)
-        {
-            //            txtScenario.SelectedText = "<kucoin postno=\"\" twitterlogin=\"\" twitterpass=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
+        {//
+            //txtScenario.SelectedText = "<kucoin postno=\"\" twApiCust=\"\" twApiCustSec=\"\"  twApiToken=\"\" twApiTokenSec=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>"; 
             var postno = node.Attributes["postno"];
             if (postno == null) return "Post number is not defined!";
             if (postno.Value == "") return "Post number is empty!";
-            var twLogin = ActiveUser.TwUserName;
-            var twLoginNode = node.Attributes["twitterlogin"];
-            if (twLoginNode != null && twLoginNode.Value != "")
+
+            var consumerKey = ActiveUser.TwConsumerKey;
+            var twcustnode = node.Attributes["twApiCust"];
+            if (twcustnode != null && twcustnode.Value != "")
             {
-                twLogin = twLoginNode.Value;
+                consumerKey = twcustnode.Value;
             }
 
-            var twPass = ActiveUser.TwPwd;
-            var twPassNode = node.Attributes["twitterpass"];
-            if (twPassNode != null && twPassNode.Value != "")
+            var consumerSecret = ActiveUser.TwConsumerSecret;
+            var twcustsecnode = node.Attributes["twApiCustSec"];
+            if (twcustsecnode != null && twcustsecnode.Value != "")
             {
-                twPass = twPassNode.Value;
+                consumerSecret = twcustsecnode.Value;
             }
+            var twtokenNode = node.Attributes["twApiToken"];
+            var twTokenSecNode = node.Attributes["twApiTokenSec"];
+            if (twtokenNode == null || twTokenSecNode == null) return "Not defined access tokens!";
+            if (twtokenNode.Value == ""|| twTokenSecNode.Value == "") return "Empty access tokens!";
 
             var twUser = ActiveUser.TwUserName;
             var twUserNode = node.Attributes["twitteruser"];
@@ -297,7 +303,9 @@ namespace AirdropBot
             }
 
             var kucoinTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinRetweet.xml");
-            kucoinTemplate = kucoinTemplate.Replace("${0}", postno.Value).Replace("${1}", twLogin).Replace("${2}", twPass).Replace("${3}", twUser).Replace("${4}", fullName).Replace("${5}", kucoinUser);
+            kucoinTemplate = kucoinTemplate.Replace("${0}", postno.Value).Replace("${1}", consumerKey).Replace("${2}", consumerSecret)
+                .Replace("${3}", twUser).Replace("${4}", fullName).Replace("${5}", kucoinUser)
+                .Replace("${6}", twtokenNode.Value).Replace("${7}", twTokenSecNode.Value);
             Run(kucoinTemplate);
             return "";
 
@@ -2039,7 +2047,7 @@ namespace AirdropBot
 
         private void kucoinToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<kucoin postno=\"\" twitterlogin=\"\" twitterpass=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
+            txtScenario.SelectedText = "<kucoin postno=\"\" twApiCust=\"\" twApiCustSec=\"\"  twApiToken=\"\" twApiTokenSec=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
 
         }
 

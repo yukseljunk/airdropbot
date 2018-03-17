@@ -5,19 +5,18 @@
   <get param="formlink" what="getAttribute('title')" xpath="//a[contains(@title,'mikecrm')]" regex=""/>
   <wait for="2"/>
 
-
-  <twitter user="${1}" pass="${2}">
+  <twitter  consumerkey="${1}" consumersecret="${2}" accesstoken="${6}" accesstokensecret="${7}">
     <follow address="kucoincom"/>
     <wait for="2"/>
-    <retweet post="https://twitter.com/kucoincom/status/${0}"/>
-    <wait for="5"/>
-    <navigate url="https://www.twitter.com" proxy=""/>
+    <retweet post="${0}"/>
     <wait for="2"/>
-    <click xpath="//*[contains(@class,'DashboardProfileCard-name')]/a" waitforbrowser="true"/>
-    <wait for="2"/>
-    <screenshot file="c:\temp\${3}.jpg"/>
-    <wait for="2"/>
+
   </twitter>
+
+  <navigate url="https://twitter.com/${3}" proxy=""/>
+  <wait for="2"/>
+  <screenshot file="c:\temp\${3}.jpg"/>
+  <wait for="2"/>
 
   <wait for="2"/>
   <navigate url="about:blank"/>
