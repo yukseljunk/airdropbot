@@ -23,10 +23,12 @@
   <clearcookies/>
   <navigate url="${formlink}" />
   <wait for="5"/>
+
+  <continueif compare="DIV" what="tagName" xpath="//div[@class='fb_componentWrapper']" />
+
   <snap xpath="//div[@class='fb_componentWrapper']/div[2]//input"  x="%50" y="%150"/>
   <wait for="2"/>
   <set value="${4}" xpath="//div[@class='fb_componentWrapper']/div[2]//input"/>
-
 
   <wait for="2"/>
 

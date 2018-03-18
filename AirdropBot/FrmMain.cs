@@ -255,7 +255,7 @@ namespace AirdropBot
             }
 
         }
-        
+
 
         private string KucoinRetweet(XmlNode node)
         {//
@@ -280,7 +280,7 @@ namespace AirdropBot
             var twtokenNode = node.Attributes["twApiToken"];
             var twTokenSecNode = node.Attributes["twApiTokenSec"];
             if (twtokenNode == null || twTokenSecNode == null) return "Not defined access tokens!";
-            if (twtokenNode.Value == ""|| twTokenSecNode.Value == "") return "Empty access tokens!";
+            if (twtokenNode.Value == "" || twTokenSecNode.Value == "") return "Empty access tokens!";
 
             var twUser = ActiveUser.TwUserName;
             var twUserNode = node.Attributes["twitteruser"];
@@ -289,7 +289,7 @@ namespace AirdropBot
                 twUser = twUserNode.Value;
             }
 
-            var fullName = ActiveUser.TwUserName;
+            var fullName = ActiveUser.Name + " " + ActiveUser.LastName;
             var fullNameNode = node.Attributes["fullname"];
             if (fullNameNode != null && fullNameNode.Value != "")
             {
@@ -303,8 +303,8 @@ namespace AirdropBot
             }
 
             var kucoinTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinRetweet.xml");
-            kucoinTemplate = kucoinTemplate.Replace("${0}", postno.Value).Replace("${1}", consumerKey).Replace("${2}", consumerSecret)
-                .Replace("${3}", twUser).Replace("${4}", fullName).Replace("${5}", kucoinUser)
+            kucoinTemplate = kucoinTemplate.Replace("${0}", ReplaceTokens(postno.Value)).Replace("${1}", consumerKey).Replace("${2}", consumerSecret)
+                .Replace("${3}", ReplaceTokens(twUser)).Replace("${4}", ReplaceTokens(fullName)).Replace("${5}", ReplaceTokens(kucoinUser))
                 .Replace("${6}", twtokenNode.Value).Replace("${7}", twTokenSecNode.Value);
             Run(kucoinTemplate);
             return "";
@@ -749,8 +749,6 @@ namespace AirdropBot
             //user, pass, search
             var user = node.Attributes["user"];
             var password = node.Attributes["pass"];
-            if (user == null || password == null) return "User/password not defined";
-            if (user.Value == "" || password.Value == "") return "User/password empty";
 
             var consumerkey = node.Attributes["consumerkey"];
             var consumersecret = node.Attributes["consumersecret"];
@@ -779,7 +777,12 @@ namespace AirdropBot
                 if (consumerkey.Value == "" || consumersecret.Value == "" || accesstoken.Value == "" ||
                     accesstokensecret.Value == "") return "API Keys empty";
             }
+            if (!onlyAPI)
+            {
+                if (user == null || password == null) return "User/password not defined";
+                if (user.Value == "" || password.Value == "") return "User/password empty";
 
+            }
             if (!onlyAPI) RunTemplate("TwitterLogin", user.Value, password.Value);//only use browser when there is some other call then API
 
             if (node.HasChildNodes)
@@ -937,11 +940,21 @@ namespace AirdropBot
             var extraArgs = "";
             if (group != null && group.Value != "")
             {
-                extraArgs = "-- tg://resolve/?domain=" + ReplaceTokens(group.Value).Replace("?", "&");
+                var groupName = group.Value;
+                if (groupName.StartsWith("http"))
+                {
+                    groupName = new Uri(groupName).PathAndQuery.Substring(1);
+                }
+                extraArgs = "-- tg://resolve/?domain=" + ReplaceTokens(groupName).Replace("?", "&");
             }
             if (chat != null && chat.Value != "")
             {
-                extraArgs = "-- tg://join/?invite=" + ReplaceTokens(chat.Value).Replace("?", "&");
+                var chatName = chat.Value;
+                if (chatName.StartsWith("http"))
+                {
+                    chatName = new Uri(chatName).PathAndQuery.Substring(1);
+                }
+                extraArgs = "-- tg://join/?invite=" + ReplaceTokens(chatName).Replace("?", "&");
             }
 
             if (Helper.OpenTelegram(ReplaceTokens(user.Value), extraArgs, ReplaceTokens(password.Value)) != "") return "Runas exe is not running!";
@@ -1627,7 +1640,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"\" pass=\"\" group=\"\" chat=\"\" message=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n</telegram>";
+            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\" message=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n</telegram>";
 
         }
 
@@ -2047,13 +2060,12 @@ namespace AirdropBot
 
         private void kucoinToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<kucoin postno=\"\" twApiCust=\"\" twApiCustSec=\"\"  twApiToken=\"\" twApiTokenSec=\"\" twitteruser=\"\" fullname=\"\" kucoinemail=\"\"/>";
-
+            txtScenario.SelectedText = "<kucoin postno=\"\" twApiCust=\"${UserTwConsumerKey}\" twApiCustSec=\"${UserTwConsumerSecret}\"  twApiToken=\"${UserTwAccessToken}\" twApiTokenSec=\"${UserTwAccessTokenSecret}\" twitteruser=\"${UserTwName}\" fullname=\"${UserName} ${UserLastName}\" kucoinemail=\"${UserKucoinUser}\"/>";
         }
 
         private void facebookToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<facebook user=\"\" pass=\"\">\r\n<search text=\"\"/>\r\n<follow page=\"\"/>\r\n<like page=\"\"/>\r\n<like post=\"\"/>\r\n<share post=\"\"/>\r\n</facebook>";
+            txtScenario.SelectedText = "<facebook user=\"${UserFBUser}\" pass=\"${UserFBPwd}\">\r\n<search text=\"\"/>\r\n<follow page=\"\"/>\r\n<like page=\"\"/>\r\n<like post=\"\"/>\r\n<share post=\"\"/>\r\n</facebook>";
 
         }
 

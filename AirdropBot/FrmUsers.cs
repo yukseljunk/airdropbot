@@ -182,8 +182,10 @@ namespace AirdropBot
         private void SaveUsers(string file)
         {
             File.WriteAllText(file, "");
+            var rowCounter = 0;
             foreach (DataGridViewRow row in dgUsers.Rows)
             {
+                rowCounter++;
                 var rowIndex = int.Parse(row.Cells[0].Value.ToString());
                 if (rowIndex == dgUsers.Rows.Count)
                 {
@@ -194,7 +196,7 @@ namespace AirdropBot
                 {
                     cellVals.Add(cell.Value == null ? "" : cell.Value.ToString());
                 }
-
+                cellVals[0] = rowCounter.ToString();
                 var singleRow = string.Join(",", cellVals) + "\r\n";
                 File.AppendAllText(file, singleRow);
             }
@@ -1236,7 +1238,7 @@ namespace AirdropBot
                     MessageBox.Show("Invalid TwitterCreateApi xml! \r\n" + twApiTemplate);
                     return;
                 }
-                
+
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = doc.DocumentElement.InnerXml + "\r\n\r\n" + doc2.DocumentElement.InnerXml };
 
                 frmMain.ShowDialog(this);
