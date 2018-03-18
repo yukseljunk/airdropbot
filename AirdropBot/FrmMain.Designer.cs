@@ -88,9 +88,6 @@
             this.ifToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ifnotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.signOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.facebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -115,6 +112,10 @@
             this.twitterNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twitterEmailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twitterPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem17 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.ethAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ethPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -153,10 +154,6 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
-            this.toolStripMenuItem17 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -646,34 +643,10 @@
             // 
             // setFieldToolStripMenuItem
             // 
-            this.setFieldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loginToolStripMenuItem,
-            this.searchToolStripMenuItem,
-            this.signOutToolStripMenuItem});
             this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
             this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setFieldToolStripMenuItem.Text = "Gmail";
-            // 
-            // loginToolStripMenuItem
-            // 
-            this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            this.loginToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.loginToolStripMenuItem.Text = "Login";
-            this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
-            // 
-            // searchToolStripMenuItem
-            // 
-            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.searchToolStripMenuItem.Text = "Search";
-            this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
-            // 
-            // signOutToolStripMenuItem
-            // 
-            this.signOutToolStripMenuItem.Name = "signOutToolStripMenuItem";
-            this.signOutToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.signOutToolStripMenuItem.Text = "Sign Out";
-            this.signOutToolStripMenuItem.Click += new System.EventHandler(this.signOutToolStripMenuItem_Click);
+            this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
             // 
             // twitterToolStripMenuItem
             // 
@@ -880,6 +853,34 @@
             this.twitterPasswordToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
             this.twitterPasswordToolStripMenuItem.Text = "Twitter Password";
             this.twitterPasswordToolStripMenuItem.Click += new System.EventHandler(this.twitterPasswordToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem17
+            // 
+            this.toolStripMenuItem17.Name = "toolStripMenuItem17";
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem17.Text = "Twitter Consumer Key";
+            this.toolStripMenuItem17.Click += new System.EventHandler(this.toolStripMenuItem17_Click);
+            // 
+            // toolStripMenuItem20
+            // 
+            this.toolStripMenuItem20.Name = "toolStripMenuItem20";
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem20.Text = "Twitter Consumer Secret";
+            this.toolStripMenuItem20.Click += new System.EventHandler(this.toolStripMenuItem20_Click);
+            // 
+            // toolStripMenuItem19
+            // 
+            this.toolStripMenuItem19.Name = "toolStripMenuItem19";
+            this.toolStripMenuItem19.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem19.Text = "Twitter Access Token";
+            this.toolStripMenuItem19.Click += new System.EventHandler(this.toolStripMenuItem19_Click);
+            // 
+            // toolStripMenuItem18
+            // 
+            this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+            this.toolStripMenuItem18.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem18.Text = "Twitter Access Token Secret";
+            this.toolStripMenuItem18.Click += new System.EventHandler(this.toolStripMenuItem18_Click);
             // 
             // toolStripMenuItem5
             // 
@@ -1171,34 +1172,6 @@
             this.pnlScenario.Size = new System.Drawing.Size(364, 264);
             this.pnlScenario.TabIndex = 19;
             // 
-            // toolStripMenuItem17
-            // 
-            this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            this.toolStripMenuItem17.Size = new System.Drawing.Size(256, 22);
-            this.toolStripMenuItem17.Text = "Twitter Consumer Key";
-            this.toolStripMenuItem17.Click += new System.EventHandler(this.toolStripMenuItem17_Click);
-            // 
-            // toolStripMenuItem18
-            // 
-            this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-            this.toolStripMenuItem18.Size = new System.Drawing.Size(256, 22);
-            this.toolStripMenuItem18.Text = "Twitter Access Token Secret";
-            this.toolStripMenuItem18.Click += new System.EventHandler(this.toolStripMenuItem18_Click);
-            // 
-            // toolStripMenuItem19
-            // 
-            this.toolStripMenuItem19.Name = "toolStripMenuItem19";
-            this.toolStripMenuItem19.Size = new System.Drawing.Size(256, 22);
-            this.toolStripMenuItem19.Text = "Twitter Access Token";
-            this.toolStripMenuItem19.Click += new System.EventHandler(this.toolStripMenuItem19_Click);
-            // 
-            // toolStripMenuItem20
-            // 
-            this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            this.toolStripMenuItem20.Size = new System.Drawing.Size(256, 22);
-            this.toolStripMenuItem20.Text = "Twitter Consumer Secret";
-            this.toolStripMenuItem20.Click += new System.EventHandler(this.toolStripMenuItem20_Click);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1318,9 +1291,6 @@
         private System.Windows.Forms.ToolStripMenuItem failIfToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem continueIfToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem signOutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem byTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem byTextToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem emptyToolStripMenuItem2;

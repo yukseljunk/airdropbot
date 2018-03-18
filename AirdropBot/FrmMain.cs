@@ -1057,10 +1057,62 @@ namespace AirdropBot
             var password = node.Attributes["pass"];
             var search = node.Attributes["search"];
             if (user == null || password == null) return "User/password empty or not defined";
+            RunTemplate("GmailLogin", ReplaceTokens(user.Value), ReplaceTokens(password.Value));
+            if (!node.HasChildNodes)//old format for search as an attribute not a node
+            {
+                if (search != null && search.Value != "")
+                {
+                    RunTemplate("GmailFind", ReplaceTokens(search.Value));
 
-            var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailFind.xml");
-            gmailTemplate = gmailTemplate.Replace("${0}", user.Value).Replace("${1}", password.Value).Replace("${2}", search == null ? "" : search.Value);
-            Run(gmailTemplate);
+                }
+                return "";
+            }
+            //more than login
+            stopped = false;
+            foreach (XmlNode subNode in node.ChildNodes)
+            {
+                if (stopped) break;
+                if (subNode.Name == "search")
+                {
+                    var textNode = subNode.Attributes["text"];
+                    if (textNode == null) continue;
+                    if (textNode.Value == "") continue;
+
+                    RunTemplate("GmailFind", ReplaceTokens(textNode.Value));
+
+                }
+                else if (subNode.Name == "searchtill")//<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>
+                {
+                    var textNode = subNode.Attributes["text"];
+                    if (textNode == null) continue;
+                    if (textNode.Value == "") continue;
+                    var retryTimesNode = subNode.Attributes["retrytimes"];
+                    var retryTimes = int.Parse(retryTimesNode.Value);
+                    var retryWaitSecsNode = subNode.Attributes["retrywaitsecs"];
+                    var retryWaitSecs = int.Parse(retryWaitSecsNode.Value);
+
+                    var xpathNode = subNode.Attributes["xpath"];
+                    if (xpathNode == null) continue;
+                    if (xpathNode.Value == "") continue;
+
+                    RunTemplate("GmailFind", ReplaceTokens(textNode.Value));
+                    for (int i = 0; i < retryTimes; i++)
+                    {
+                        var elementTag = GetCElement(subNode);
+                        if (elementTag != "UNDEF") break;
+                        Wait(retryWaitSecs);
+                        RunTemplate("GmailFind", ReplaceTokens(textNode.Value));
+                    }
+                    
+                }
+                else
+                {
+                    Run(subNode.OuterXml);
+                }
+            }
+            //logout
+            RunTemplate("GmailSignout");
+
             return "";
         }
 
@@ -1335,13 +1387,14 @@ namespace AirdropBot
 
         private string FindXPathScript =
             "function getElementByXpath(path) {{return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}}";
+
         private string GetCElement(XmlNode node)
         {
             var what = node.Attributes["what"];
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", ReplaceTokens(xpath.Value), FindXPathScript, what.Value);
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", ReplaceTokens(xpath.Value), FindXPathScript, what == null ? "tagName" : what.Value);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
@@ -2090,6 +2143,12 @@ namespace AirdropBot
         private void toolStripMenuItem18_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "${UserTwAccessTokenSecret}";
+
+        }
+
+        private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<gmail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>\r\n</gmail>";
 
         }
     }

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="www.gmail.com"/>
+  <wait for="${Random(3,7)}"/>
+  <snap xpath="//*[@name='identifier']" x="%20" y="%160"/>
+  <wait for="${Random(1,3)}"/>
+  <sendkey value="${0}"/>
+  <wait for="${Random(2,3)}"/>
+  <continueif compare="${0}" what="getAttribute('data-initial-value')" xpath="//input[@name='identifier']" regex=""/>
+  <snap xpath="//*[@id='identifierNext']" x="%50" y="%100"/>
+  <wait for="${Random(1,3)}"/>
+  <snap xpath="//*[@name='password']" x="%20" y="%160"/>
+  <wait for="${Random(1,3)}"/>
+  <sendkey value="${1}"/>
+  <wait for="${Random(1,3)}"/>
+  <continueif compare="${1}" what="getAttribute('data-initial-value')" xpath="//input[@name='password']"/>
+  <snap xpath="//*[@id='passwordNext']" x="%20" y="%160"/>
+  <wait for="5"/>
+  <continueif compare="UNDEF" what="getAttribute('data-initial-value')" xpath="//input[@name='password']"/>
+  <waittill compare="q" what="getAttribute('name')" xpath="//input[@name='q']"/>
+
+
+</steps>
