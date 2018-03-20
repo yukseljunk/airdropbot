@@ -154,9 +154,12 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.stLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openCsvFile
@@ -173,7 +176,7 @@
             this.txtScenario.Multiline = true;
             this.txtScenario.Name = "txtScenario";
             this.txtScenario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtScenario.Size = new System.Drawing.Size(358, 231);
+            this.txtScenario.Size = new System.Drawing.Size(358, 243);
             this.txtScenario.TabIndex = 8;
             this.txtScenario.Text = resources.GetString("txtScenario.Text");
             this.txtScenario.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -181,7 +184,7 @@
             // btnApplyScenario
             // 
             this.btnApplyScenario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnApplyScenario.Location = new System.Drawing.Point(12, 550);
+            this.btnApplyScenario.Location = new System.Drawing.Point(12, 565);
             this.btnApplyScenario.Name = "btnApplyScenario";
             this.btnApplyScenario.Size = new System.Drawing.Size(180, 23);
             this.btnApplyScenario.TabIndex = 9;
@@ -198,7 +201,7 @@
             this.tokensToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(995, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1045, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -1075,7 +1078,7 @@
             this.btnRunRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRunRest.BackColor = System.Drawing.Color.Maroon;
             this.btnRunRest.ForeColor = System.Drawing.Color.White;
-            this.btnRunRest.Location = new System.Drawing.Point(200, 550);
+            this.btnRunRest.Location = new System.Drawing.Point(200, 565);
             this.btnRunRest.Name = "btnRunRest";
             this.btnRunRest.Size = new System.Drawing.Size(180, 23);
             this.btnRunRest.TabIndex = 12;
@@ -1097,7 +1100,7 @@
             // btnStop
             // 
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStop.Location = new System.Drawing.Point(111, 586);
+            this.btnStop.Location = new System.Drawing.Point(111, 601);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(180, 23);
             this.btnStop.TabIndex = 16;
@@ -1115,7 +1118,7 @@
             this.ContentPanel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.ContentPanel.Location = new System.Drawing.Point(410, 65);
             this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(562, 544);
+            this.ContentPanel.Size = new System.Drawing.Size(614, 559);
             this.ContentPanel.TabIndex = 17;
             this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
             // 
@@ -1169,14 +1172,31 @@
             this.pnlScenario.Controls.Add(this.txtScenario);
             this.pnlScenario.Location = new System.Drawing.Point(16, 280);
             this.pnlScenario.Name = "pnlScenario";
-            this.pnlScenario.Size = new System.Drawing.Size(364, 264);
+            this.pnlScenario.Size = new System.Drawing.Size(364, 276);
             this.pnlScenario.TabIndex = 19;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 627);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1045, 22);
+            this.statusStrip1.TabIndex = 20;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // stLabel
+            // 
+            this.stLabel.Name = "stLabel";
+            this.stLabel.Size = new System.Drawing.Size(118, 17);
+            this.stLabel.Text = "toolStripStatusLabel1";
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(995, 621);
+            this.ClientSize = new System.Drawing.Size(1045, 649);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.pnlScenario);
             this.Controls.Add(this.pnlUsers);
             this.Controls.Add(this.ContentPanel);
@@ -1195,6 +1215,8 @@
             this.pnlUsers.PerformLayout();
             this.pnlScenario.ResumeLayout(false);
             this.pnlScenario.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1327,6 +1349,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem20;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem19;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem18;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel stLabel;
     }
 }
 

@@ -65,6 +65,7 @@ namespace AirdropBot
                 txtScenario.Text = Scenario;
                 return;
             }
+            stLabel.Text = "";
 
             btnStop.Enabled = false;
             LoadUsers();
@@ -830,18 +831,21 @@ namespace AirdropBot
             }
             //logout
             if (!onlyAPI) RunTemplate("TwitterLogout");
+            stLabel.Text = "";
             return "";
         }
 
         private void RunTweetApi(string command, string commandarg, string consumerkey, string consumersecret, string accesstoken, string accesstokensecret)
         {
+            
             var botExe = Helper.AssemblyDirectory + "\\TwitterBot\\TwitterBot.exe";
             var output = Helper.StartProcess(botExe,
                                 string.Format("{0} {1} {2} {3} {4} {5}", ReplaceTokens(consumerkey), ReplaceTokens(consumersecret), ReplaceTokens(accesstoken),
                                               ReplaceTokens(accesstokensecret), command, commandarg), true);
             //wait for bot to respond
-            Thread.Sleep(5000);
+            Wait(5);
             Debug.WriteLine(output);
+            stLabel.Text = output;
         }
 
 
