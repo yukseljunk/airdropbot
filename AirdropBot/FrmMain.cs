@@ -64,7 +64,6 @@ namespace AirdropBot
                 txtScenario.Text = Scenario;
                 return;
             }
-            stLabel.Text = "";
 
             btnStop.Enabled = false;
             LoadUsers();
@@ -826,7 +825,6 @@ namespace AirdropBot
             }
             //logout
             if (!onlyAPI) RunTemplate("TwitterLogout");
-            stLabel.Text = "";
             return "";
         }
 
@@ -840,7 +838,11 @@ namespace AirdropBot
             //wait for bot to respond
             Wait(5);
             Debug.WriteLine(output);
-            stLabel.Text = output;
+
+            var htmlFile = Helper.AssemblyDirectory + "\\temp2.html";
+            File.WriteAllText(htmlFile, output);
+            CreateCBrowser(htmlFile + "?nonce=" + Guid.NewGuid(), "");
+
         }
 
 

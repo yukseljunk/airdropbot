@@ -154,12 +154,9 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.stLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openCsvFile
@@ -1175,28 +1172,11 @@
             this.pnlScenario.Size = new System.Drawing.Size(364, 276);
             this.pnlScenario.TabIndex = 19;
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 627);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1045, 22);
-            this.statusStrip1.TabIndex = 20;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // stLabel
-            // 
-            this.stLabel.Name = "stLabel";
-            this.stLabel.Size = new System.Drawing.Size(118, 17);
-            this.stLabel.Text = "toolStripStatusLabel1";
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 649);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.pnlScenario);
             this.Controls.Add(this.pnlUsers);
             this.Controls.Add(this.ContentPanel);
@@ -1215,8 +1195,6 @@
             this.pnlUsers.PerformLayout();
             this.pnlScenario.ResumeLayout(false);
             this.pnlScenario.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1349,8 +1327,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem20;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem19;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem18;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel stLabel;
     }
 }
 
