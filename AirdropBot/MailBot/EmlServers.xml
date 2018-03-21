@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hosts>
+  <host name="gmail.com" address="imap.gmail.com" port="993" ssl="true"/>
+  <host name="yahoo.com" address="imap.mail.yahoo.com" port="993" ssl="true"/>
+</hosts> 

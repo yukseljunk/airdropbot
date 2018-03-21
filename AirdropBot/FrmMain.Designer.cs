@@ -648,7 +648,7 @@
             // 
             this.setFieldToolStripMenuItem.Name = "setFieldToolStripMenuItem";
             this.setFieldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.setFieldToolStripMenuItem.Text = "Gmail";
+            this.setFieldToolStripMenuItem.Text = "Mail";
             this.setFieldToolStripMenuItem.Click += new System.EventHandler(this.setFieldToolStripMenuItem_Click);
             // 
             // twitterToolStripMenuItem

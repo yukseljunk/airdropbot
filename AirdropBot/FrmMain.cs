@@ -16,7 +16,6 @@ using TestStack.White.WindowsAPI;
 namespace AirdropBot
 {
     /// <summary>
-    /// gmail calismiyor
     /// stop process de loadingwait lerde cikar
     /// </summary>
     public partial class FrmMain : Form
@@ -181,13 +180,9 @@ namespace AirdropBot
                 {
                     commandResult = WaitCommand(node);
                 }
-                if (command == "gmail")
+                if (command == "mail")
                 {
-                    commandResult = GmailCommand(node);
-                }
-                if (command == "gmailsignout")
-                {
-                    commandResult = GmailSignOutCommand(node);
+                    commandResult = MailCommand(node);
                 }
                 if (command == "twitter")
                 {
@@ -837,7 +832,7 @@ namespace AirdropBot
 
         private void RunTweetApi(string command, string commandarg, string consumerkey, string consumersecret, string accesstoken, string accesstokensecret)
         {
-            
+
             var botExe = Helper.AssemblyDirectory + "\\TwitterBot\\TwitterBot.exe";
             var output = Helper.StartProcess(botExe,
                                 string.Format("{0} {1} {2} {3} {4} {5}", ReplaceTokens(consumerkey), ReplaceTokens(consumersecret), ReplaceTokens(accesstoken),
@@ -1054,22 +1049,16 @@ namespace AirdropBot
 
 
 
-        private string GmailCommand(XmlNode node)
+        private string MailCommand(XmlNode node)
         {
             //user, pass, search
             var user = node.Attributes["user"];
             var password = node.Attributes["pass"];
-            var search = node.Attributes["search"];
             if (user == null || password == null) return "User/password empty or not defined";
-            RunTemplate("GmailLogin", ReplaceTokens(user.Value), ReplaceTokens(password.Value));
-            if (!node.HasChildNodes)//old format for search as an attribute not a node
-            {
-                if (search != null && search.Value != "")
-                {
-                    RunTemplate("GmailFind", ReplaceTokens(search.Value));
 
-                }
-                return "";
+            if (!node.HasChildNodes)//no more action, just log in
+            {
+                return "No action specified for email!";
             }
             //more than login
             stopped = false;
@@ -1081,8 +1070,7 @@ namespace AirdropBot
                     var textNode = subNode.Attributes["text"];
                     if (textNode == null) continue;
                     if (textNode.Value == "") continue;
-
-                    RunTemplate("GmailFind", ReplaceTokens(textNode.Value));
+                    RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
 
                 }
                 else if (subNode.Name == "searchtill")//<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>
@@ -1098,35 +1086,39 @@ namespace AirdropBot
                     var xpathNode = subNode.Attributes["xpath"];
                     if (xpathNode == null) continue;
                     if (xpathNode.Value == "") continue;
+                    RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
 
-                    RunTemplate("GmailFind", ReplaceTokens(textNode.Value));
                     for (int i = 0; i < retryTimes; i++)
                     {
                         var elementTag = GetCElement(subNode);
                         if (elementTag != "UNDEF") break;
                         Wait(retryWaitSecs);
-                        RunTemplate("GmailFind", ReplaceTokens(textNode.Value));
+                        RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
                     }
-                    
+
                 }
                 else
                 {
                     Run(subNode.OuterXml);
                 }
             }
-            //logout
-            RunTemplate("GmailSignout");
 
             return "";
         }
 
-
-        private string GmailSignOutCommand(XmlNode node)
+        //default is search by subject
+        private void RunMailApi(string action, string type, string value, string user, string pass)
         {
-            var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailSignout.xml");
-            Run(gmailTemplate);
-            return "";
+            var botExe = Helper.AssemblyDirectory + "\\MailBot\\MailBot.exe";
+            var output = Helper.StartProcess(botExe,
+                                string.Format("{0} {1} {2} {3}", user, pass, type, value), true);
+            //wait for bot to respond
+            Wait(5);
+            var htmlFile = Helper.AssemblyDirectory + "\\temp.html";
+            File.WriteAllText(htmlFile, output);
+            CreateCBrowser(htmlFile + "?nonce=" + Guid.NewGuid(), "");
         }
+
 
         private string WaitCommand(XmlNode node)
         {
@@ -1936,24 +1928,6 @@ namespace AirdropBot
 
         }
 
-        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\"/>";
-
-        }
-
-        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            txtScenario.SelectedText = "<gmail user=\"\" pass=\"\" search=\"\"/>";
-
-        }
-
-        private void signOutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            txtScenario.SelectedText = "<gmailsignout/>";
-
-        }
-
         private void byTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<set value=\"\" xpath=\"//*[text()='']\"/>";
@@ -2152,7 +2126,7 @@ namespace AirdropBot
 
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<gmail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>\r\n</gmail>";
+            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>\r\n</mail>";
 
         }
     }

@@ -531,7 +531,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check gmail address for empty mail address and mail password! " + (index + 1));
                     return;
                 }
-                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailCheck.xml");
+                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailLogin.xml");
                 gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 4));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };

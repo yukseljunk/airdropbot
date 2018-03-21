@@ -21,5 +21,8 @@
   <continueif compare="UNDEF" what="getAttribute('data-initial-value')" xpath="//input[@name='password']"/>
   <waittill compare="q" what="getAttribute('name')" xpath="//input[@name='q']"/>
 
+  <wait for="30"/>
+  <click xpath="//a[text()='Sign out']" />
 
+  
 </steps>
