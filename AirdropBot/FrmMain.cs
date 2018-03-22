@@ -198,7 +198,7 @@ namespace AirdropBot
                 if (command == "telegram")
                 {
                     this.WindowState = FormWindowState.Minimized;
-                    commandResult = TelegramCommand(node);
+                    commandResult = TelegramCommandMemu(node);
                     this.WindowState = FormWindowState.Maximized;
 
                 }
@@ -926,6 +926,69 @@ namespace AirdropBot
             return "";
         }
 
+        private string TelegramCommandMemu(XmlNode node)
+        {
+            var user = node.Attributes["user"];
+            var password = node.Attributes["pass"];
+            var group = node.Attributes["group"];
+            var chat = node.Attributes["chat"];
+            var message = node.Attributes["message"];
+            if (user == null || password == null) return "User/password not defined";
+            if (!ReplaceTokens(user.Value).StartsWith("m_"))
+            {
+                return TelegramCommand(node);
+            }
+            var url = "";
+
+            var extraArgs = "";
+            if (group != null && group.Value != "")
+            {
+                url = group.Value;
+            }
+            if (chat != null && chat.Value != "")
+            {
+
+                url = chat.Value;
+            }
+
+            Rect location = new Rect();
+            if (Helper.OpenTelegramMemu(ReplaceTokens(user.Value), ReplaceTokens(password.Value), url, out location, true) != "") return "Memu is not running!";
+            /*
+            TestStack.White.Application app = TestStack.White.Application.Attach(@"MEmuHeadless");
+
+            var mainWindow = app.GetWindows()[0];
+            try
+            {
+                mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+            }
+            catch
+            {
+            }
+
+            return "";
+            //join or open group/send message
+            if (@group != null && @group.Value.Trim() != "")
+            {
+                Process p = Process.GetProcessesByName("Telegram")[0];
+
+                SetForegroundWindow(p.Handle); access denied
+                /*Deb.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
+                                              mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));
+                var pointToClick = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
+
+                mainWindow.Mouse.Location = pointToClick;
+                mainWindow.Mouse.Click();
+                if (message != null && message.Value.Trim() != "")
+                {
+                    Thread.Sleep(1000);
+                    mainWindow.Mouse.Click();
+                    mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
+                    mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                }
+            }*/
+            return "";
+
+        }
 
         private string TelegramCommand(XmlNode node)
         {
