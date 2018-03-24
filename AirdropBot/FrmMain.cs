@@ -932,7 +932,6 @@ namespace AirdropBot
             var password = node.Attributes["pass"];
             var group = node.Attributes["group"];
             var chat = node.Attributes["chat"];
-            var message = node.Attributes["message"];
             if (user == null || password == null) return "User/password not defined";
             if (!ReplaceTokens(user.Value).StartsWith("m_"))
             {
@@ -952,41 +951,74 @@ namespace AirdropBot
             }
 
             Rect location = new Rect();
-            if (Helper.OpenTelegramMemu(ReplaceTokens(user.Value), ReplaceTokens(password.Value), url, out location, true) != "") return "Memu is not running!";
-            /*
-            TestStack.White.Application app = TestStack.White.Application.Attach(@"MEmuHeadless");
+            var memuRes = Helper.OpenTelegramMemu(ReplaceTokens(user.Value), ReplaceTokens(password.Value), url,
+                                                  out location, true);
+            if (memuRes != "") return memuRes;
 
-            var mainWindow = app.GetWindows()[0];
-            try
+            if (node.HasChildNodes)
             {
-                mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
-            }
-            catch
-            {
-            }
-
-            return "";
-            //join or open group/send message
-            if (@group != null && @group.Value.Trim() != "")
-            {
-                Process p = Process.GetProcessesByName("Telegram")[0];
-
-                SetForegroundWindow(p.Handle); access denied
-                /*Deb.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
-                                              mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));
-                var pointToClick = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
-
-                mainWindow.Mouse.Location = pointToClick;
-                mainWindow.Mouse.Click();
-                if (message != null && message.Value.Trim() != "")
+                stopped = false;
+                foreach (XmlNode subNode in node.ChildNodes)
                 {
-                    Thread.Sleep(1000);
-                    mainWindow.Mouse.Click();
-                    mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
-                    mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                    if (stopped) break;
+                    if (subNode.Name == "click")
+                    {
+                        var x = subNode.Attributes["x"];
+                        var y = subNode.Attributes["y"];
+                        if (x == null || y == null) continue;
+                        var xval = x.Value;
+                        var yval = y.Value;
+                        var xnegative = xval.StartsWith("-");
+                        var ynegative = yval.StartsWith("-");
+                        var xrelative = xval.StartsWith("%");
+                        var yrelative = yval.StartsWith("%");
+                        xval = xval.Replace("-", "").Replace("%", "");
+                        yval = yval.Replace("-", "").Replace("%", "");
+                        int xpoint = int.Parse(xval);
+                        int ypoint = int.Parse(yval);
+                        if (xrelative) xpoint = location.Left + Convert.ToInt32((location.Right - location.Left) * xpoint / 100);
+                        if (yrelative) ypoint = location.Top + Convert.ToInt32((location.Bottom - location.Top) * ypoint / 100);
+                        if (xnegative) xpoint = Convert.ToInt32(location.Right - xpoint);
+                        if (ynegative) ypoint = Convert.ToInt32(location.Bottom - ypoint);
+
+                        var pointToClick = new System.Windows.Point(xpoint, ypoint);
+                        ClickOnPointTool.ClickOnPoint(new Point(xpoint, ypoint));
+
+
+                    }
+                    if (subNode.Name == "message")
+                    {
+
+                        //<message text
+                        var text = subNode.Attributes["text"];
+
+                        if (text != null && text.Value.Trim() != "")
+                        {
+                            Thread.Sleep(1000);
+                            SendKeys.SendWait(ReplaceTokens(text.Value));
+
+                        }
+                    }
+                    if (subNode.Name == "join")
+                    {
+
+                        //<message text
+                        var newUrl = subNode.Attributes["url"];
+
+                        if (newUrl != null && newUrl.Value.Trim() != "")
+                        {
+
+                        }
+                    }
+                    if (subNode.Name == "wait")
+                    {
+                        WaitCommand(subNode);
+                    }
+
                 }
-            }*/
+            }
             return "";
+
 
         }
 
@@ -1195,11 +1227,12 @@ namespace AirdropBot
 
                 waitsecs = int.Parse(ReplaceTokens(forAmount));
             }
-
+            stopped = false;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (true)
             {
+                if (stopped) return "";
                 Application.DoEvents();
                 if (sw.ElapsedMilliseconds >= waitsecs * 1000)
                 {
@@ -1754,7 +1787,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\" message=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n</telegram>";
+            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n<join url=\"\"/>\r\n</telegram>";
 
         }
 

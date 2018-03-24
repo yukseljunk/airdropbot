@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -30,6 +32,7 @@ namespace AirdropBot
         [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
         public static extern IntPtr FindWindow(string lpClassName,
                                                string lpWindowName);
+
 
         // Activate an application window.
         [DllImport("USER32.DLL")]
@@ -109,7 +112,8 @@ namespace AirdropBot
             }
             var arg = "MEmu";
             if (mindex != "0") arg += "_" + mindex.ToString();
-            StartProcess(@"D:\Program Files\Microvirt\MEmu\MemuConsole.exe", arg, false, @"D:\Program Files\Microvirt\MEmu\");
+            var memuFolder = ConfigurationManager.AppSettings["memupath"];
+            StartProcess(memuFolder + "MemuConsole.exe", arg, false, memuFolder);
             Thread.Sleep(100);
 
 
@@ -134,10 +138,11 @@ namespace AirdropBot
                     {
                         break;
                     }
+
                     Application.DoEvents();
                 }
-                //give half min for emu to start
-                Thread.Sleep(35000);
+                var mws = int.Parse(ConfigurationManager.AppSettings["memuwaitsec"]);
+                Thread.Sleep(mws * 1000);
             }
 
             SetForegroundWindow(runasHandle);
@@ -145,18 +150,52 @@ namespace AirdropBot
             location = new Rect();
             GetWindowRect(runasHandle, ref location);
 
-            var browserPos = CalculateAbsolut(location, 20, 80);
+            var browserPos = CalculateAbsolut(location, 15, 50);
             var tgPos = CalculateAbsolut(location, 80, 30);
+            var cirlePos = new Point(location.Right - 10, location.Bottom - 90);
+            var trianglePos = new Point(location.Right - 10, location.Bottom - 120);
             //click home 
             Thread.Sleep(100);
-            ClickOnPointTool.ClickOnPoint(runasHandle, new Point(location.Right - 10, location.Bottom - 90));
-            //click telegram, positioned on first row 5th col
-            Thread.Sleep(100);
-            ClickOnPointTool.ClickOnPoint(runasHandle, tgPos);
+            ClickOnPointTool.ClickOnPoint(cirlePos);
 
+            //go to browser if url is not empty
+            if (!string.IsNullOrEmpty(url))
+            {
+                Thread.Sleep(100);
+                ClickOnPointTool.ClickOnPoint(browserPos);
+                Thread.Sleep(500);
+                for (int i = 0; i < 50; i++)
+                {
+                    ClickOnPointTool.ClickOnPoint(trianglePos);
+                }
+                Thread.Sleep(100);
+                ClickOnPointTool.ClickOnPoint(browserPos);
+                Thread.Sleep(3000);
+                ClickOnPointTool.ClickOnPoint(CalculateAbsolut(location, 50, 30));
+                Thread.Sleep(2000);
+                SendKeys.SendWait(url);
+                Thread.Sleep(1000);
+                ClickOnPointTool.ClickOnPoint(CalculateAbsolut(location, 95, 10));
+                Thread.Sleep(3000);
+                ClickOnPointTool.ClickOnPoint(new Point(CalculateAbsolut(location, 50, 10).X, location.Bottom - 10));
+
+                Thread.Sleep(1000);
+
+            }
+            else
+            {
+                //click telegram, positioned on first row 5th col
+                Thread.Sleep(100);
+                ClickOnPointTool.ClickOnPoint(tgPos);
+            }
             Thread.Sleep(100);
             return "";
         }
+
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, string windowTitle);
+
 
         private static Point CalculateAbsolut(Rect location, int percX, int percY)
         {
@@ -196,6 +235,75 @@ namespace AirdropBot
             }
             return result;
         }
+    }
+
+    public class WindowHandleInfo
+    {
+        private delegate bool EnumWindowProc(IntPtr hwnd, IntPtr lParam);
+
+        [DllImport("user32")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr lParam);
+
+        private IntPtr _MainHandle;
+
+        public WindowHandleInfo(IntPtr handle)
+        {
+            this._MainHandle = handle;
+        }
+
+        public List<string> GetAllChildHandles()
+        {
+            List<IntPtr> childHandles = new List<IntPtr>();
+            var result = new List<string>();
+
+            GCHandle gcChildhandlesList = GCHandle.Alloc(childHandles);
+            IntPtr pointerChildHandlesList = GCHandle.ToIntPtr(gcChildhandlesList);
+
+            try
+            {
+                EnumWindowProc childProc = new EnumWindowProc(EnumWindow);
+                EnumChildWindows(this._MainHandle, childProc, pointerChildHandlesList);
+            }
+            finally
+            {
+                gcChildhandlesList.Free();
+            }
+
+            if (childHandles.Count > 0)
+            {
+                foreach (var childHandle in childHandles)
+                {
+                    int capacity = GetWindowTextLength(new HandleRef(this, childHandle)) * 2;
+                    StringBuilder stringBuilder = new StringBuilder(capacity);
+                    var caption = GetWindowText(new HandleRef(this, childHandle), stringBuilder, stringBuilder.Capacity);
+                    result.Add(stringBuilder.ToString());
+                }
+            }
+
+            return result;
+        }
+
+        private bool EnumWindow(IntPtr hWnd, IntPtr lParam)
+        {
+            GCHandle gcChildhandlesList = GCHandle.FromIntPtr(lParam);
+
+            if (gcChildhandlesList == null || gcChildhandlesList.Target == null)
+            {
+                return false;
+            }
+
+            List<IntPtr> childHandles = gcChildhandlesList.Target as List<IntPtr>;
+            childHandles.Add(hWnd);
+
+            return true;
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetWindowTextLength(HandleRef hWnd);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
     }
 }
 

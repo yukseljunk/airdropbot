@@ -61,7 +61,7 @@ namespace AirdropBot
             mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
         }
 
-        public static void ClickOnPoint(IntPtr wndHandle, Point clientPoint)
+        public static void ClickOnPoint( Point clientPoint)
         {
             var oldPos = Cursor.Position;
 
