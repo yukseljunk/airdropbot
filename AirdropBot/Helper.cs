@@ -161,16 +161,19 @@ namespace AirdropBot
             //go to browser if url is not empty
             if (!string.IsNullOrEmpty(url))
             {
-                Thread.Sleep(100);
+                Thread.Sleep(2000);
                 ClickOnPointTool.ClickOnPoint(browserPos);
                 Thread.Sleep(500);
-                for (int i = 0; i < 50; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     ClickOnPointTool.ClickOnPoint(trianglePos);
+                    Thread.Sleep(50);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(1500);
                 ClickOnPointTool.ClickOnPoint(browserPos);
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
+
+                
                 ClickOnPointTool.ClickOnPoint(CalculateAbsolut(location, 50, 30));
                 Thread.Sleep(2000);
                 SendKeys.SendWait(url);

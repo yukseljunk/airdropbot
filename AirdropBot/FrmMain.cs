@@ -939,7 +939,6 @@ namespace AirdropBot
             }
             var url = "";
 
-            var extraArgs = "";
             if (group != null && group.Value != "")
             {
                 url = group.Value;
@@ -981,12 +980,11 @@ namespace AirdropBot
                         if (xnegative) xpoint = Convert.ToInt32(location.Right - xpoint);
                         if (ynegative) ypoint = Convert.ToInt32(location.Bottom - ypoint);
 
-                        var pointToClick = new System.Windows.Point(xpoint, ypoint);
                         ClickOnPointTool.ClickOnPoint(new Point(xpoint, ypoint));
 
 
                     }
-                    if (subNode.Name == "message")
+                    else if (subNode.Name == "message")
                     {
 
                         //<message text
@@ -995,24 +993,17 @@ namespace AirdropBot
                         if (text != null && text.Value.Trim() != "")
                         {
                             Thread.Sleep(1000);
+                            ClickOnPointTool.ClickOnPoint(new Point((location.Right + location.Left) / 2, location.Bottom - 10));
+                            Thread.Sleep(1000);
                             SendKeys.SendWait(ReplaceTokens(text.Value));
-
+                            Thread.Sleep(100);
+                            ClickOnPointTool.ClickOnPoint(new Point(location.Right - 40, location.Bottom - 40));
+                            Thread.Sleep(100);
                         }
                     }
-                    if (subNode.Name == "join")
+                    else
                     {
-
-                        //<message text
-                        var newUrl = subNode.Attributes["url"];
-
-                        if (newUrl != null && newUrl.Value.Trim() != "")
-                        {
-
-                        }
-                    }
-                    if (subNode.Name == "wait")
-                    {
-                        WaitCommand(subNode);
+                        Run(subNode.OuterXml);
                     }
 
                 }
@@ -1787,7 +1778,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n<join url=\"\"/>\r\n</telegram>";
+            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n</telegram>";
 
         }
 
