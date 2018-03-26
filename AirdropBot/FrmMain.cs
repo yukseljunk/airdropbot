@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -175,6 +176,11 @@ namespace AirdropBot
                     commandResult = SubmitCommand(node);
                 }
 
+                if (command == "repeat")
+                {
+                    commandResult = RepeatCommand(node);
+                }
+
                 if (command == "wait")
                 {
                     commandResult = WaitCommand(node);
@@ -249,6 +255,20 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string RepeatCommand(XmlNode node)
+        {
+            var times = node.Attributes["times"];
+
+
+            if (times == null) return "Repeat times is not defined!";
+            if (times.Value == "") return "Repeat times is empty!";
+            for (int i = 0; i < int.Parse(times.Value); i++)
+            {
+                Run(node.InnerXml);
+            }
+            return "";
         }
 
 
@@ -1210,14 +1230,20 @@ namespace AirdropBot
 
         private string WaitCommand(XmlNode node)
         {
-            var waitsecs = 1;
+            var waitsecs = 1000;
             var secs = node.Attributes["for"];
             if (secs != null)
             {
                 var forAmount = node.Attributes["for"].Value;
 
-                waitsecs = int.Parse(ReplaceTokens(forAmount));
+                waitsecs = int.Parse(ReplaceTokens(forAmount)) * 1000;
             }
+            var milisecs = node.Attributes["formilisec"];
+            if (milisecs != null)
+            {
+                waitsecs = int.Parse(ReplaceTokens(node.Attributes["formilisec"].Value));
+            }
+
             stopped = false;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -1225,7 +1251,7 @@ namespace AirdropBot
             {
                 if (stopped) return "";
                 Application.DoEvents();
-                if (sw.ElapsedMilliseconds >= waitsecs * 1000)
+                if (sw.ElapsedMilliseconds >= waitsecs)
                 {
                     return "";
 
@@ -1640,7 +1666,7 @@ namespace AirdropBot
 
         private void waitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<wait for=\"2\"/>";
+            txtScenario.SelectedText = "<wait for=\"2\" formilisec=\"2\"/>";
 
         }
 
@@ -2216,6 +2242,12 @@ namespace AirdropBot
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>\r\n</mail>";
+
+        }
+
+        private void repeatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<repeat times=\"10\">\r\n\r\n<wait formilisec=\"1\"/>\r\n</repeat>";
 
         }
     }
