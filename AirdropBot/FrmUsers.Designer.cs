@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sallaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +42,9 @@
             this.twitterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFollowersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createAPIKeysToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.checkToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.mEWToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,8 +52,6 @@
             this.createToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.telegramToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.createWindowsUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideWindowsUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTelegramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.facebookToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +73,9 @@
             this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createTwitterAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createTwitterFollowersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createAPIKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.checkTwitterAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mEWToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createMewAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBalanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,21 +83,12 @@
             this.createKucoinAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkKucoinAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.telegramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createWindowsUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideWindowsUserInLoginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.openTelegramForSelectedUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.facebookToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFBAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkFBAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openCsvFile = new System.Windows.Forms.OpenFileDialog();
             this.saveCsvFile = new System.Windows.Forms.SaveFileDialog();
-            this.checkTwitterAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.createAPIKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.createAPIKeysToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -101,10 +96,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -214,6 +209,25 @@
             this.createFollowersToolStripMenuItem.Text = "Create Followers";
             this.createFollowersToolStripMenuItem.Click += new System.EventHandler(this.createFollowersToolStripMenuItem_Click);
             // 
+            // createAPIKeysToolStripMenuItem1
+            // 
+            this.createAPIKeysToolStripMenuItem1.Name = "createAPIKeysToolStripMenuItem1";
+            this.createAPIKeysToolStripMenuItem1.Size = new System.Drawing.Size(161, 22);
+            this.createAPIKeysToolStripMenuItem1.Text = "Create API Keys";
+            this.createAPIKeysToolStripMenuItem1.Click += new System.EventHandler(this.createAPIKeysToolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(158, 6);
+            // 
+            // checkToolStripMenuItem4
+            // 
+            this.checkToolStripMenuItem4.Name = "checkToolStripMenuItem4";
+            this.checkToolStripMenuItem4.Size = new System.Drawing.Size(161, 22);
+            this.checkToolStripMenuItem4.Text = "Check";
+            this.checkToolStripMenuItem4.Click += new System.EventHandler(this.checkToolStripMenuItem4_Click);
+            // 
             // mEWToolStripMenuItem1
             // 
             this.mEWToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -263,31 +277,15 @@
             // telegramToolStripMenuItem1
             // 
             this.telegramToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createWindowsUserToolStripMenuItem1,
-            this.hideWindowsUToolStripMenuItem,
             this.openTelegramToolStripMenuItem});
             this.telegramToolStripMenuItem1.Name = "telegramToolStripMenuItem1";
             this.telegramToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
             this.telegramToolStripMenuItem1.Text = "Telegram";
             // 
-            // createWindowsUserToolStripMenuItem1
-            // 
-            this.createWindowsUserToolStripMenuItem1.Name = "createWindowsUserToolStripMenuItem1";
-            this.createWindowsUserToolStripMenuItem1.Size = new System.Drawing.Size(186, 22);
-            this.createWindowsUserToolStripMenuItem1.Text = "Create Windows User";
-            this.createWindowsUserToolStripMenuItem1.Click += new System.EventHandler(this.createWindowsUserToolStripMenuItem1_Click);
-            // 
-            // hideWindowsUToolStripMenuItem
-            // 
-            this.hideWindowsUToolStripMenuItem.Name = "hideWindowsUToolStripMenuItem";
-            this.hideWindowsUToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.hideWindowsUToolStripMenuItem.Text = "Hide Windows User";
-            this.hideWindowsUToolStripMenuItem.Click += new System.EventHandler(this.hideWindowsUToolStripMenuItem_Click);
-            // 
             // openTelegramToolStripMenuItem
             // 
             this.openTelegramToolStripMenuItem.Name = "openTelegramToolStripMenuItem";
-            this.openTelegramToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.openTelegramToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.openTelegramToolStripMenuItem.Text = "Open Telegram";
             this.openTelegramToolStripMenuItem.Click += new System.EventHandler(this.openTelegramToolStripMenuItem_Click);
             // 
@@ -460,6 +458,25 @@
             this.createTwitterFollowersToolStripMenuItem.Text = "Create twitter followers";
             this.createTwitterFollowersToolStripMenuItem.Click += new System.EventHandler(this.createTwitterFollowersToolStripMenuItem_Click);
             // 
+            // createAPIKeysToolStripMenuItem
+            // 
+            this.createAPIKeysToolStripMenuItem.Name = "createAPIKeysToolStripMenuItem";
+            this.createAPIKeysToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.createAPIKeysToolStripMenuItem.Text = "Create API Keys";
+            this.createAPIKeysToolStripMenuItem.Click += new System.EventHandler(this.createAPIKeysToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(193, 6);
+            // 
+            // checkTwitterAccountToolStripMenuItem
+            // 
+            this.checkTwitterAccountToolStripMenuItem.Name = "checkTwitterAccountToolStripMenuItem";
+            this.checkTwitterAccountToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.checkTwitterAccountToolStripMenuItem.Text = "Check twitter account";
+            this.checkTwitterAccountToolStripMenuItem.Click += new System.EventHandler(this.checkTwitterAccountToolStripMenuItem_Click);
+            // 
             // mEWToolStripMenuItem
             // 
             this.mEWToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -509,32 +526,10 @@
             // telegramToolStripMenuItem
             // 
             this.telegramToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createWindowsUserToolStripMenuItem,
-            this.hideWindowsUserInLoginToolStripMenuItem,
-            this.toolStripMenuItem1,
             this.openTelegramForSelectedUserToolStripMenuItem});
             this.telegramToolStripMenuItem.Name = "telegramToolStripMenuItem";
             this.telegramToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
             this.telegramToolStripMenuItem.Text = "Telegram";
-            // 
-            // createWindowsUserToolStripMenuItem
-            // 
-            this.createWindowsUserToolStripMenuItem.Name = "createWindowsUserToolStripMenuItem";
-            this.createWindowsUserToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.createWindowsUserToolStripMenuItem.Text = "Create windows user";
-            this.createWindowsUserToolStripMenuItem.Click += new System.EventHandler(this.createWindowsUserToolStripMenuItem_Click);
-            // 
-            // hideWindowsUserInLoginToolStripMenuItem
-            // 
-            this.hideWindowsUserInLoginToolStripMenuItem.Name = "hideWindowsUserInLoginToolStripMenuItem";
-            this.hideWindowsUserInLoginToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.hideWindowsUserInLoginToolStripMenuItem.Text = "Hide windows user in login";
-            this.hideWindowsUserInLoginToolStripMenuItem.Click += new System.EventHandler(this.hideWindowsUserInLoginToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(239, 6);
             // 
             // openTelegramForSelectedUserToolStripMenuItem
             // 
@@ -576,44 +571,6 @@
             this.saveCsvFile.DefaultExt = "csv";
             this.saveCsvFile.Filter = "CSV Files|*.csv";
             this.saveCsvFile.RestoreDirectory = true;
-            // 
-            // checkTwitterAccountToolStripMenuItem
-            // 
-            this.checkTwitterAccountToolStripMenuItem.Name = "checkTwitterAccountToolStripMenuItem";
-            this.checkTwitterAccountToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.checkTwitterAccountToolStripMenuItem.Text = "Check twitter account";
-            this.checkTwitterAccountToolStripMenuItem.Click += new System.EventHandler(this.checkTwitterAccountToolStripMenuItem_Click);
-            // 
-            // checkToolStripMenuItem4
-            // 
-            this.checkToolStripMenuItem4.Name = "checkToolStripMenuItem4";
-            this.checkToolStripMenuItem4.Size = new System.Drawing.Size(161, 22);
-            this.checkToolStripMenuItem4.Text = "Check";
-            this.checkToolStripMenuItem4.Click += new System.EventHandler(this.checkToolStripMenuItem4_Click);
-            // 
-            // createAPIKeysToolStripMenuItem
-            // 
-            this.createAPIKeysToolStripMenuItem.Name = "createAPIKeysToolStripMenuItem";
-            this.createAPIKeysToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.createAPIKeysToolStripMenuItem.Text = "Create API Keys";
-            this.createAPIKeysToolStripMenuItem.Click += new System.EventHandler(this.createAPIKeysToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(193, 6);
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(158, 6);
-            // 
-            // createAPIKeysToolStripMenuItem1
-            // 
-            this.createAPIKeysToolStripMenuItem1.Name = "createAPIKeysToolStripMenuItem1";
-            this.createAPIKeysToolStripMenuItem1.Size = new System.Drawing.Size(161, 22);
-            this.createAPIKeysToolStripMenuItem1.Text = "Create API Keys";
-            this.createAPIKeysToolStripMenuItem1.Click += new System.EventHandler(this.createAPIKeysToolStripMenuItem1_Click);
             // 
             // FrmUsers
             // 
@@ -666,9 +623,6 @@
         private System.Windows.Forms.ToolStripMenuItem createKucoinAccountToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkKucoinAccountToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem telegramToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem createWindowsUserToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hideWindowsUserInLoginToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem openTelegramForSelectedUserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem facebookToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createFBAccountToolStripMenuItem;
@@ -691,8 +645,6 @@
         private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem createWindowsUserToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem hideWindowsUToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openTelegramToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem facebookToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem3;

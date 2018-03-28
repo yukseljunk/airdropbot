@@ -33,7 +33,7 @@
     <wait for="2"/>
     <search text="kucoin"/>
     <wait for="2"/>
-    <get param="ulker" what="getAttribute('href')" xpath="//*[text() = 'valid=pending']" regex=""/>
+    <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'valid=pending')]" regex=""/>
     <wait for="2"/>
   </mail>
   <wait for="2"/>

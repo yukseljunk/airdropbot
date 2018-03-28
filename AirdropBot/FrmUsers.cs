@@ -865,7 +865,17 @@ namespace AirdropBot
                 MessageBox.Show("Cannot open telegram for empty win user or win pwd !" + (index + 1));//email, pass, proxy
                 return;
             }
+
+            if (GetCell(index, 13).StartsWith("m_"))
+            {
+
+                Rect rect;
+                Helper.OpenTelegramMemu(GetCell(index, 13), GetCell(index, 14), "", out rect);
+                return;
+            }
             Helper.OpenTelegram(GetCell(index, 13), "", GetCell(index, 14));
+            
+
         }
 
         private void byIgnoringFirstLineToolStripMenuItem_Click(object sender, EventArgs e)

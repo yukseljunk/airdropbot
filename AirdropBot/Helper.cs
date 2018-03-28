@@ -191,8 +191,9 @@ namespace AirdropBot
             else
             {
                 //click telegram, positioned on first row 5th col
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
                 ClickOnPointTool.ClickOnPoint(tgPos);
+                Thread.Sleep(1000);
             }
             Thread.Sleep(100);
             return "";
