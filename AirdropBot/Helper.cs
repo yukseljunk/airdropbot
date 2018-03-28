@@ -149,39 +149,42 @@ namespace AirdropBot
 
             location = new Rect();
             GetWindowRect(runasHandle, ref location);
+            Thread.Sleep(1000);
 
-            var browserPos = CalculateAbsolut(location, 15, 50);
             var tgPos = CalculateAbsolut(location, 80, 30);
-            var cirlePos = new Point(location.Right - 10, location.Bottom - 90);
-            var trianglePos = new Point(location.Right - 10, location.Bottom - 120);
-            //click home 
-            Thread.Sleep(100);
-            ClickOnPointTool.ClickOnPoint(cirlePos);
 
             //go to browser if url is not empty
             if (!string.IsNullOrEmpty(url))
             {
-                Thread.Sleep(2000);
-                ClickOnPointTool.ClickOnPoint(browserPos);
-                Thread.Sleep(500);
+                var scenarioPlayPos = new Point(location.Right - 12, location.Top + 88);
+                ClickOnPointTool.ClickOnPoint(scenarioPlayPos);
+                Thread.Sleep(1000);
+
+                var scenarioFile = ConfigurationManager.AppSettings["memuscenariofile"];
+                File.Copy(AssemblyDirectory + "\\Templates\\MemuOpenBrowser1.txt", scenarioFile, true);
+
                 for (int i = 0; i < 10; i++)
                 {
-                    ClickOnPointTool.ClickOnPoint(trianglePos);
-                    Thread.Sleep(50);
+                    File.AppendAllText(scenarioFile, (4000000 + i * 90000) + "--VINPUT--KBDPR:158:0\r\n");
+                    File.AppendAllText(scenarioFile, (4000100 + i * 90000) + "--VINPUT--KBDRL:158:0\r\n");
                 }
-                Thread.Sleep(1500);
-                ClickOnPointTool.ClickOnPoint(browserPos);
+                var template2 = File.ReadAllText(AssemblyDirectory + "\\Templates\\MemuOpenBrowser2.txt");
+                File.AppendAllText(scenarioFile, template2);
+
+                for (int i = 0; i < url.Length; i++)
+                {
+
+                    File.AppendAllText(scenarioFile, (6000000 + i * 10000) + "--CLIPBOARD--" + url[i] + "\r\n");
+                }
+                File.AppendAllText(scenarioFile, (6000000 + url.Length * 10000) + "--VINPUT--KBDPR:28:1\r\n");
+                File.AppendAllText(scenarioFile, (6100000 + url.Length * 10000) + "--VINPUT--KBDRL:28:0\r\n");
                 Thread.Sleep(1000);
 
-                
-                ClickOnPointTool.ClickOnPoint(CalculateAbsolut(location, 50, 30));
-                Thread.Sleep(2000);
-                SendKeys.SendWait(url);
-                Thread.Sleep(1000);
-                ClickOnPointTool.ClickOnPoint(CalculateAbsolut(location, 95, 10));
-                Thread.Sleep(3000);
-                ClickOnPointTool.ClickOnPoint(new Point(CalculateAbsolut(location, 50, 10).X, location.Bottom - 10));
-
+                var replayScenarioPos = new Point((location.Right + location.Left) / 2 + 120, (location.Top + location.Bottom) / 2 - 30);
+                ClickOnPointTool.ClickOnPoint(replayScenarioPos);
+                Thread.Sleep(16000);
+                var closeScenarioPos = new Point((location.Right + location.Left) / 2 + 195, (location.Top + location.Bottom) / 2 - 135);
+                ClickOnPointTool.ClickOnPoint(closeScenarioPos);
                 Thread.Sleep(1000);
 
             }
@@ -219,6 +222,7 @@ namespace AirdropBot
             {
                 startInfo.UseShellExecute = false;
                 startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
                 startInfo.CreateNoWindow = true;
             }
 
@@ -234,6 +238,12 @@ namespace AirdropBot
                 {
                     res.Add(process.StandardOutput.ReadLine());
                 }
+                while (!process.StandardError.EndOfStream)
+                {
+                    res.Add(process.StandardError.ReadLine());
+                }
+
+
                 result = string.Join("\r\n", res);
             }
             return result;

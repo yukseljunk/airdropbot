@@ -989,16 +989,20 @@ namespace AirdropBot
                         var yval = y.Value;
                         var xnegative = xval.StartsWith("-");
                         var ynegative = yval.StartsWith("-");
+                        var xpositive = xval.StartsWith("+");
+                        var ypositive = yval.StartsWith("+");
                         var xrelative = xval.StartsWith("%");
                         var yrelative = yval.StartsWith("%");
-                        xval = xval.Replace("-", "").Replace("%", "");
-                        yval = yval.Replace("-", "").Replace("%", "");
+                        xval = xval.Replace("-", "").Replace("+", "").Replace("%", "");
+                        yval = yval.Replace("-", "").Replace("+", "").Replace("%", "");
                         int xpoint = int.Parse(xval);
                         int ypoint = int.Parse(yval);
                         if (xrelative) xpoint = location.Left + Convert.ToInt32((location.Right - location.Left) * xpoint / 100);
                         if (yrelative) ypoint = location.Top + Convert.ToInt32((location.Bottom - location.Top) * ypoint / 100);
                         if (xnegative) xpoint = Convert.ToInt32(location.Right - xpoint);
                         if (ynegative) ypoint = Convert.ToInt32(location.Bottom - ypoint);
+                        if (xpositive) xpoint = Convert.ToInt32(location.Left + xpoint);
+                        if (ypositive) ypoint = Convert.ToInt32(location.Top + ypoint);
 
                         ClickOnPointTool.ClickOnPoint(new Point(xpoint, ypoint));
 
@@ -1112,6 +1116,8 @@ namespace AirdropBot
                         var yval = y.Value;
                         var xnegative = xval.StartsWith("-");
                         var ynegative = yval.StartsWith("-");
+                        var xpositive = xval.StartsWith("+");
+                        var ypositive = yval.StartsWith("+");
                         var xrelative = xval.StartsWith("%");
                         var yrelative = yval.StartsWith("%");
                         xval = xval.Replace("-", "").Replace("%", "");
@@ -1122,6 +1128,8 @@ namespace AirdropBot
                         if (yrelative) ypoint = Convert.ToInt32(mainWindow.Bounds.Bottom * ypoint / 100);
                         if (xnegative) xpoint = Convert.ToInt32(mainWindow.Bounds.Right - xpoint);
                         if (ynegative) ypoint = Convert.ToInt32(mainWindow.Bounds.Bottom - ypoint);
+                        if (xpositive) xpoint = Convert.ToInt32(mainWindow.Bounds.Left + xpoint);
+                        if (ypositive) ypoint = Convert.ToInt32(mainWindow.Bounds.Top + ypoint);
 
                         var pointToClick = new System.Windows.Point(xpoint, ypoint);
 
@@ -1239,9 +1247,9 @@ namespace AirdropBot
                 waitsecs = int.Parse(ReplaceTokens(forAmount)) * 1000;
             }
             var milisecs = node.Attributes["formilisec"];
-            if (milisecs != null)
+            if (milisecs != null && milisecs.Value != "")
             {
-                waitsecs = int.Parse(ReplaceTokens(node.Attributes["formilisec"].Value));
+                waitsecs = int.Parse(ReplaceTokens(milisecs.Value));
             }
 
             stopped = false;
@@ -1666,7 +1674,7 @@ namespace AirdropBot
 
         private void waitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<wait for=\"2\" formilisec=\"2\"/>";
+            txtScenario.SelectedText = "<wait for=\"2\" formilisec=\"\"/>";
 
         }
 
