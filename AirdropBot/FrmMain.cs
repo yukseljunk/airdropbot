@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -1016,13 +1017,29 @@ namespace AirdropBot
 
                         if (text != null && text.Value.Trim() != "")
                         {
+                          
+                            var scenarioPlayPos = new Point(location.Right - 12, location.Top + 88);
+                            ClickOnPointTool.ClickOnPoint(scenarioPlayPos);
                             Thread.Sleep(1000);
-                            ClickOnPointTool.ClickOnPoint(new Point((location.Right + location.Left) / 2, location.Bottom - 10));
+                            var scenarioFile = ConfigurationManager.AppSettings["memuscenariofile"];
+                            File.Copy(Helper.AssemblyDirectory + "\\Templates\\MemuTgMessage1.txt", scenarioFile, true);
+
+                            var msg = ReplaceTokens(text.Value);
+                            for (int i = 0; i < msg.Length; i++)
+                            {
+                                File.AppendAllText(scenarioFile, (50000 + i * 10000) + "--CLIPBOARD--" + msg[i] + "\r\n");
+                            }
+                            var template2 = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\MemuTgMessage2.txt");
+                            File.AppendAllText(scenarioFile, template2);
+
+                            var replayScenarioPos = new Point((location.Right + location.Left) / 2 + 120, (location.Top + location.Bottom) / 2 - 30);
+                            ClickOnPointTool.ClickOnPoint(replayScenarioPos);
                             Thread.Sleep(1000);
-                            SendKeys.SendWait(ReplaceTokens(text.Value));
-                            Thread.Sleep(100);
-                            ClickOnPointTool.ClickOnPoint(new Point(location.Right - 40, location.Bottom - 40));
-                            Thread.Sleep(100);
+
+                            var closeScenarioPos = new Point((location.Right + location.Left) / 2 + 195, (location.Top + location.Bottom) / 2 - 135);
+                            ClickOnPointTool.ClickOnPoint(closeScenarioPos);
+                            Thread.Sleep(1000);
+                            
                         }
                     }
                     else

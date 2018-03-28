@@ -177,6 +177,12 @@
     <Content Include="msvcr110.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\MemuTgMessage1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\MemuTgMessage2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\MemuOpenBrowser2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
