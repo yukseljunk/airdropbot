@@ -1,5 +1,8 @@
+using System.Runtime.InteropServices;
+
 namespace AirdropBot
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct Rect
     {
         public int Left { get; set; }

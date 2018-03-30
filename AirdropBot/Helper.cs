@@ -37,6 +37,7 @@ namespace AirdropBot
         // Activate an application window.
         [DllImport("USER32.DLL")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
@@ -136,19 +137,47 @@ namespace AirdropBot
                     // Verify that Calculator is a running process.
                     if (runasHandle != IntPtr.Zero)
                     {
+                        var initialDims = new Rect();
+                        GetWindowRect(runasHandle, ref initialDims);
+                        Thread.Sleep(5000);
+                        
+                        while (true)
+                        {
+                            if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
+                            {
+                                location = new Rect();
+                                return "Timeout after secs " + browsertimeoutSecs * 1000; //timeout
+                            }
+                            var currDims = new Rect();
+                            GetWindowRect(runasHandle, ref currDims);
+                            if (initialDims.Right != currDims.Right ) //bir oncekine gore saga dogru acilmissa tamamdir
+                            {
+                                if (initialDims.Right < currDims.Right && initialDims.Left == currDims.Left &&
+                                    initialDims.Top == currDims.Top && initialDims.Bottom == currDims.Bottom)
+                                {
+                                    break;
+                                }
+                                initialDims = currDims;
+                            }
+                            Application.DoEvents();
+                        }
+
                         break;
                     }
 
                     Application.DoEvents();
                 }
-                var mws = int.Parse(ConfigurationManager.AppSettings["memuwaitsec"]);
-                Thread.Sleep(mws * 1000);
+                Thread.Sleep(1000);
             }
-
+            runasHandle = FindWindow("Qt5QWindowIcon", "(" + user + ")");
             SetForegroundWindow(runasHandle);
 
             location = new Rect();
             GetWindowRect(runasHandle, ref location);
+            if (location.Top < 0 || location.Bottom < 0 || location.Left < 0 || location.Right < 0)
+            {
+                return "Minus Location coming!";
+            }
             Thread.Sleep(1000);
 
             var tgPos = CalculateAbsolut(location, 80, 30);
@@ -156,9 +185,14 @@ namespace AirdropBot
             //go to browser if url is not empty
             if (!string.IsNullOrEmpty(url))
             {
-                var scenarioPlayPos = new Point(location.Right - 12, location.Top + 88);
-                ClickOnPointTool.ClickOnPoint(scenarioPlayPos);
                 Thread.Sleep(1000);
+
+                var scenarioPlayPos = new Point(location.Right - 12, location.Top + 88);
+                for (int i = 0; i < 10; i++)
+                {
+                    ClickOnPointTool.ClickOnPoint(scenarioPlayPos);
+                    Thread.Sleep(250);
+                }
 
                 var scenarioFile = ConfigurationManager.AppSettings["memuscenariofile"];
                 File.Copy(AssemblyDirectory + "\\Templates\\MemuOpenBrowser1.txt", scenarioFile, true);
@@ -173,14 +207,13 @@ namespace AirdropBot
 
                 for (int i = 0; i < url.Length; i++)
                 {
-
-                    File.AppendAllText(scenarioFile, (6000000 + i * 10000) + "--CLIPBOARD--" + url[i] + "\r\n");
+                    File.AppendAllText(scenarioFile, (6000000 + i * 100000) + "--CLIPBOARD--" + url[i] + "\r\n");
                 }
-                File.AppendAllText(scenarioFile, (6000000 + url.Length * 10000) + "--VINPUT--KBDPR:28:1\r\n");
-                File.AppendAllText(scenarioFile, (6100000 + url.Length * 10000) + "--VINPUT--KBDRL:28:0\r\n");
+                File.AppendAllText(scenarioFile, (6000000 + url.Length * 100000) + "--VINPUT--KBDPR:28:1\r\n");
+                File.AppendAllText(scenarioFile, (6100000 + url.Length * 100000) + "--VINPUT--KBDRL:28:0\r\n");
                 Thread.Sleep(1000);
 
-                var replayScenarioPos = new Point((location.Right + location.Left) / 2 + 120, (location.Top + location.Bottom) / 2 - 30);
+                var replayScenarioPos = new Point((location.Right + location.Left) / 2 + 120, (location.Top + location.Bottom) / 2 - 26);
                 ClickOnPointTool.ClickOnPoint(replayScenarioPos);
                 Thread.Sleep(16000);
                 var closeScenarioPos = new Point((location.Right + location.Left) / 2 + 195, (location.Top + location.Bottom) / 2 - 135);
