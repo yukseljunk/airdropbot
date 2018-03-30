@@ -207,10 +207,10 @@ namespace AirdropBot
 
                 for (int i = 0; i < url.Length; i++)
                 {
-                    File.AppendAllText(scenarioFile, (6000000 + i * 100000) + "--CLIPBOARD--" + url[i] + "\r\n");
+                    File.AppendAllText(scenarioFile, (7000000 + i * 100000) + "--CLIPBOARD--" + url[i] + "\r\n");
                 }
-                File.AppendAllText(scenarioFile, (6000000 + url.Length * 100000) + "--VINPUT--KBDPR:28:1\r\n");
-                File.AppendAllText(scenarioFile, (6100000 + url.Length * 100000) + "--VINPUT--KBDRL:28:0\r\n");
+                File.AppendAllText(scenarioFile, (7000000 + url.Length * 100000) + "--VINPUT--KBDPR:28:1\r\n");
+                File.AppendAllText(scenarioFile, (7100000 + url.Length * 100000) + "--VINPUT--KBDRL:28:0\r\n");
                 Thread.Sleep(1000);
 
                 var replayScenarioPos = new Point((location.Right + location.Left) / 2 + 120, (location.Top + location.Bottom) / 2 - 26);

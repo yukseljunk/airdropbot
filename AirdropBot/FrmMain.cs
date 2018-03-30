@@ -1027,7 +1027,7 @@ namespace AirdropBot
                             var msg = ReplaceTokens(text.Value);
                             for (int i = 0; i < msg.Length; i++)
                             {
-                                File.AppendAllText(scenarioFile, (50000 + i * 10000) + "--CLIPBOARD--" + msg[i] + "\r\n");
+                                File.AppendAllText(scenarioFile, (50000 + i * 100000) + "--CLIPBOARD--" + msg[i] + "\r\n");
                             }
                             var template2 = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\MemuTgMessage2.txt");
                             File.AppendAllText(scenarioFile, template2);
