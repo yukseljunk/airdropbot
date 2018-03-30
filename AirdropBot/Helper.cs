@@ -197,25 +197,25 @@ namespace AirdropBot
                 var scenarioFile = ConfigurationManager.AppSettings["memuscenariofile"];
                 File.Copy(AssemblyDirectory + "\\Templates\\MemuOpenBrowser1.txt", scenarioFile, true);
 
-                for (int i = 0; i < 10; i++)
+               /* for (int i = 0; i < 10; i++)
                 {
                     File.AppendAllText(scenarioFile, (8000000 + i * 90000) + "--VINPUT--KBDPR:158:0\r\n");
                     File.AppendAllText(scenarioFile, (8000100 + i * 90000) + "--VINPUT--KBDRL:158:0\r\n");
                 }
                 var template2 = File.ReadAllText(AssemblyDirectory + "\\Templates\\MemuOpenBrowser2.txt");
-                File.AppendAllText(scenarioFile, template2);
+                File.AppendAllText(scenarioFile, template2);*/
 
                 for (int i = 0; i < url.Length; i++)
                 {
-                    File.AppendAllText(scenarioFile, (15000000 + i * 100000) + "--CLIPBOARD--" + url[i] + "\r\n");
+                    File.AppendAllText(scenarioFile, (7000000 + i * 100000) + "--CLIPBOARD--" + url[i] + "\r\n");
                 }
-                File.AppendAllText(scenarioFile, (16000000 + url.Length * 100000) + "--VINPUT--KBDPR:28:1\r\n");
-                File.AppendAllText(scenarioFile, (16500000 + url.Length * 100000) + "--VINPUT--KBDRL:28:0\r\n");
+                File.AppendAllText(scenarioFile, (8000000 + url.Length * 100000) + "--VINPUT--KBDPR:28:1\r\n");
+                File.AppendAllText(scenarioFile, (8500000 + url.Length * 100000) + "--VINPUT--KBDRL:28:0\r\n");
                 Thread.Sleep(1000);
 
                 var replayScenarioPos = new Point((location.Right + location.Left) / 2 + 120, (location.Top + location.Bottom) / 2 - 26);
                 ClickOnPointTool.ClickOnPoint(replayScenarioPos);
-                Thread.Sleep(25000);
+                Thread.Sleep(12000);
                 var closeScenarioPos = new Point((location.Right + location.Left) / 2 + 195, (location.Top + location.Bottom) / 2 - 135);
                 ClickOnPointTool.ClickOnPoint(closeScenarioPos);
                 Thread.Sleep(1000);
