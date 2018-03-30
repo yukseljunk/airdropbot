@@ -155,6 +155,10 @@
             this.llCheckAll = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
+            this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripSeparator();
+            this.groupScenarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.byTelegramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openScenarios = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -233,7 +237,9 @@
             this.toolStripMenuItem1,
             this.loadToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
+            this.saveAsToolStripMenuItem,
+            this.toolStripMenuItem21,
+            this.groupScenarioToolStripMenuItem});
             this.scenarioToolStripMenuItem.Name = "scenarioToolStripMenuItem";
             this.scenarioToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.scenarioToolStripMenuItem.Text = "Scenario";
@@ -241,28 +247,28 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
             this.toolStripMenuItem1.Text = "New";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.loadToolStripMenuItem.Text = "Load...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.saveAsToolStripMenuItem.Text = "Save As ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -1182,6 +1188,33 @@
             this.pnlScenario.Size = new System.Drawing.Size(364, 276);
             this.pnlScenario.TabIndex = 19;
             // 
+            // toolStripMenuItem21
+            // 
+            this.toolStripMenuItem21.Name = "toolStripMenuItem21";
+            this.toolStripMenuItem21.Size = new System.Drawing.Size(190, 6);
+            // 
+            // groupScenarioToolStripMenuItem
+            // 
+            this.groupScenarioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.byTelegramToolStripMenuItem});
+            this.groupScenarioToolStripMenuItem.Name = "groupScenarioToolStripMenuItem";
+            this.groupScenarioToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.groupScenarioToolStripMenuItem.Text = "Extract From Scenarios";
+            // 
+            // byTelegramToolStripMenuItem
+            // 
+            this.byTelegramToolStripMenuItem.Name = "byTelegramToolStripMenuItem";
+            this.byTelegramToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.byTelegramToolStripMenuItem.Text = "By telegram";
+            this.byTelegramToolStripMenuItem.Click += new System.EventHandler(this.byTelegramToolStripMenuItem_Click);
+            // 
+            // openScenarios
+            // 
+            this.openScenarios.Filter = "Scenario Files|*.xml";
+            this.openScenarios.Multiselect = true;
+            this.openScenarios.RestoreDirectory = true;
+            this.openScenarios.FileOk += new System.ComponentModel.CancelEventHandler(this.openScenarios_FileOk);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1338,6 +1371,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem19;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem18;
         private System.Windows.Forms.ToolStripMenuItem repeatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem21;
+        private System.Windows.Forms.ToolStripMenuItem groupScenarioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem byTelegramToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openScenarios;
     }
 }
 

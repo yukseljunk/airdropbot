@@ -1017,7 +1017,7 @@ namespace AirdropBot
 
                         if (text != null && text.Value.Trim() != "")
                         {
-                          
+
                             var scenarioPlayPos = new Point(location.Right - 12, location.Top + 88);
                             ClickOnPointTool.ClickOnPoint(scenarioPlayPos);
                             Thread.Sleep(1000);
@@ -1039,7 +1039,7 @@ namespace AirdropBot
                             var closeScenarioPos = new Point((location.Right + location.Left) / 2 + 195, (location.Top + location.Bottom) / 2 - 135);
                             ClickOnPointTool.ClickOnPoint(closeScenarioPos);
                             Thread.Sleep(1000);
-                            
+
                         }
                     }
                     else
@@ -2273,6 +2273,47 @@ namespace AirdropBot
         private void repeatToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<repeat times=\"10\">\r\n\r\n<wait formilisec=\"1\"/>\r\n</repeat>";
+
+        }
+
+        private void byTelegramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openScenarios.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+
+                txtScenario.Text = "<?xml version=\"1.0\"?>\r\n<steps>\r\n";
+
+                foreach (var fileName in openScenarios.FileNames)
+                {
+
+                    var doc = new XmlDocument();
+                    try
+                    {
+                        doc.LoadXml(File.ReadAllText(fileName));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Invalid xml on file : " + fileName);
+                        continue;
+                    }
+
+                    var nodeList = doc.SelectNodes("/steps/telegram");
+                    if (nodeList == null) continue;
+                    var stepNo = 1;
+                    foreach (XmlNode node in nodeList)
+                    {
+                        txtScenario.AppendText(node.OuterXml.Replace("<","\r\n<"));
+                        txtScenario.AppendText("\r\n\r\n");
+                    }
+
+                }
+                txtScenario.AppendText("\r\n</steps>");
+            }
+        }
+
+        private void openScenarios_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
 
         }
     }
