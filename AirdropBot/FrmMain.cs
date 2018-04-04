@@ -53,6 +53,11 @@ namespace AirdropBot
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            try
+            {
+                ConfigureCef();
+            }
+            catch{}
             if (OnlyBrowser)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -66,17 +71,38 @@ namespace AirdropBot
                 txtScenario.Text = Scenario;
                 return;
             }
-
+            
             btnStop.Enabled = false;
             LoadUsers();
-
+            RestoreLastScenario();
         }
 
+        private string lastScenarioFile = Helper.AssemblyDirectory + @"\\lastsc.txt";
+        private void RestoreLastScenario()
+        {
+            if (File.Exists(lastScenarioFile))
+            {
+                var lastScFile = File.ReadAllText(lastScenarioFile);
+                if(File.Exists(lastScFile))
+                {
+                    txtScenario.Text = File.ReadAllText(lastScFile);
+                    scenarioFileName = lastScFile;
+                    this.Text = scenarioFileName;
+
+                }
+            }
+        }
 
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            if(scenarioFileName!="")
+            {
+                if(!this.Text.EndsWith("*"))
+                {
+                    this.Text += "*";
+                }
+            }
         }
 
         private bool cloadingFinished = false;
@@ -172,6 +198,10 @@ namespace AirdropBot
                     commandResult = ClickCommand(node);
                 }
 
+                if (command == "delete")
+                {
+                    commandResult = DeleteCommand(node);
+                }
                 if (command == "submit")
                 {
                     commandResult = SubmitCommand(node);
@@ -317,11 +347,21 @@ namespace AirdropBot
             {
                 kucoinUser = kucoinemailnode.Value;
             }
+            var formlink = "";
+            var flink = node.Attributes["formlink"];
+            if(flink!=null && flink.Value!="")
+            {
+                formlink = flink.Value;
+            }
 
             var kucoinTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinRetweet.xml");
             kucoinTemplate = kucoinTemplate.Replace("${0}", ReplaceTokens(postno.Value)).Replace("${1}", consumerKey).Replace("${2}", consumerSecret)
                 .Replace("${3}", ReplaceTokens(twUser)).Replace("${4}", ReplaceTokens(fullName)).Replace("${5}", ReplaceTokens(kucoinUser))
                 .Replace("${6}", twtokenNode.Value).Replace("${7}", twTokenSecNode.Value);
+            if(formlink!="")
+            {
+                kucoinTemplate = kucoinTemplate.Replace("${formlink}", formlink);
+            }
             Run(kucoinTemplate);
             return "";
 
@@ -548,10 +588,12 @@ namespace AirdropBot
             return el;
         }
 
-        public void Configure(string proxy)
+        public void ConfigureCef()
         {
             CefSettings cfsettings = new CefSettings();
-            cfsettings.CefCommandLineArgs.Add("proxy-server", proxy);
+            cfsettings.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0";
+            //cfsettings.CachePath = @"c:\temp\cefcache";
+            //cfsettings.CefCommandLineArgs.Add("proxy-server", proxy);
             Cef.Initialize(cfsettings);
         }
         private void CreateCBrowser(string url, string proxy)
@@ -1312,6 +1354,13 @@ namespace AirdropBot
             return el;
         }
 
+        private string DeleteCommand(XmlNode node)
+        {
+            var el = DeleteElement(node);
+
+            return el;
+        }
+
         private string GetCSubmit(XmlNode node)
         {
             var xpath = node.Attributes["xpath"];
@@ -1367,7 +1416,33 @@ namespace AirdropBot
             }
             return "XPath not specified!";
         }
+        private string DeleteElement(XmlNode node)
+        {
+            //buradayiz
+            var xpath = node.Attributes["xpath"];
+            if (xpath != null && xpath.Value != "")
+            {
+                string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").outerHTML='';}} x(); ", ReplaceTokens(xpath.Value), FindXPathScript);
+                var resp = "";
+                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                {
+                    var response = x.Result;
 
+                    if (response.Success && response.Result != null)
+                    {
+                        resp = response.Result.ToString();
+                        //startDate is the value of a HTML element.
+                    }
+                }).Wait();
+
+                if (resp == "UNDEF")
+                {
+                    return "Element cannot be found!";
+                }
+                return resp;
+            }
+            return "XPath not specified!";
+        }
 
         private string WaitTillCommand(XmlNode node)
         {
@@ -1635,6 +1710,7 @@ namespace AirdropBot
             if (scenarioFileName != "")
             {
                 File.WriteAllText(scenarioFileName, txtScenario.Text);
+                this.Text = scenarioFileName;
             }
             else
             {
@@ -1982,6 +2058,15 @@ namespace AirdropBot
             catch
             {
             }
+
+            try
+            {
+                File.WriteAllText(lastScenarioFile, scenarioFileName);
+            }
+            catch
+            {
+                
+            }
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
@@ -2231,7 +2316,7 @@ namespace AirdropBot
 
         private void kucoinToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<kucoin postno=\"\" twApiCust=\"${UserTwConsumerKey}\" twApiCustSec=\"${UserTwConsumerSecret}\"  twApiToken=\"${UserTwAccessToken}\" twApiTokenSec=\"${UserTwAccessTokenSecret}\" twitteruser=\"${UserTwName}\" fullname=\"${UserName} ${UserLastName}\" kucoinemail=\"${UserKucoinUser}\"/>";
+            txtScenario.SelectedText = "<kucoin postno=\"\" formlink=\"\" twApiCust=\"${UserTwConsumerKey}\" twApiCustSec=\"${UserTwConsumerSecret}\"  twApiToken=\"${UserTwAccessToken}\" twApiTokenSec=\"${UserTwAccessTokenSecret}\" twitteruser=\"${UserTwName}\" fullname=\"${UserName} ${UserLastName}\" kucoinemail=\"${UserKucoinUser}\"/>";
         }
 
         private void facebookToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2303,7 +2388,7 @@ namespace AirdropBot
                     var stepNo = 1;
                     foreach (XmlNode node in nodeList)
                     {
-                        txtScenario.AppendText(node.OuterXml.Replace("<","\r\n<"));
+                        txtScenario.AppendText(node.OuterXml.Replace("<", "\r\n<"));
                         txtScenario.AppendText("\r\n\r\n");
                     }
 
@@ -2314,6 +2399,40 @@ namespace AirdropBot
 
         private void openScenarios_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
+
+        }
+
+        private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private double zlevel = 1.0;
+        private void toolStripMenuItem23_Click(object sender, EventArgs e)
+        {
+            if (cbrowser == null) return;
+            zlevel *= 2;
+            cbrowser.SetZoomLevel(zlevel);
+
+        }
+
+        private void outToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (cbrowser == null) return;
+            zlevel /= 2;
+            cbrowser.SetZoomLevel(zlevel);
+
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (cbrowser == null) return;
+            cbrowser.Reload(true);
+
+        }
+
+        private void emptyToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<delete xpath=\"\"/>";
 
         }
     }

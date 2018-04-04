@@ -1291,5 +1291,93 @@ namespace AirdropBot
             if (rowIndex == -1) return;
             CreateTwApiKeys(rowIndex);
         }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            UpdateTwApiKeys(GetSelectedRow());
+
+        }
+
+        private void UpdateTwApiKeys(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 16) || EmptyCell(index, 17) || EmptyCell(index, 18))
+                {
+                    MessageBox.Show("Cannot check twitter address for empty twitter user or twitter password! " + (index + 1));
+                    return;
+                }
+                var twLoginTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterLogin.xml");
+                twLoginTemplate = twLoginTemplate.Replace("${0}", GetCell(index, 16)).Replace("${1}", GetCell(index, 17));
+
+                var twApiTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterUpdateApi.xml");
+                twApiTemplate = twApiTemplate.Replace("${0}", GetCell(index, 18));
+
+
+                var doc = new XmlDocument();
+                try
+                {
+                    doc.LoadXml(twLoginTemplate);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Invalid Twitter login xml! \r\n" + twLoginTemplate);
+                    return;
+                }
+
+                var doc2 = new XmlDocument();
+                try
+                {
+                    doc2.LoadXml(twApiTemplate);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Invalid TwitterCreateApi xml! \r\n" + twApiTemplate);
+                    return;
+                }
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = doc.DocumentElement.InnerXml + "\r\n\r\n" + doc2.DocumentElement.InnerXml };
+
+                frmMain.ShowDialog(this);
+
+                try
+                {
+                    if (frmMain.Variables.ContainsKey("consumerkey"))
+                    {
+                        SetCell(index, 29, frmMain.Variables["consumerkey"]);
+                    }
+
+                    if (frmMain.Variables.ContainsKey("consumersecret"))
+                    {
+                        SetCell(index, 30, frmMain.Variables["consumersecret"]);
+                    }
+                    if (frmMain.Variables.ContainsKey("accesstoken"))
+                    {
+                        SetCell(index, 31, frmMain.Variables["accesstoken"]);
+                    }
+                    if (frmMain.Variables.ContainsKey("accesstokensecret"))
+                    {
+                        SetCell(index, 32, frmMain.Variables["accesstokensecret"]);
+                    }
+                }
+                catch
+                {
+                }
+
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void toolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            UpdateTwApiKeys(rowIndex);
+
+        }
     }
 }

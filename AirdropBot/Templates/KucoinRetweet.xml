@@ -2,7 +2,9 @@
 <steps>
   <navigate url="https://twitter.com/kucoincom/status/${0}" proxy=""/>
   <wait for="2"/>
-  <get param="formlink" what="getAttribute('title')" xpath="//a[contains(@title,'mikecrm')]" regex=""/>
+  <if compare="A" what="tagName" xpath="//a[contains(@title,'mikecrm')]" regex="">
+    <get param="formlink" what="getAttribute('title')" xpath="//a[contains(@title,'mikecrm')]" regex=""/>
+  </if>
   <wait for="2"/>
 
   <twitter  consumerkey="${1}" consumersecret="${2}" accesstoken="${6}" accesstokensecret="${7}">
@@ -25,7 +27,8 @@
   <wait for="5"/>
 
   <continueif compare="DIV" what="tagName" xpath="//div[@class='fb_componentWrapper']" />
-
+  <delete xpath="//div[@class='header']"/>
+  <wait for="2"/>
   <snap xpath="//div[@class='fb_componentWrapper']/div[2]//input"  x="%50" y="%150"/>
   <wait for="2"/>
   <set value="${4}" xpath="//div[@class='fb_componentWrapper']/div[2]//input"/>
@@ -42,5 +45,7 @@
 
   <scroll height="1000"/>
   <snap xpath="//*[@class='fbc_paContentInfo']" x="30" y="-30" />
+  <wait for="2"/>
+  <waittill compare="P" what="tagName" timeout="50" xpath="//p[text()='Success!']" regex=""/>
 
 </steps>

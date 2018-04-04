@@ -177,6 +177,10 @@
     <Content Include="msvcr110.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\TwitterUpdateApi.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\MemuTgMessage1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
