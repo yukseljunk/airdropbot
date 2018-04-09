@@ -30,13 +30,10 @@
 
 
   <mail user="${0}" pass="${3}">
-    <wait for="2"/>
-    <search text="kucoin"/>
-    <wait for="2"/>
-    <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'valid=pending')]" regex=""/>
-    <wait for="2"/>
+    <searchtill text="kucoin" retrytimes="5" retrywaitsecs="10"/>
   </mail>
   <wait for="2"/>
+  <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'valid=pending')]" regex=""/>
 
 
   <navigate url="about:blank"/>
@@ -47,8 +44,18 @@
 
   <navigate url="https://www.kucoin.com/#/login" proxy="${2}"/>
 
-  <wait for="8"/>
+  <wait for="10"/>
+  
+  <click xpath="//div[@class='ant-checkbox-group']/div[1]//input" />
+  <click xpath="//div[@class='ant-checkbox-group']/div[2]//input" />
+  <click xpath="//div[@class='ant-checkbox-group']/div[3]//input" />
+  <click xpath="//div[@class='ant-checkbox-group']/div[4]//input" />
+  <click xpath="//div[@class='ant-checkbox-group']/div[5]//input" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Confirm']" waitforbrowser="true"/>
+  <wait for="2"/>
 
+  
   <set value="" xpath="//*[@id='username']" />
   <snap xpath="//*[@id='username']"  x="%50" y="%160"/>
 

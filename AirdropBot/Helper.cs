@@ -6,9 +6,11 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Management;
 
 namespace AirdropBot
 {
@@ -49,7 +51,7 @@ namespace AirdropBot
                 //close all instances of telegram first
                 foreach (var p in Process.GetProcessesByName("Telegram"))
                 {
-                    p.Kill();
+                    //  p.Kill();
                 }
             }
             catch
@@ -83,6 +85,33 @@ namespace AirdropBot
             Thread.Sleep(5000);
             return "";
         }
+
+
+        public static Dictionary<string, int> GetProcessUsers(string processName)
+        {
+            var result = new Dictionary<string, int>();
+            ObjectQuery x = new ObjectQuery("Select * From Win32_Process where Name='" + processName + "'");
+
+            ManagementObjectSearcher mos = new ManagementObjectSearcher(x);
+
+            foreach (ManagementObject mo in mos.Get())
+            {
+
+                string[] s = new string[2];
+
+                mo.InvokeMethod("GetOwner", (object[])s);
+
+                result.Add(s[0], int.Parse(mo["PROCESSID"].ToString()));
+
+            }
+            return result;
+        }
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool CloseHandle(IntPtr hObject);
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
@@ -140,7 +169,7 @@ namespace AirdropBot
                         var initialDims = new Rect();
                         GetWindowRect(runasHandle, ref initialDims);
                         Thread.Sleep(5000);
-                        
+
                         while (true)
                         {
                             if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -150,7 +179,7 @@ namespace AirdropBot
                             }
                             var currDims = new Rect();
                             GetWindowRect(runasHandle, ref currDims);
-                            if (initialDims.Right != currDims.Right ) //bir oncekine gore saga dogru acilmissa tamamdir
+                            if (initialDims.Right != currDims.Right) //bir oncekine gore saga dogru acilmissa tamamdir
                             {
                                 if (initialDims.Right < currDims.Right && initialDims.Left == currDims.Left &&
                                     initialDims.Top == currDims.Top && initialDims.Bottom == currDims.Bottom)
@@ -197,13 +226,13 @@ namespace AirdropBot
                 var scenarioFile = ConfigurationManager.AppSettings["memuscenariofile"];
                 File.Copy(AssemblyDirectory + "\\Templates\\MemuOpenBrowser1.txt", scenarioFile, true);
 
-               /* for (int i = 0; i < 10; i++)
-                {
-                    File.AppendAllText(scenarioFile, (8000000 + i * 90000) + "--VINPUT--KBDPR:158:0\r\n");
-                    File.AppendAllText(scenarioFile, (8000100 + i * 90000) + "--VINPUT--KBDRL:158:0\r\n");
-                }
-                var template2 = File.ReadAllText(AssemblyDirectory + "\\Templates\\MemuOpenBrowser2.txt");
-                File.AppendAllText(scenarioFile, template2);*/
+                /* for (int i = 0; i < 10; i++)
+                 {
+                     File.AppendAllText(scenarioFile, (8000000 + i * 90000) + "--VINPUT--KBDPR:158:0\r\n");
+                     File.AppendAllText(scenarioFile, (8000100 + i * 90000) + "--VINPUT--KBDRL:158:0\r\n");
+                 }
+                 var template2 = File.ReadAllText(AssemblyDirectory + "\\Templates\\MemuOpenBrowser2.txt");
+                 File.AppendAllText(scenarioFile, template2);*/
 
                 for (int i = 0; i < url.Length; i++)
                 {

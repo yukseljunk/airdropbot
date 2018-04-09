@@ -5,8 +5,10 @@
   <navigate url="www.gmail.com" proxy=""/>
 
   <wait for="2"/>
-  <snap xpath="//*[text()='More options']" x="%20" y="%150"/>
-  <wait for="2"/>
+  <if compare="More options" what="innerHTML" xpath="//*[text()='More options']">
+    <snap xpath="//*[text()='More options']" x="%20" y="%150"/>
+    <wait for="2"/>
+  </if>
   <snap xpath="//*[text()='Create account']" x="%20" y="%150"/>
   <wait for="2"/>
   <if compare="FirstName" what="id" xpath="//input[@id='FirstName']">

@@ -57,7 +57,7 @@ namespace AirdropBot
             {
                 ConfigureCef();
             }
-            catch{}
+            catch { }
             if (OnlyBrowser)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -71,7 +71,7 @@ namespace AirdropBot
                 txtScenario.Text = Scenario;
                 return;
             }
-            
+
             btnStop.Enabled = false;
             LoadUsers();
             RestoreLastScenario();
@@ -83,7 +83,7 @@ namespace AirdropBot
             if (File.Exists(lastScenarioFile))
             {
                 var lastScFile = File.ReadAllText(lastScenarioFile);
-                if(File.Exists(lastScFile))
+                if (File.Exists(lastScFile))
                 {
                     txtScenario.Text = File.ReadAllText(lastScFile);
                     scenarioFileName = lastScFile;
@@ -96,9 +96,9 @@ namespace AirdropBot
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if(scenarioFileName!="")
+            if (scenarioFileName != "")
             {
-                if(!this.Text.EndsWith("*"))
+                if (!this.Text.EndsWith("*"))
                 {
                     this.Text += "*";
                 }
@@ -349,7 +349,7 @@ namespace AirdropBot
             }
             var formlink = "";
             var flink = node.Attributes["formlink"];
-            if(flink!=null && flink.Value!="")
+            if (flink != null && flink.Value != "")
             {
                 formlink = flink.Value;
             }
@@ -358,7 +358,7 @@ namespace AirdropBot
             kucoinTemplate = kucoinTemplate.Replace("${0}", ReplaceTokens(postno.Value)).Replace("${1}", consumerKey).Replace("${2}", consumerSecret)
                 .Replace("${3}", ReplaceTokens(twUser)).Replace("${4}", ReplaceTokens(fullName)).Replace("${5}", ReplaceTokens(kucoinUser))
                 .Replace("${6}", twtokenNode.Value).Replace("${7}", twTokenSecNode.Value);
-            if(formlink!="")
+            if (formlink != "")
             {
                 kucoinTemplate = kucoinTemplate.Replace("${formlink}", formlink);
             }
@@ -1129,8 +1129,15 @@ namespace AirdropBot
 
             if (Helper.OpenTelegram(ReplaceTokens(user.Value), extraArgs, ReplaceTokens(password.Value)) != "") return "Runas exe is not running!";
 
+            var pid = 0;
+            var tgUsrs = Helper.GetProcessUsers("Telegram.exe");
+            if(tgUsrs.ContainsKey(ReplaceTokens(user.Value)))
+            {
+                pid = tgUsrs[ReplaceTokens(user.Value)];
+            }
+
             //this may require closing off all telegram instances
-            TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
+            TestStack.White.Application app = TestStack.White.Application.Attach(pid);
             var mainWindow = app.GetWindows()[0];
             try
             {
@@ -1248,7 +1255,7 @@ namespace AirdropBot
                     RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
 
                 }
-                else if (subNode.Name == "searchtill")//<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>
+                else if (subNode.Name == "searchtill")//<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\"/>
                 {
                     var textNode = subNode.Attributes["text"];
                     if (textNode == null) continue;
@@ -1257,18 +1264,13 @@ namespace AirdropBot
                     var retryTimes = int.Parse(retryTimesNode.Value);
                     var retryWaitSecsNode = subNode.Attributes["retrywaitsecs"];
                     var retryWaitSecs = int.Parse(retryWaitSecsNode.Value);
-
-                    var xpathNode = subNode.Attributes["xpath"];
-                    if (xpathNode == null) continue;
-                    if (xpathNode.Value == "") continue;
-                    RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
-
+                    stopped = false;
                     for (int i = 0; i < retryTimes; i++)
                     {
-                        var elementTag = GetCElement(subNode);
-                        if (elementTag != "UNDEF") break;
+                        if (RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value),
+                                   ReplaceTokens(password.Value))) break;
                         Wait(retryWaitSecs);
-                        RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
+                        if (stopped) break;
                     }
 
                 }
@@ -1282,7 +1284,7 @@ namespace AirdropBot
         }
 
         //default is search by subject
-        private void RunMailApi(string action, string type, string value, string user, string pass)
+        private bool RunMailApi(string action, string type, string value, string user, string pass)
         {
             var botExe = Helper.AssemblyDirectory + "\\MailBot\\MailBot.exe";
             var output = Helper.StartProcess(botExe,
@@ -1292,6 +1294,7 @@ namespace AirdropBot
             var htmlFile = Helper.AssemblyDirectory + "\\temp.html";
             File.WriteAllText(htmlFile, output);
             CreateCBrowser(htmlFile + "?nonce=" + Guid.NewGuid(), "");
+            return !output.StartsWith("No email found for ");
         }
 
 
@@ -1395,6 +1398,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
+                if (!cbrowser.IsBrowserInitialized) return "";
                 string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click();}} x(); ", ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
@@ -1605,6 +1609,7 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
+                if (!cbrowser.IsBrowserInitialized) return "UNDEF";
                 string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", ReplaceTokens(xpath.Value), FindXPathScript, what == null ? "tagName" : what.Value);
                 var resp = "";
                 cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
@@ -2065,7 +2070,7 @@ namespace AirdropBot
             }
             catch
             {
-                
+
             }
         }
 
@@ -2351,7 +2356,7 @@ namespace AirdropBot
 
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\" xpath=\"\"/>\r\n</mail>";
+            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"3\" retrywaitsecs=\"10\"/>\r\n</mail>";
 
         }
 

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <navigate url="http://apps.twitter.com/app" proxy=""/>
+  <wait for="${Random(4,6)}"/>
+
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[@class='apps-list']/li[1]//a" waitforbrowser="true"/>
+  <wait for="4"/>
+  <click xpath="//*[text()='Keys and Access Tokens']" />
+
+  <wait for="20" formilisec=""/>
+
+  <get param="consumerkey" what="innerText" xpath="//*[@class='app-settings']/div[1]/span[2]" regex=""/>
+  <get param="consumersecret" what="innerText" xpath="//*[@class='app-settings']/div[2]/span[2]" regex=""/>
+  <get param="accesstoken" what="innerText" xpath="//*[@class='access']/div[1]/span[2]" regex=""/>
+  <get param="accesstokensecret" what="innerText" xpath="//*[@class='access']/div[2]/span[2]" regex=""/>
+
+
+  
+
+</steps>

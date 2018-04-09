@@ -15,12 +15,18 @@
 
   <snap xpath="//*[@name='reg_email__']" x="%50" y="%150"/>
   <sendkey value="${2}"/>
-  <wait for="2"/>
+  <wait for="3"/>
+
 
   <snap xpath="//*[@name='reg_passwd__']" x="%50" y="%150"/>
   <sendkey value="${3}"/>
   <wait for="2"/>
 
+  <snap xpath="//*[@name='reg_email_confirmation__']" x="%50" y="%150"/>
+  <sendkey value="${2}"/>
+  <wait for="2"/>
+
+  
   <set value="${Random(1,28)}" xpath="//select[@id='day']"/>
   <wait for="1"/>
   <set value="${Random(1,12)}" xpath="//select[@id='month']"/>
