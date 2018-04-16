@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,6 +14,7 @@ using System.Windows.Forms;
 using System.Xml;
 using CefSharp;
 using CefSharp.WinForms;
+using TestStack.White.UIItems.WindowItems;
 using TestStack.White.WindowsAPI;
 
 namespace AirdropBot
@@ -71,13 +73,54 @@ namespace AirdropBot
                 txtScenario.Text = Scenario;
                 return;
             }
+            string[] args = Environment.GetCommandLineArgs();
 
             btnStop.Enabled = false;
             LoadUsers();
             RestoreLastScenario();
+            RestoreLastSelectedUser();
+
+            /*
+            if (args.Length > 1) //called by host with params
+            {
+                try
+                {
+
+                    var itemsToSelect = args.Skip(1).ToList();
+                    for (int i = 0; i < itemsToSelect.Count - 1; i++)
+                    {
+                        lstUsers.SetItemChecked(int.Parse(itemsToSelect[i]), true);
+                    }
+                    var sel = int.Parse(itemsToSelect.Last());
+                    lstUsers.SelectedIndex = sel;
+                }
+                catch { }
+
+            }
+            */
+        }
+
+        private void RestoreLastSelectedUser()
+        {
+            if (File.Exists(lastUserFile))
+            {
+                var lastUserIndex = File.ReadAllText(lastUserFile);
+                if (lastUserIndex != "")
+                {
+                    try
+                    {
+                        lstUsers.SelectedIndex = int.Parse(lastUserIndex);
+                        lstUsers.TopIndex = lstUsers.SelectedIndex;
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
         }
 
         private string lastScenarioFile = Helper.AssemblyDirectory + @"\\lastsc.txt";
+        private string lastUserFile = Helper.AssemblyDirectory + @"\\lastusr.txt";
         private void RestoreLastScenario()
         {
             if (File.Exists(lastScenarioFile))
@@ -286,6 +329,15 @@ namespace AirdropBot
                 stepNo++;
             }
 
+        }
+
+        private string RestartCommand(XmlNode node)
+        {
+            var args = GetArgList();
+            if (args == "") return "";
+
+            File.WriteAllText(Helper.AssemblyDirectory + "\\command.txt", args);
+            return "";
         }
 
         private string RepeatCommand(XmlNode node)
@@ -1129,24 +1181,54 @@ namespace AirdropBot
 
             if (Helper.OpenTelegram(ReplaceTokens(user.Value), extraArgs, ReplaceTokens(password.Value)) != "") return "Runas exe is not running!";
 
-            var pid = 0;
-            var tgUsrs = Helper.GetProcessUsers("Telegram.exe");
-            if(tgUsrs.ContainsKey(ReplaceTokens(user.Value)))
-            {
-                pid = tgUsrs[ReplaceTokens(user.Value)];
-            }
-
-            //this may require closing off all telegram instances
-            TestStack.White.Application app = TestStack.White.Application.Attach(pid);
-            var mainWindow = app.GetWindows()[0];
+            var pid = GetPid(ReplaceTokens(user.Value));
+            //butun telegramlari kapat bu pid haricinde
             try
             {
-                mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                //close all instances of telegram first
+                foreach (var p in Process.GetProcessesByName("Telegram"))
+                {
+                    if (p.Id == pid) continue;
+                    p.Kill();
+                }
             }
             catch
             {
             }
 
+
+            Window mainWindow = null;
+            int waitsecs = 5;
+            int maxTryCount = 5;
+            int tryCount = 0;
+            var windowFound = false;
+            while (tryCount < maxTryCount)
+            {
+                tryCount++;
+                TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
+                if (app.GetWindows().Count > 0)
+                {
+                    mainWindow = app.GetWindows()[0];
+                    mainWindow.DisplayState = TestStack.White.UIItems.WindowItems.DisplayState.Maximized;
+                    windowFound = true;
+                    break;
+                }
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (true)
+                {
+                    Application.DoEvents();
+                    if (sw.ElapsedMilliseconds >= waitsecs)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!windowFound)
+            {
+                return "Telegram window could not be found by testwhite!";
+            }
             //join or open group/send message
             if (@group != null && @group.Value.Trim() != "")
             {
@@ -1178,8 +1260,11 @@ namespace AirdropBot
                         var x = subNode.Attributes["x"];
                         var y = subNode.Attributes["y"];
                         if (x == null || y == null) continue;
-                        var xval = x.Value;
-                        var yval = y.Value;
+                        var xval = x.Value.Trim();
+                        var yval = y.Value.Trim();
+                        if (xval == "") xval = "%50";
+                        if (yval == "") yval = "-35";
+
                         var xnegative = xval.StartsWith("-");
                         var ynegative = yval.StartsWith("-");
                         var xpositive = xval.StartsWith("+");
@@ -1188,8 +1273,11 @@ namespace AirdropBot
                         var yrelative = yval.StartsWith("%");
                         xval = xval.Replace("-", "").Replace("%", "");
                         yval = yval.Replace("-", "").Replace("%", "");
-                        int xpoint = int.Parse(xval);
-                        int ypoint = int.Parse(yval);
+                        int xpoint=0;
+                        int.TryParse(xval, out xpoint);
+                        int ypoint = 0;
+                        int.TryParse(yval, out ypoint);
+
                         if (xrelative) xpoint = Convert.ToInt32(mainWindow.Bounds.Right * xpoint / 100);
                         if (yrelative) ypoint = Convert.ToInt32(mainWindow.Bounds.Bottom * ypoint / 100);
                         if (xnegative) xpoint = Convert.ToInt32(mainWindow.Bounds.Right - xpoint);
@@ -1228,7 +1316,17 @@ namespace AirdropBot
             return "";
         }
 
-
+        private int GetPid(string tgUserName)
+        {
+            var pid = 0;
+            Dictionary<string, int> tgUsrs = new Dictionary<string, int>();
+            tgUsrs = Helper.GetProcessUsers("Telegram.exe");
+            if (tgUsrs.ContainsKey(tgUserName))
+            {
+                pid = tgUsrs[tgUserName];
+            }
+            return pid;
+        }
 
 
         private string MailCommand(XmlNode node)
@@ -1252,7 +1350,15 @@ namespace AirdropBot
                     var textNode = subNode.Attributes["text"];
                     if (textNode == null) continue;
                     if (textNode.Value == "") continue;
-                    RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
+
+                    var typeNode = subNode.Attributes["type"];
+                    var type = "subject";
+                    if (typeNode != null && typeNode.Value != "")
+                    {
+                        type = typeNode.Value;
+                    }
+
+                    RunMailApi("search", type, ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
 
                 }
                 else if (subNode.Name == "searchtill")//<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\"/>
@@ -1264,10 +1370,16 @@ namespace AirdropBot
                     var retryTimes = int.Parse(retryTimesNode.Value);
                     var retryWaitSecsNode = subNode.Attributes["retrywaitsecs"];
                     var retryWaitSecs = int.Parse(retryWaitSecsNode.Value);
+                    var typeNode = subNode.Attributes["type"];
+                    var type = "subject";
+                    if (typeNode != null && typeNode.Value != "")
+                    {
+                        type = typeNode.Value;
+                    }
                     stopped = false;
                     for (int i = 0; i < retryTimes; i++)
                     {
-                        if (RunMailApi("search", "subject", ReplaceTokens(textNode.Value), ReplaceTokens(user.Value),
+                        if (RunMailApi("search", type, ReplaceTokens(textNode.Value), ReplaceTokens(user.Value),
                                    ReplaceTokens(password.Value))) break;
                         Wait(retryWaitSecs);
                         if (stopped) break;
@@ -2072,6 +2184,17 @@ namespace AirdropBot
             {
 
             }
+            try
+            {
+                if (lstUsers.SelectedIndex != -1)
+                {
+                    File.WriteAllText(lastUserFile, lstUsers.SelectedIndex.ToString());
+                }
+            }
+            catch
+            {
+
+            }
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
@@ -2356,7 +2479,7 @@ namespace AirdropBot
 
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\"/>\r\n<searchtill text=\"\" retrytimes=\"3\" retrywaitsecs=\"10\"/>\r\n</mail>";
+            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\" type=\"subject\"/>\r\n<searchtill text=\"\" type=\"subject\" retrytimes=\"3\" retrywaitsecs=\"10\"/>\r\n</mail>";
 
         }
 
@@ -2439,6 +2562,23 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "<delete xpath=\"\"/>";
 
+        }
+
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private string GetArgList()
+        {
+            if (lstUsers.SelectedIndex == -1) return "";
+            var arglist = new List<string>();
+            foreach (var i in lstUsers.CheckedIndices)
+            {
+                arglist.Add(i.ToString());
+            }
+            if (!arglist.Any()) return "";
+            return lstUsers.SelectedIndex + " " + string.Join(" ", arglist);
         }
     }
 }

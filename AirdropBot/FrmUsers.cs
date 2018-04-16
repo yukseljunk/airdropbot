@@ -874,7 +874,7 @@ namespace AirdropBot
                 return;
             }
             Helper.OpenTelegram(GetCell(index, 13), "", GetCell(index, 14));
-            
+
 
         }
 
@@ -1377,6 +1377,44 @@ namespace AirdropBot
             var rowIndex = GetRowIndexForContextMenu();
             if (rowIndex == -1) return;
             UpdateTwApiKeys(rowIndex);
+
+        }
+
+        private void closeAllInstancesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Helper.CloseProcessAllInstances("Telegram");
+        }
+
+        private void closeAllInstancesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Helper.CloseProcessAllInstances("Telegram");
+
+        }
+
+        private void createWinUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateWinUser(GetSelectedRow());
+
+        }
+
+        private void hideWinUserFromLogonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HideWinUser(GetSelectedRow());
+        }
+
+        private void createWinUserToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+
+            CreateWinUser(rowIndex);
+        }
+
+        private void hideWinUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            HideWinUser(rowIndex);
 
         }
     }

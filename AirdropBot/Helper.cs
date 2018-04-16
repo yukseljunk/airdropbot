@@ -43,6 +43,20 @@ namespace AirdropBot
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
+        public static void CloseProcessAllInstances(string processName)
+        {
+            try
+            {
+                //close all instances of telegram first
+                foreach (var p in Process.GetProcessesByName(processName))
+                {
+                    p.Kill();
+                }
+            }
+            catch
+            {
+            }
+        }
 
         public static string OpenTelegram(string user, string args, string password)
         {
