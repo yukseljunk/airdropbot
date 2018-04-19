@@ -114,8 +114,10 @@ namespace AirdropBot
                 string[] s = new string[2];
 
                 mo.InvokeMethod("GetOwner", (object[])s);
-
-                result.Add(s[0], int.Parse(mo["PROCESSID"].ToString()));
+                if (!result.ContainsKey(s[0]))
+                {
+                    result.Add(s[0], int.Parse(mo["PROCESSID"].ToString()));
+                }
 
             }
             return result;

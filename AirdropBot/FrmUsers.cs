@@ -56,7 +56,9 @@ namespace AirdropBot
                              "Twitter Consumer Key",
                              "Twitter Consumer Secret",
                             "Twitter Access Token",
-                            "Twitter Access Token Secret"
+                            "Twitter Access Token Secret",
+                            "Neo Address",
+                            "Neo Private Key"
 
                            };
             foreach (var col in cols)
@@ -164,7 +166,7 @@ namespace AirdropBot
                                  u.EthAddress, u.EthPrivateKey, u.EthPass, u.ProxyIp, u.ProxyPort,
                                  u.WinUser, u.WinPwd, u.TgUser, u.TwUserName, u.TwPwd, u.TwName, u.KucoinUser,
                                  u.KucoinPass, u.FBUser, u.FBPwd, u.FBProfile, u.ReddUser, u.ReddPwd, u.BtcTalkUser,
-                                 u.BtcTalkPwd, u.BtcTalkProfileLink, u.TwConsumerKey, u.TwConsumerSecret, u.TwAccessToken, u.TwAccessTokenSecret);
+                                 u.BtcTalkPwd, u.BtcTalkProfileLink, u.TwConsumerKey, u.TwConsumerSecret, u.TwAccessToken, u.TwAccessTokenSecret, u.NeoAddress, u.NeoPrivateKey);
             }
         }
 
@@ -1416,6 +1418,87 @@ namespace AirdropBot
             if (rowIndex == -1) return;
             HideWinUser(rowIndex);
 
+        }
+
+        private void createToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            CreateNeo(GetSelectedRow());
+        }
+        private void CreateNeo(int index)
+        {
+            try
+            {
+                var neoTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\NeoReg.xml");
+                neoTemplate = neoTemplate.Replace("${0}", GetCell(index, 6));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = neoTemplate };
+
+                frmMain.ShowDialog(this);
+
+                try
+                {
+                    if (frmMain.Variables.ContainsKey("prkey") && EmptyCell(index, 34))
+                    {
+                        SetCell(index, 34, frmMain.Variables["prkey"]);
+                    }
+
+                    if (frmMain.Variables.ContainsKey("pbkey") && EmptyCell(index, 33))
+                    {
+                        SetCell(index, 33, frmMain.Variables["pbkey"]);
+                    }
+                }
+                catch
+                {
+                }
+
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void checkToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            CheckNeoBalance(GetSelectedRow());
+        }
+        private void CheckNeoBalance(int index)
+        {
+
+            try
+            {
+                if (EmptyCell(index, 33))
+                {
+                    MessageBox.Show("Cannot show balance for empty NEO address! " + (index + 1));
+                    return;
+                }
+                var template = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\NeoCheck.xml");
+                template = template.Replace("${0}", GetCell(index, 33));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = template };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+        }
+
+        private void createToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CreateNeo(rowIndex);
+        }
+
+        private void checkToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            CheckNeoBalance(rowIndex);
         }
     }
 }

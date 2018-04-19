@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="https://neotracker.io/address/${0}" proxy=""/>
+
+
+
+</steps>

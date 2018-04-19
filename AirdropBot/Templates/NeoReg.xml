@@ -1,0 +1,48 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="https://neotracker.io/wallet" proxy=""/>
+
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='NEW WALLET']" />
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//*[@id='textField-ckv-password']" x="%50" y="%150"/>
+
+  <wait for="2" formilisec=""/>
+  <sendkey value="${0}"/>
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='CREATE']/../.."/>
+
+  <wait for="5" formilisec=""/>
+  <click xpath="//*[text()='DOWNLOAD ENCRYPTED KEY']/../.." />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='CONTINUE']/../.." />
+
+  <get param="prkey" what="getAttribute('value')" xpath="//*[@id='textField-nwspk-private-key']" regex=""/>
+  <wait for="2" formilisec=""/>
+
+
+  <navigate url="https://neotracker.io/wallet" proxy=""/>
+
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='OPEN WALLET']" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Private Key']/.." />
+  <wait for="2" formilisec=""/>
+  <snap xpath="//*[@id='textField-owpk-private-key']" x="%50" y="%150"/>
+  <sendkey value="${prkey}" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='UNLOCK']" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='GO TO WALLET']/../.." />
+
+  <wait for="2" formilisec=""/>
+
+
+  <get param="pbkey" what="getAttribute('value')" xpath="//*[@id='textField-iv-address']" regex=""/>
+
+  <wait for="2" formilisec=""/>
+
+</steps>

@@ -425,7 +425,7 @@ namespace AirdropBot
             var fileName = "c:\\temp\\test.jpg";
             if (fileNode != null && fileNode.Value != "")
             {
-                fileName = fileNode.Value;
+                fileName = ReplaceTokens(fileNode.Value);
             }
             Rectangle bounds = ContentPanel.Bounds;
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
@@ -1195,8 +1195,7 @@ namespace AirdropBot
             catch
             {
             }
-
-
+            
             Window mainWindow = null;
             int waitsecs = 5;
             int maxTryCount = 5;
@@ -2579,6 +2578,23 @@ namespace AirdropBot
             }
             if (!arglist.Any()) return "";
             return lstUsers.SelectedIndex + " " + string.Join(" ", arglist);
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItem24_Click(object sender, EventArgs e)
+        {
+
+            txtScenario.SelectedText = "${UserFBProfile}";
+
+        }
+
+        private void toolStripMenuItem26_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${UserNeoAddress}";
         }
     }
 }

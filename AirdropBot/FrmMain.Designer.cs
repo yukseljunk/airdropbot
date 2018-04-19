@@ -115,6 +115,7 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.fBUsernameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fBPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem24 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.winUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.winPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -128,8 +129,6 @@
             this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.ethAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ethPassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ethPrivateKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.proxyIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.proxyPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -166,6 +165,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
             this.openScenarios = new System.Windows.Forms.OpenFileDialog();
+            this.toolStripMenuItem26 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -380,7 +381,7 @@
             // navigateToolStripMenuItem1
             // 
             this.navigateToolStripMenuItem1.Name = "navigateToolStripMenuItem1";
-            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.navigateToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.navigateToolStripMenuItem1.Text = "Navigate";
             this.navigateToolStripMenuItem1.Click += new System.EventHandler(this.navigateToolStripMenuItem1_Click);
             // 
@@ -394,7 +395,7 @@
             this.byTagToolStripMenuItem,
             this.byTextToolStripMenuItem});
             this.setFieldToolStripMenuItem1.Name = "setFieldToolStripMenuItem1";
-            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.setFieldToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.setFieldToolStripMenuItem1.Text = "Set Field";
             this.setFieldToolStripMenuItem1.Click += new System.EventHandler(this.setFieldToolStripMenuItem1_Click);
             // 
@@ -450,7 +451,7 @@
             this.byTagToolStripMenuItem1,
             this.byTextToolStripMenuItem1});
             this.getFieldToolStripMenuItem1.Name = "getFieldToolStripMenuItem1";
-            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.getFieldToolStripMenuItem1.Size = new System.Drawing.Size(146, 22);
             this.getFieldToolStripMenuItem1.Text = "Get Field";
             this.getFieldToolStripMenuItem1.Click += new System.EventHandler(this.getFieldToolStripMenuItem1_Click);
             // 
@@ -506,7 +507,7 @@
             this.byTagToolStripMenuItem2,
             this.byTextToolStripMenuItem2});
             this.clickToolStripMenuItem.Name = "clickToolStripMenuItem";
-            this.clickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clickToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.clickToolStripMenuItem.Text = "Click";
             this.clickToolStripMenuItem.Click += new System.EventHandler(this.clickToolStripMenuItem_Click);
             // 
@@ -557,7 +558,7 @@
             this.toolStripMenuItem22.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.emptyToolStripMenuItem4});
             this.toolStripMenuItem22.Name = "toolStripMenuItem22";
-            this.toolStripMenuItem22.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem22.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuItem22.Text = "Delete";
             // 
             // emptyToolStripMenuItem4
@@ -570,21 +571,21 @@
             // submitToolStripMenuItem
             // 
             this.submitToolStripMenuItem.Name = "submitToolStripMenuItem";
-            this.submitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.submitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.submitToolStripMenuItem.Text = "Submit";
             this.submitToolStripMenuItem.Click += new System.EventHandler(this.submitToolStripMenuItem_Click);
             // 
             // clearCookiesToolStripMenuItem
             // 
             this.clearCookiesToolStripMenuItem.Name = "clearCookiesToolStripMenuItem";
-            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearCookiesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.clearCookiesToolStripMenuItem.Text = "Clear Cookies";
             this.clearCookiesToolStripMenuItem.Click += new System.EventHandler(this.clearCookiesToolStripMenuItem_Click);
             // 
             // scrollToolStripMenuItem
             // 
             this.scrollToolStripMenuItem.Name = "scrollToolStripMenuItem";
-            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scrollToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.scrollToolStripMenuItem.Text = "Scroll";
             this.scrollToolStripMenuItem.Click += new System.EventHandler(this.scrollToolStripMenuItem_Click);
             // 
@@ -594,7 +595,7 @@
             this.toPointToolStripMenuItem,
             this.toElementToolStripMenuItem});
             this.snapToolStripMenuItem.Name = "snapToolStripMenuItem";
-            this.snapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.snapToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.snapToolStripMenuItem.Text = "Snap";
             this.snapToolStripMenuItem.Click += new System.EventHandler(this.snapToolStripMenuItem_Click);
             // 
@@ -664,66 +665,66 @@
             // sendKeysToolStripMenuItem
             // 
             this.sendKeysToolStripMenuItem.Name = "sendKeysToolStripMenuItem";
-            this.sendKeysToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sendKeysToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.sendKeysToolStripMenuItem.Text = "SendKeys";
             this.sendKeysToolStripMenuItem.Click += new System.EventHandler(this.sendKeysToolStripMenuItem_Click);
             // 
             // focusToolStripMenuItem
             // 
             this.focusToolStripMenuItem.Name = "focusToolStripMenuItem";
-            this.focusToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.focusToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.focusToolStripMenuItem.Text = "Focus";
             this.focusToolStripMenuItem.Click += new System.EventHandler(this.focusToolStripMenuItem_Click);
             // 
             // toolStripMenuItem15
             // 
             this.toolStripMenuItem15.Name = "toolStripMenuItem15";
-            this.toolStripMenuItem15.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem15.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuItem15.Text = "Screenshot";
             this.toolStripMenuItem15.Click += new System.EventHandler(this.toolStripMenuItem15_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // waitTillToolStripMenuItem
             // 
             this.waitTillToolStripMenuItem.Name = "waitTillToolStripMenuItem";
-            this.waitTillToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.waitTillToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.waitTillToolStripMenuItem.Text = "Wait Till";
             this.waitTillToolStripMenuItem.Click += new System.EventHandler(this.waitTillToolStripMenuItem_Click);
             // 
             // failIfToolStripMenuItem
             // 
             this.failIfToolStripMenuItem.Name = "failIfToolStripMenuItem";
-            this.failIfToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.failIfToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.failIfToolStripMenuItem.Text = "Fail If";
             this.failIfToolStripMenuItem.Click += new System.EventHandler(this.failIfToolStripMenuItem_Click);
             // 
             // continueIfToolStripMenuItem
             // 
             this.continueIfToolStripMenuItem.Name = "continueIfToolStripMenuItem";
-            this.continueIfToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.continueIfToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.continueIfToolStripMenuItem.Text = "Continue If";
             this.continueIfToolStripMenuItem.Click += new System.EventHandler(this.continueIfToolStripMenuItem_Click);
             // 
             // toolStripMenuItem14
             // 
             this.toolStripMenuItem14.Name = "toolStripMenuItem14";
-            this.toolStripMenuItem14.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem14.Size = new System.Drawing.Size(143, 6);
             // 
             // ifToolStripMenuItem
             // 
             this.ifToolStripMenuItem.Name = "ifToolStripMenuItem";
-            this.ifToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ifToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.ifToolStripMenuItem.Text = "If";
             this.ifToolStripMenuItem.Click += new System.EventHandler(this.ifToolStripMenuItem_Click);
             // 
             // ifnotToolStripMenuItem
             // 
             this.ifnotToolStripMenuItem.Name = "ifnotToolStripMenuItem";
-            this.ifnotToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ifnotToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.ifnotToolStripMenuItem.Text = "Ifnot";
             this.ifnotToolStripMenuItem.Click += new System.EventHandler(this.ifnotToolStripMenuItem_Click);
             // 
@@ -812,6 +813,7 @@
             this.toolStripMenuItem2,
             this.fBUsernameToolStripMenuItem,
             this.fBPasswordToolStripMenuItem,
+            this.toolStripMenuItem24,
             this.toolStripMenuItem4,
             this.winUserToolStripMenuItem,
             this.winPassToolStripMenuItem,
@@ -825,8 +827,8 @@
             this.toolStripMenuItem18,
             this.toolStripMenuItem5,
             this.ethAddressToolStripMenuItem,
-            this.ethPassToolStripMenuItem,
-            this.ethPrivateKeyToolStripMenuItem,
+            this.toolStripMenuItem27,
+            this.toolStripMenuItem26,
             this.toolStripMenuItem7,
             this.proxyIPToolStripMenuItem,
             this.proxyPortToolStripMenuItem,
@@ -902,10 +904,18 @@
             this.fBPasswordToolStripMenuItem.Text = "FB Password";
             this.fBPasswordToolStripMenuItem.Click += new System.EventHandler(this.fBPasswordToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem24
+            // 
+            this.toolStripMenuItem24.Name = "toolStripMenuItem24";
+            this.toolStripMenuItem24.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem24.Text = "FB Profile";
+            this.toolStripMenuItem24.Click += new System.EventHandler(this.toolStripMenuItem24_Click);
+            // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(253, 6);
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // winUserToolStripMenuItem
             // 
@@ -986,20 +996,6 @@
             this.ethAddressToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
             this.ethAddressToolStripMenuItem.Text = "Eth Address";
             this.ethAddressToolStripMenuItem.Click += new System.EventHandler(this.ethAddressToolStripMenuItem_Click);
-            // 
-            // ethPassToolStripMenuItem
-            // 
-            this.ethPassToolStripMenuItem.Name = "ethPassToolStripMenuItem";
-            this.ethPassToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.ethPassToolStripMenuItem.Text = "Eth Pass";
-            this.ethPassToolStripMenuItem.Click += new System.EventHandler(this.ethPassToolStripMenuItem_Click);
-            // 
-            // ethPrivateKeyToolStripMenuItem
-            // 
-            this.ethPrivateKeyToolStripMenuItem.Name = "ethPrivateKeyToolStripMenuItem";
-            this.ethPrivateKeyToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.ethPrivateKeyToolStripMenuItem.Text = "Eth Private Key";
-            this.ethPrivateKeyToolStripMenuItem.Click += new System.EventHandler(this.ethPrivateKeyToolStripMenuItem_Click);
             // 
             // toolStripMenuItem7
             // 
@@ -1280,6 +1276,18 @@
             this.openScenarios.RestoreDirectory = true;
             this.openScenarios.FileOk += new System.ComponentModel.CancelEventHandler(this.openScenarios_FileOk);
             // 
+            // toolStripMenuItem26
+            // 
+            this.toolStripMenuItem26.Name = "toolStripMenuItem26";
+            this.toolStripMenuItem26.Size = new System.Drawing.Size(256, 22);
+            this.toolStripMenuItem26.Text = "Neo Address";
+            this.toolStripMenuItem26.Click += new System.EventHandler(this.toolStripMenuItem26_Click);
+            // 
+            // toolStripMenuItem27
+            // 
+            this.toolStripMenuItem27.Name = "toolStripMenuItem27";
+            this.toolStripMenuItem27.Size = new System.Drawing.Size(253, 6);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1352,8 +1360,6 @@
         private System.Windows.Forms.ToolStripMenuItem twitterPasswordToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem ethAddressToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ethPassToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ethPrivateKeyToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
         private System.Windows.Forms.ToolStripMenuItem proxyIPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem proxyPortToolStripMenuItem;
@@ -1447,6 +1453,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem22;
         private System.Windows.Forms.ToolStripMenuItem emptyToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem24;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem27;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem26;
     }
 }
 

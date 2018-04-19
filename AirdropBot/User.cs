@@ -46,6 +46,9 @@ namespace AirdropBot
         public string EthPrivateKey { get; set; }
         public string EthPass { get; set; }
 
+        public string NeoAddress { get; set; }
+        public string NeoPrivateKey { get; set; }
+        
         public string ProxyIp { get; set; }
         public string ProxyPort { get; set; }
 
@@ -124,6 +127,11 @@ namespace AirdropBot
                     user.TwConsumerSecret = fields[30];
                     user.TwAccessToken = fields[31];
                     user.TwAccessTokenSecret = fields[32];
+                }
+                if(fields.Length>34)
+                {
+                    user.NeoAddress = fields[33];
+                    user.NeoPrivateKey = fields[34];
                 }
 
                 users.Add(user.Id, user);
