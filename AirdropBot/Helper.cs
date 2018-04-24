@@ -96,7 +96,7 @@ namespace AirdropBot
             SetForegroundWindow(runasHandle);
             SendKeys.SendWait(password + "{ENTER}");
             //wait for telegram to open
-            Thread.Sleep(5000);
+            Thread.Sleep(1000);
             return "";
         }
 

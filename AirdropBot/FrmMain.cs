@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -1195,7 +1196,7 @@ namespace AirdropBot
             catch
             {
             }
-            
+
             Window mainWindow = null;
             int waitsecs = 5;
             int maxTryCount = 5;
@@ -1228,6 +1229,15 @@ namespace AirdropBot
             {
                 return "Telegram window could not be found by testwhite!";
             }
+
+            var pointToClick = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
+            mainWindow.Mouse.Location = pointToClick;
+
+            var search = "[69][69][69][69][69][69][69][69]0000000000000";
+            var search2 = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000099999999999";
+
+
+
             //join or open group/send message
             if (@group != null && @group.Value.Trim() != "")
             {
@@ -1236,16 +1246,74 @@ namespace AirdropBot
                 SetForegroundWindow(p.Handle); access denied*/
                 /*Debug.WriteLine(string.Format("{0} {1} {2} {3}", mainWindow.Bounds.Top, mainWindow.Bounds.Left,
                                               mainWindow.Bounds.Bottom, mainWindow.Bounds.Right));*/
-                var pointToClick = new System.Windows.Point(mainWindow.Bounds.Right / 2, mainWindow.Bounds.Bottom - 25);
 
-                mainWindow.Mouse.Location = pointToClick;
+                using (Bitmap bitmap = CaptureScreen(true, (int)mainWindow.Bounds.Right, (int)mainWindow.Bounds.Bottom, 0, 0))
+                {
+                    var h = GetHash(bitmap);
+                    var ltb = FindMost(h.ToArray(), search);
+                    var r = FindMost(h.ToArray(), search2, search2.Length - 10);
+
+                    stopped = false;
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    var wsecs = 30000;//30sec timeout
+
+                    while (ltb.Item2 == -1 || ltb.Item2 < 30)
+                    {
+                        Thread.Sleep(1000);
+                        ltb = FindMost(h.ToArray(), search);
+                        if (stopped) return "";
+                        Application.DoEvents();
+                        if (sw.ElapsedMilliseconds >= wsecs)
+                        {
+                            return "Timeout opening telegram group!";
+                        }
+                    }
+                }
                 mainWindow.Mouse.Click();
+
+
                 if (message != null && message.Value.Trim() != "")
                 {
                     Thread.Sleep(1000);
                     mainWindow.Mouse.Click();
                     mainWindow.Keyboard.Enter(ReplaceTokens(message.Value));
                     mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+                }
+            }
+
+            if(chat!=null && chat.Value!=null)
+            {
+
+                using (Bitmap bitmap = CaptureScreen(true, (int)mainWindow.Bounds.Right, (int)mainWindow.Bounds.Bottom, 0, 0))
+                {
+                    var h = GetWhiteBox(bitmap);
+                    var ltb = FindMost(h.ToArray(), "111111111111111111111000000000000000000000000", 20);
+
+                    stopped = false;
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    var wsecs = 30000; //30sec timeout
+
+                    while (ltb.Item2 == -1 )
+                    {
+                        Thread.Sleep(1000);
+                        ltb = FindMost(h.ToArray(), search);
+                        if (stopped) return "";
+                        Application.DoEvents();
+                        if (sw.ElapsedMilliseconds >= wsecs)
+                        {
+                            return "Timeout opening telegram chat!";
+                        }
+                    }
+
+                    pointToClick = new System.Windows.Point(ltb.Item1-20, ltb.Item3-20);
+                    mainWindow.Mouse.Location = pointToClick;
+                    mainWindow.Mouse.Click();
+
+                    Thread.Sleep(2000);
                 }
             }
             if (node.HasChildNodes)
@@ -1272,7 +1340,7 @@ namespace AirdropBot
                         var yrelative = yval.StartsWith("%");
                         xval = xval.Replace("-", "").Replace("%", "");
                         yval = yval.Replace("-", "").Replace("%", "");
-                        int xpoint=0;
+                        int xpoint = 0;
                         int.TryParse(xval, out xpoint);
                         int ypoint = 0;
                         int.TryParse(yval, out ypoint);
@@ -1284,9 +1352,10 @@ namespace AirdropBot
                         if (xpositive) xpoint = Convert.ToInt32(mainWindow.Bounds.Left + xpoint);
                         if (ypositive) ypoint = Convert.ToInt32(mainWindow.Bounds.Top + ypoint);
 
-                        var pointToClick = new System.Windows.Point(xpoint, ypoint);
+                        pointToClick = new System.Windows.Point(xpoint, ypoint);
 
                         mainWindow.Mouse.Location = pointToClick;
+
                         mainWindow.Mouse.Click();
 
 
@@ -1305,6 +1374,49 @@ namespace AirdropBot
                             mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
                         }
                     }
+                    if (subNode.Name == "detectbox")
+                    {
+                        Thread.Sleep(1000);
+
+                        using (Bitmap bitmap = CaptureScreen(true, (int)mainWindow.Bounds.Right, (int)mainWindow.Bounds.Bottom, 0, 0))
+                        {
+                            var h = GetHash(bitmap);
+                            var ltb = FindMost(h.ToArray(), search);
+                            var r = FindMost(h.ToArray(), search2, search2.Length - 10);
+                            var right = r.Item1;
+                            if (r.Item1 < 1)
+                            {
+                                right = (int)mainWindow.Bounds.Right;
+                            }
+                            for (int i = ltb.Item2; i < ltb.Item3; i += 10)
+                            {
+                                pointToClick = new System.Windows.Point(ltb.Item1, i);
+                                mainWindow.Mouse.Location = pointToClick;
+                                Thread.Sleep(10);
+                            }
+                            for (int i = ltb.Item1; i < right; i += 10)
+                            {
+                                pointToClick = new System.Windows.Point(i, ltb.Item3);
+                                mainWindow.Mouse.Location = pointToClick;
+                                Thread.Sleep(10);
+                            }
+                            for (int i = ltb.Item3; i > ltb.Item2; i -= 10)
+                            {
+                                pointToClick = new System.Windows.Point(right, i);
+                                mainWindow.Mouse.Location = pointToClick;
+                                Thread.Sleep(10);
+                            }
+                            for (int i = right; i > ltb.Item1; i -= 10)
+                            {
+                                pointToClick = new System.Windows.Point(i, ltb.Item2);
+                                mainWindow.Mouse.Location = pointToClick;
+                                Thread.Sleep(10);
+                            }
+
+                        }
+
+
+                    }
                     if (subNode.Name == "wait")
                     {
                         WaitCommand(subNode);
@@ -1312,7 +1424,129 @@ namespace AirdropBot
 
                 }
             }
+            mainWindow.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.ESCAPE);
+
             return "";
+        }
+
+        private static Tuple<int, int, int> FindMost(string[] readLines, string search, int offset = 8)
+        {
+            var found = new Dictionary<int, int>();
+            var lineNo = 0;
+            var top = -1;
+            var bottom = -1;
+            foreach (var line in readLines)
+            {
+                lineNo++;
+                var x = new Regex(search);
+                foreach (Match match in x.Matches(line))
+                {
+                    var foundIndex = match.Index;
+                    foundIndex += offset;
+                    if (!found.ContainsKey(foundIndex))
+                    {
+                        found.Add(foundIndex, 0);
+                    }
+                    found[foundIndex]++;
+                    bottom = lineNo;
+                    if (top == -1) top = lineNo;
+                }
+            }
+            int left = -1;
+            if (found.Any())
+            {
+                var maxval = found.Values.Max();
+                var maxCol = found.Where(x => x.Value == maxval).OrderBy(x => x.Key);
+                left = int.MaxValue;
+                foreach (var keyValuePair in maxCol)
+                {
+                    if (left > keyValuePair.Key)
+                    {
+                        left = keyValuePair.Key;
+                    }
+                }
+            }
+            return new Tuple<int, int, int>(left, top, bottom);
+        }
+
+        public static List<string> GetWhiteBox(Bitmap bmpMin)
+        {
+            var lResult = new List<string>();
+            //create new image with 16x16 pixel
+            for (int j = 0; j < bmpMin.Height; j++)
+            {
+                var t = new List<int>();
+                for (int i = 0; i < bmpMin.Width; i++)
+                {
+                    //reduce colors to true / false             
+                    var br = bmpMin.GetPixel(i, j).GetBrightness();
+                    if (br > 0.99999f)
+                    {
+                        t.Add(1);
+                    }
+                    else
+                    {
+                        t.Add(0);
+                    }
+
+                }
+                lResult.Add(string.Join("", t));
+            }
+            return lResult;
+        }
+
+
+        public static List<string> GetHash(Bitmap bmpMin)
+        {
+            var lResult = new List<string>();
+            //create new image with 16x16 pixel
+            for (int j = 0; j < bmpMin.Height; j++)
+            {
+                var t = new List<int>();
+                for (int i = 0; i < bmpMin.Width; i++)
+                {
+                    //reduce colors to true / false             
+                    var br = bmpMin.GetPixel(i, j).GetBrightness();
+                    if (br < 0.1f)
+                    {
+                        t.Add(0);
+                    }
+                    else if (br < 0.2f)
+                    {
+                        t.Add(2);
+                    }
+                    else if (br < 0.3f)
+                    {
+                        t.Add(3);
+                    }
+                    else if (br < 0.4f)
+                    {
+                        t.Add(4);
+                    }
+                    else if (br < 0.5f)
+                    {
+                        t.Add(5);
+                    }
+                    else if (br < 0.6f)
+                    {
+                        t.Add(6);
+                    }
+                    else if (br < 0.7f)
+                    {
+                        t.Add(7);
+                    }
+                    else if (br < 0.8f)
+                    {
+                        t.Add(8);
+                    }
+                    else
+                    {
+                        t.Add(9);
+                    }
+                }
+                lResult.Add(string.Join("", t));
+            }
+            return lResult;
         }
 
         private int GetPid(string tgUserName)
@@ -2021,7 +2255,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n</telegram>";
+            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n<detectbox/>\r\n</telegram>";
 
         }
 
@@ -2566,6 +2800,46 @@ namespace AirdropBot
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Window mainWindow = null;
+            int waitsecs = 5;
+            int maxTryCount = 5;
+            int tryCount = 0;
+            var windowFound = false;
+            while (tryCount < maxTryCount)
+            {
+                tryCount++;
+                TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
+                if (app.GetWindows().Count > 0)
+                {
+                    mainWindow = app.GetWindows()[0];
+                    windowFound = true;
+                    break;
+                }
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                while (true)
+                {
+                    Application.DoEvents();
+                    if (sw.ElapsedMilliseconds >= waitsecs)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!windowFound)
+            {
+                return;
+            }
+            using (Bitmap bitmap = CaptureScreen(true, (int)mainWindow.Bounds.Right, (int)mainWindow.Bounds.Bottom, 0, 0))
+            {
+                var h = GetWhiteBox(bitmap);
+                var f=FindMost(h.ToArray(), "111111111111111111111000000000000000000000000", 20);
+                MessageBox.Show(f.Item1 + ": " + f.Item2 + ": " + f.Item3);
+
+
+            }
+
         }
 
         private string GetArgList()
@@ -2596,5 +2870,68 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "${UserNeoAddress}";
         }
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct CURSORINFO
+        {
+            public Int32 cbSize;
+            public Int32 flags;
+            public IntPtr hCursor;
+            public POINTAPI ptScreenPos;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINTAPI
+        {
+            public int x;
+            public int y;
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetCursorInfo(out CURSORINFO pci);
+
+        [DllImport("user32.dll")]
+        static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
+
+        const Int32 CURSOR_SHOWING = 0x00000001;
+
+        public static Bitmap CaptureScreen(bool CaptureMouse, int w, int h, int x, int y)
+        {
+            Bitmap result = new Bitmap(w, h, PixelFormat.Format24bppRgb);
+
+            try
+            {
+                using (Graphics g = Graphics.FromImage(result))
+                {
+                    g.CopyFromScreen(new Point(x, y), Point.Empty, new Size(w, h), CopyPixelOperation.SourceCopy);
+
+
+                    if (CaptureMouse)
+                    {
+                        CURSORINFO pci;
+                        pci.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(CURSORINFO));
+
+                        if (GetCursorInfo(out pci))
+                        {
+                            if (pci.flags == CURSOR_SHOWING)
+                            {
+                                DrawIcon(g.GetHdc(), pci.ptScreenPos.x, pci.ptScreenPos.y, pci.hCursor);
+                                g.ReleaseHdc();
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                result = null;
+            }
+
+            return result;
+        }
+
     }
+
+
 }
