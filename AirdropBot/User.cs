@@ -57,6 +57,24 @@ namespace AirdropBot
 
         public string KucoinUser { get; set; }
         public string KucoinPass { get; set; }
+        public string KucoinGSecret { get; set; }
+
+        public string GSecret1 { get; set; }
+        public string GSecret2 { get; set; }
+        public string GSecret3 { get; set; }
+        public string GSecret4 { get; set; }
+        public string GSecret5 { get; set; }
+
+        public string CustomField1 { get; set; }
+        public string CustomField2 { get; set; }
+        public string CustomField3 { get; set; }
+        public string CustomField4 { get; set; }
+        public string CustomField5 { get; set; }
+        public string CustomField6 { get; set; }
+        public string CustomField7 { get; set; }
+        public string CustomField8 { get; set; }
+        public string CustomField9 { get; set; }
+
 
         public void FillToDictionary(Dictionary<string, string> dict)
         {
@@ -133,6 +151,25 @@ namespace AirdropBot
                     user.NeoAddress = fields[33];
                     user.NeoPrivateKey = fields[34];
                 }
+                if(fields.Length>49)
+                {
+                    user.KucoinGSecret = fields[35];
+                    user.GSecret1 = fields[36];
+                    user.GSecret2 = fields[37];
+                    user.GSecret3 = fields[38];
+                    user.GSecret4 = fields[39];
+                    user.GSecret5 = fields[40];
+                    user.CustomField1 = fields[41];
+                    user.CustomField2 = fields[42];
+                    user.CustomField3 = fields[43];
+                    user.CustomField4 = fields[44];
+                    user.CustomField5 = fields[45];
+                    user.CustomField6 = fields[46];
+                    user.CustomField7 = fields[47];
+                    user.CustomField8 = fields[48];
+                    user.CustomField9 = fields[49];
+                }
+
 
                 users.Add(user.Id, user);
             }

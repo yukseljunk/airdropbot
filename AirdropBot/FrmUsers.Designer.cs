@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgUsers = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sallaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,6 +49,9 @@
             this.mEWToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.neoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.kucoinToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,9 +107,8 @@
             this.checkToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.openCsvFile = new System.Windows.Forms.OpenFileDialog();
             this.saveCsvFile = new System.Windows.Forms.SaveFileDialog();
-            this.neoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.followEachOtherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -114,10 +116,10 @@
             // 
             // dgUsers
             // 
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            this.dgUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -153,7 +155,7 @@
             this.telegramToolStripMenuItem1,
             this.facebookToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 236);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 214);
             // 
             // sallaToolStripMenuItem
             // 
@@ -267,16 +269,39 @@
             // createToolStripMenuItem1
             // 
             this.createToolStripMenuItem1.Name = "createToolStripMenuItem1";
-            this.createToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.createToolStripMenuItem1.Size = new System.Drawing.Size(108, 22);
             this.createToolStripMenuItem1.Text = "Create";
             this.createToolStripMenuItem1.Click += new System.EventHandler(this.createToolStripMenuItem1_Click);
             // 
             // checkToolStripMenuItem1
             // 
             this.checkToolStripMenuItem1.Name = "checkToolStripMenuItem1";
-            this.checkToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.checkToolStripMenuItem1.Size = new System.Drawing.Size(108, 22);
             this.checkToolStripMenuItem1.Text = "Check";
             this.checkToolStripMenuItem1.Click += new System.EventHandler(this.checkToolStripMenuItem1_Click);
+            // 
+            // neoToolStripMenuItem
+            // 
+            this.neoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem5,
+            this.checkToolStripMenuItem6});
+            this.neoToolStripMenuItem.Name = "neoToolStripMenuItem";
+            this.neoToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.neoToolStripMenuItem.Text = "Neo";
+            // 
+            // createToolStripMenuItem5
+            // 
+            this.createToolStripMenuItem5.Name = "createToolStripMenuItem5";
+            this.createToolStripMenuItem5.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem5.Text = "Create";
+            this.createToolStripMenuItem5.Click += new System.EventHandler(this.createToolStripMenuItem5_Click);
+            // 
+            // checkToolStripMenuItem6
+            // 
+            this.checkToolStripMenuItem6.Name = "checkToolStripMenuItem6";
+            this.checkToolStripMenuItem6.Size = new System.Drawing.Size(108, 22);
+            this.checkToolStripMenuItem6.Text = "Check";
+            this.checkToolStripMenuItem6.Click += new System.EventHandler(this.checkToolStripMenuItem6_Click);
             // 
             // kucoinToolStripMenuItem1
             // 
@@ -364,14 +389,14 @@
             // createToolStripMenuItem3
             // 
             this.createToolStripMenuItem3.Name = "createToolStripMenuItem3";
-            this.createToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.createToolStripMenuItem3.Size = new System.Drawing.Size(108, 22);
             this.createToolStripMenuItem3.Text = "Create";
             this.createToolStripMenuItem3.Click += new System.EventHandler(this.createToolStripMenuItem3_Click);
             // 
             // checkToolStripMenuItem3
             // 
             this.checkToolStripMenuItem3.Name = "checkToolStripMenuItem3";
-            this.checkToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.checkToolStripMenuItem3.Size = new System.Drawing.Size(108, 22);
             this.checkToolStripMenuItem3.Text = "Check";
             this.checkToolStripMenuItem3.Click += new System.EventHandler(this.checkToolStripMenuItem3_Click);
             // 
@@ -500,7 +525,9 @@
             // 
             this.twitterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createTwitterAccountToolStripMenuItem,
+            this.toolStripMenuItem11,
             this.createTwitterFollowersToolStripMenuItem,
+            this.followEachOtherToolStripMenuItem,
             this.createAPIKeysToolStripMenuItem,
             this.toolStripMenuItem1,
             this.toolStripMenuItem4,
@@ -703,28 +730,17 @@
             this.saveCsvFile.Filter = "CSV Files|*.csv";
             this.saveCsvFile.RestoreDirectory = true;
             // 
-            // neoToolStripMenuItem
+            // followEachOtherToolStripMenuItem
             // 
-            this.neoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createToolStripMenuItem5,
-            this.checkToolStripMenuItem6});
-            this.neoToolStripMenuItem.Name = "neoToolStripMenuItem";
-            this.neoToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.neoToolStripMenuItem.Text = "Neo";
+            this.followEachOtherToolStripMenuItem.Name = "followEachOtherToolStripMenuItem";
+            this.followEachOtherToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.followEachOtherToolStripMenuItem.Text = "Follow each other";
+            this.followEachOtherToolStripMenuItem.Click += new System.EventHandler(this.followEachOtherToolStripMenuItem_Click);
             // 
-            // createToolStripMenuItem5
+            // toolStripMenuItem11
             // 
-            this.createToolStripMenuItem5.Name = "createToolStripMenuItem5";
-            this.createToolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
-            this.createToolStripMenuItem5.Text = "Create";
-            this.createToolStripMenuItem5.Click += new System.EventHandler(this.createToolStripMenuItem5_Click);
-            // 
-            // checkToolStripMenuItem6
-            // 
-            this.checkToolStripMenuItem6.Name = "checkToolStripMenuItem6";
-            this.checkToolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
-            this.checkToolStripMenuItem6.Text = "Check";
-            this.checkToolStripMenuItem6.Click += new System.EventHandler(this.checkToolStripMenuItem6_Click);
+            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(193, 6);
             // 
             // FrmUsers
             // 
@@ -827,6 +843,8 @@
         private System.Windows.Forms.ToolStripMenuItem neoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem6;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
+        private System.Windows.Forms.ToolStripMenuItem followEachOtherToolStripMenuItem;
 
     }
 }

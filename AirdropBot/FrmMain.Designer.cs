@@ -105,6 +105,7 @@
             this.inoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bringWindowFronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repeatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -153,6 +154,7 @@
             this.variableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clipboardValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.randomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.openScenarioFile = new System.Windows.Forms.OpenFileDialog();
@@ -167,6 +169,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnlScenario = new System.Windows.Forms.Panel();
             this.openScenarios = new System.Windows.Forms.OpenFileDialog();
+            this.google2FAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlUsers.SuspendLayout();
             this.pnlScenario.SuspendLayout();
@@ -345,8 +348,10 @@
             this.kucoinToolStripMenuItem,
             this.waitToolStripMenuItem,
             this.inoToolStripMenuItem,
+            this.google2FAToolStripMenuItem,
             this.bringWindowFronToolStripMenuItem,
-            this.repeatToolStripMenuItem});
+            this.repeatToolStripMenuItem,
+            this.restartToolStripMenuItem});
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.commandsToolStripMenuItem.Text = "Commands";
@@ -791,13 +796,21 @@
             this.repeatToolStripMenuItem.Text = "Repeat";
             this.repeatToolStripMenuItem.Click += new System.EventHandler(this.repeatToolStripMenuItem_Click);
             // 
+            // restartToolStripMenuItem
+            // 
+            this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.restartToolStripMenuItem.Text = "Restart";
+            this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
+            // 
             // tokensToolStripMenuItem
             // 
             this.tokensToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.userToolStripMenuItem,
             this.variableToolStripMenuItem,
             this.clipboardValueToolStripMenuItem,
-            this.randomToolStripMenuItem});
+            this.randomToolStripMenuItem,
+            this.randomTextToolStripMenuItem});
             this.tokensToolStripMenuItem.Name = "tokensToolStripMenuItem";
             this.tokensToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.tokensToolStripMenuItem.Text = "Tokens";
@@ -1151,6 +1164,13 @@
             this.randomToolStripMenuItem.Text = "Random";
             this.randomToolStripMenuItem.Click += new System.EventHandler(this.randomToolStripMenuItem_Click);
             // 
+            // randomTextToolStripMenuItem
+            // 
+            this.randomTextToolStripMenuItem.Name = "randomTextToolStripMenuItem";
+            this.randomTextToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.randomTextToolStripMenuItem.Text = "Random Text";
+            this.randomTextToolStripMenuItem.Click += new System.EventHandler(this.randomTextToolStripMenuItem_Click);
+            // 
             // testToolStripMenuItem
             // 
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
@@ -1288,6 +1308,13 @@
             this.openScenarios.RestoreDirectory = true;
             this.openScenarios.FileOk += new System.ComponentModel.CancelEventHandler(this.openScenarios_FileOk);
             // 
+            // google2FAToolStripMenuItem
+            // 
+            this.google2FAToolStripMenuItem.Name = "google2FAToolStripMenuItem";
+            this.google2FAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.google2FAToolStripMenuItem.Text = "Google2FA";
+            this.google2FAToolStripMenuItem.Click += new System.EventHandler(this.google2FAToolStripMenuItem_Click_1);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1303,6 +1330,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.Text = "Airdrop Bot v1.0";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -1456,6 +1484,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem24;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem27;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem26;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem randomTextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem google2FAToolStripMenuItem;
     }
 }
 

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <navigate url="http://apps.twitter.com/app/new" proxy=""/>
+  <wait for="${Random(4,6)}"/>
+
+  <set value="${RandomText(my,test,verynew,awasome,welldone,cookiealert,cookiemonster,overboiled,potato,hotchoc,telepathy,randsom,handsom,fearless,metal,total)}_${Random(1,100)}_${UserTwName}" xpath="//*[@name='name']"/>
+  <wait for="${Random(1,3)}"/>
+
+  <set value="${RandomText(fearit,tasty,yummy,gummy,gummybear,bear,mine,testing,newwave,awesome,halfdone,cookieape,hairymonster,underboiled,caesar,coldcoffee,empathy,randof,dear,fearfull,liquid,volumed)}${Random(1,100)}_${RandomText(fearit,tasty,yummy,gummy,gummybear,bear,mine,testing,newwave,awesome,halfdone,cookieape,hairymonster,underboiled,caesar,coldcoffee,empathy,randof,dear,fearfull,liquid,volumed)}" xpath="//*[@id='edit-description']"/>
+  <wait for="${Random(1,3)}"/>
+
+  <set value="http://www.${RandomText(fearit,tasty,yummy,gummy,gummybear,bear,mine,testing,newwave,awesome,halfdone,cookieape,hairymonster,underboiled,caesar,coldcoffee,empathy,randof,dear,fearfull,liquid,volumed)}.com/${RandomText(sub,first,second,third,index,get,set,read,write,append,follow,like,love,taste,fall,go,down,load,select)}${Random(1,10)}" xpath="//*[@id='edit-url']"/>
+  <wait for="${Random(1,3)}"/>
+  <click xpath="//*[@id='edit-tos-agreement']" />
+  <wait for="${Random(1,3)}"/>
+
+  <click xpath="//*[@id='edit-submit']" waitforbrowser="true"/>
+  <wait for="4"/>
+  <click xpath="//*[text()='Keys and Access Tokens']" />
+  <wait for="4"/>
+  <scroll height="300"/>
+  <click xpath="//*[@id='edit-submit-owner-token']" />
+  <wait for="4"/>
+  <scroll height="300"/>
+
+  <get param="consumerkey" what="innerText" xpath="//*[@class='app-settings']/div[1]/span[2]" regex=""/>
+  <get param="consumersecret" what="innerText" xpath="//*[@class='app-settings']/div[2]/span[2]" regex=""/>
+  <get param="accesstoken" what="innerText" xpath="//*[@class='access']/div[1]/span[2]" regex=""/>
+  <get param="accesstokensecret" what="innerText" xpath="//*[@class='access']/div[2]/span[2]" regex=""/>
+
+</steps>

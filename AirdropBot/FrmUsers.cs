@@ -58,7 +58,22 @@ namespace AirdropBot
                             "Twitter Access Token",
                             "Twitter Access Token Secret",
                             "Neo Address",
-                            "Neo Private Key"
+                            "Neo Private Key",
+                            "Kucoin GSecret",
+                            "GSecret1",
+                            "GSecret2",
+                            "GSecret3",
+                            "GSecret4",
+                            "GSecret5",
+                            "CustomField1",
+                            "CustomField2",
+                            "CustomField3",
+                            "CustomField4",
+                            "CustomField5",
+                            "CustomField6",
+                            "CustomField7",
+                            "CustomField8",
+                            "CustomField9"
 
                            };
             foreach (var col in cols)
@@ -74,6 +89,7 @@ namespace AirdropBot
                 FillUsers();
             }
             IsDirty = false;
+            IsEdited = false;
         }
 
         private void dgUsers_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -166,7 +182,9 @@ namespace AirdropBot
                                  u.EthAddress, u.EthPrivateKey, u.EthPass, u.ProxyIp, u.ProxyPort,
                                  u.WinUser, u.WinPwd, u.TgUser, u.TwUserName, u.TwPwd, u.TwName, u.KucoinUser,
                                  u.KucoinPass, u.FBUser, u.FBPwd, u.FBProfile, u.ReddUser, u.ReddPwd, u.BtcTalkUser,
-                                 u.BtcTalkPwd, u.BtcTalkProfileLink, u.TwConsumerKey, u.TwConsumerSecret, u.TwAccessToken, u.TwAccessTokenSecret, u.NeoAddress, u.NeoPrivateKey);
+                                 u.BtcTalkPwd, u.BtcTalkProfileLink, u.TwConsumerKey, u.TwConsumerSecret, u.TwAccessToken, u.TwAccessTokenSecret, u.NeoAddress, u.NeoPrivateKey,
+                                 u.KucoinGSecret, u.GSecret1, u.GSecret2, u.GSecret3, u.GSecret4, u.GSecret5,
+                                 u.CustomField1, u.CustomField2, u.CustomField3, u.CustomField4, u.CustomField5, u.CustomField6, u.CustomField7, u.CustomField8, u.CustomField9);
             }
         }
 
@@ -213,12 +231,20 @@ namespace AirdropBot
             }
         }
 
-        private bool _isDirty;
+        public bool IsEdited
+        {
+            get { return _isEdited; }
+            set { _isEdited = value; }
+        }
+
+        private bool _isDirty = false;
+        private bool _isEdited = false;
         public bool IsDirty { get { return _isDirty; } set { _isDirty = value; } }
 
         private void dgUsers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             IsDirty = true;
+            _isEdited = true;
         }
 
         private void FrmUsers_FormClosing(object sender, FormClosingEventArgs e)
@@ -1222,12 +1248,11 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check twitter address for empty twitter user or twitter password! " + (index + 1));
                     return;
                 }
-                var twLoginTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterLogin.xml");
-                twLoginTemplate = twLoginTemplate.Replace("${0}", GetCell(index, 16)).Replace("${1}", GetCell(index, 17));
+                var twLoginTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\TwitterLogin.xml");
+                twLoginTemplate = twLoginTemplate.Replace("${UserTwUserName}", GetCell(index, 16)).Replace("${UserTwPwd}", GetCell(index, 17));
 
-                var twApiTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterCreateApi.xml");
-                twApiTemplate = twApiTemplate.Replace("${0}", GetCell(index, 18));
-
+                var twApiTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\TwitterCreateApi.xml");
+                twApiTemplate = twApiTemplate.Replace("${UserTwName}", GetCell(index, 18));
 
                 var doc = new XmlDocument();
                 try
@@ -1257,20 +1282,20 @@ namespace AirdropBot
 
                 try
                 {
-                    if (frmMain.Variables.ContainsKey("consumerkey") && EmptyCell(index, 29))
+                    if (frmMain.Variables.ContainsKey("consumerkey"))
                     {
                         SetCell(index, 29, frmMain.Variables["consumerkey"]);
                     }
 
-                    if (frmMain.Variables.ContainsKey("consumersecret") && EmptyCell(index, 30))
+                    if (frmMain.Variables.ContainsKey("consumersecret"))
                     {
                         SetCell(index, 30, frmMain.Variables["consumersecret"]);
                     }
-                    if (frmMain.Variables.ContainsKey("accesstoken") && EmptyCell(index, 31))
+                    if (frmMain.Variables.ContainsKey("accesstoken"))
                     {
                         SetCell(index, 31, frmMain.Variables["accesstoken"]);
                     }
-                    if (frmMain.Variables.ContainsKey("accesstokensecret") && EmptyCell(index, 32))
+                    if (frmMain.Variables.ContainsKey("accesstokensecret"))
                     {
                         SetCell(index, 32, frmMain.Variables["accesstokensecret"]);
                     }
@@ -1499,6 +1524,35 @@ namespace AirdropBot
             var rowIndex = GetRowIndexForContextMenu();
             if (rowIndex == -1) return;
             CheckNeoBalance(rowIndex);
+        }
+
+        private void followEachOtherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TwitterFollowEachOther(GetSelectedRow());
+
+        }
+
+        private void TwitterFollowEachOther(int index)
+        {
+            try
+            {
+                if (EmptyCell(index, 18))
+                {
+                    MessageBox.Show("Cannot create twitter followers for empty twitter name! " + (index + 1));
+                    return;
+                }
+                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\TwitterFollowEachOther.xml");
+                twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 18));
+
+                var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
+
+                frmMain.Show(this);
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
         }
     }
 }

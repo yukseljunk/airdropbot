@@ -1,0 +1,5 @@
+﻿- twitter follow each other
+- show tokens on 1 click
+- show total tokens
+- make templates like scenarios
+- add call template functionality

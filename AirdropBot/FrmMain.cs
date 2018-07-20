@@ -74,31 +74,21 @@ namespace AirdropBot
                 txtScenario.Text = Scenario;
                 return;
             }
-            string[] args = Environment.GetCommandLineArgs();
-
             btnStop.Enabled = false;
             LoadUsers();
             RestoreLastScenario();
             RestoreLastSelectedUser();
-
-            /*
-            if (args.Length > 1) //called by host with params
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Count() > 1)
             {
-                try
+                foreach (var i in args.Skip(1))
                 {
-
-                    var itemsToSelect = args.Skip(1).ToList();
-                    for (int i = 0; i < itemsToSelect.Count - 1; i++)
-                    {
-                        lstUsers.SetItemChecked(int.Parse(itemsToSelect[i]), true);
-                    }
-                    var sel = int.Parse(itemsToSelect.Last());
-                    lstUsers.SelectedIndex = sel;
+                    lstUsers.SetItemChecked(int.Parse(i), true);
                 }
-                catch { }
-
+                Thread.Sleep(1000);
+                btnRunRest_Click(null, null);
             }
-            */
+
         }
 
         private void RestoreLastSelectedUser()
@@ -210,6 +200,10 @@ namespace AirdropBot
                 {
                     commandResult = ScrollCommand(node);
                 }
+                if (command == "restart")
+                {
+                    commandResult = RestartCommand(node);
+                }
                 if (command == "snap")
                 {
                     commandResult = SnapCommand(node);
@@ -317,13 +311,17 @@ namespace AirdropBot
                 {
                     commandResult = KucoinRetweet(node);
                 }
+                if (command == "google2fa")
+                {
+                    commandResult = Google2FaCode(node);
+                }
                 if (command == "screenshot")
                 {
                     commandResult = ScreenShotCommand(node);
                 }
                 if (commandResult != "")
                 {
-                    MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult);
+                    MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult + "\r\nCommand is : \r\n" + node.OuterXml);
                     stopped = true;
                     break;
                 }
@@ -332,12 +330,33 @@ namespace AirdropBot
 
         }
 
+        private string Google2FaCode(XmlNode node)
+        {
+            var param = node.Attributes["param"];
+            var secret = node.Attributes["secret"];
+            if (param == null || secret == null) return "param/secret not defined";
+            if (string.IsNullOrEmpty(param.Value) || string.IsNullOrEmpty(secret.Value)) return "param/secret empty";
+
+
+            var secretPure = ReplaceTokens(secret.Value);
+            var g2fa = new Google2Fa();
+            var result = g2fa.GetCode(secretPure);
+            if (!localVariables.ContainsKey(param.Value))
+            {
+                localVariables.Add(param.Value, result);
+            }
+            localVariables[param.Value] = result;
+
+            return "";
+        }
+
         private string RestartCommand(XmlNode node)
         {
-            var args = GetArgList();
-            if (args == "") return "";
-
-            File.WriteAllText(Helper.AssemblyDirectory + "\\command.txt", args);
+            if (lstUsers.SelectedIndex != -1)
+            {
+                lstUsers.SetItemChecked(lstUsers.SelectedIndex, false);
+            }
+            StartAnotherInstanceWithCheckedItems();
             return "";
         }
 
@@ -362,59 +381,13 @@ namespace AirdropBot
             var postno = node.Attributes["postno"];
             if (postno == null) return "Post number is not defined!";
             if (postno.Value == "") return "Post number is empty!";
-
-            var consumerKey = ActiveUser.TwConsumerKey;
-            var twcustnode = node.Attributes["twApiCust"];
-            if (twcustnode != null && twcustnode.Value != "")
-            {
-                consumerKey = twcustnode.Value;
-            }
-
-            var consumerSecret = ActiveUser.TwConsumerSecret;
-            var twcustsecnode = node.Attributes["twApiCustSec"];
-            if (twcustsecnode != null && twcustsecnode.Value != "")
-            {
-                consumerSecret = twcustsecnode.Value;
-            }
-            var twtokenNode = node.Attributes["twApiToken"];
-            var twTokenSecNode = node.Attributes["twApiTokenSec"];
-            if (twtokenNode == null || twTokenSecNode == null) return "Not defined access tokens!";
-            if (twtokenNode.Value == "" || twTokenSecNode.Value == "") return "Empty access tokens!";
-
-            var twUser = ActiveUser.TwUserName;
-            var twUserNode = node.Attributes["twitteruser"];
-            if (twUserNode != null && twUserNode.Value != "")
-            {
-                twUser = twUserNode.Value;
-            }
-
-            var fullName = ActiveUser.Name + " " + ActiveUser.LastName;
-            var fullNameNode = node.Attributes["fullname"];
-            if (fullNameNode != null && fullNameNode.Value != "")
-            {
-                fullName = fullNameNode.Value;
-            }
-            var kucoinUser = ActiveUser.KucoinUser;
-            var kucoinemailnode = node.Attributes["kucoinemail"];
-            if (kucoinemailnode != null && kucoinemailnode.Value != "")
-            {
-                kucoinUser = kucoinemailnode.Value;
-            }
             var formlink = "";
             var flink = node.Attributes["formlink"];
-            if (flink != null && flink.Value != "")
-            {
-                formlink = flink.Value;
-            }
+            if (flink == null) return "Form link not defined!";
+            if (flink.Value == "") return "Form link is empty!";
 
-            var kucoinTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinRetweet.xml");
-            kucoinTemplate = kucoinTemplate.Replace("${0}", ReplaceTokens(postno.Value)).Replace("${1}", consumerKey).Replace("${2}", consumerSecret)
-                .Replace("${3}", ReplaceTokens(twUser)).Replace("${4}", ReplaceTokens(fullName)).Replace("${5}", ReplaceTokens(kucoinUser))
-                .Replace("${6}", twtokenNode.Value).Replace("${7}", twTokenSecNode.Value);
-            if (formlink != "")
-            {
-                kucoinTemplate = kucoinTemplate.Replace("${formlink}", formlink);
-            }
+            var kucoinTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\KucoinRetweet.xml");
+            kucoinTemplate = kucoinTemplate.Replace("${kucoinpostno}", ReplaceTokens(postno.Value)).Replace("${kucoinformlink}", flink.Value);
             Run(kucoinTemplate);
             return "";
 
@@ -876,7 +849,7 @@ namespace AirdropBot
                 }
             }
             commands.Remove("wait");
-            var apiCommands = new HashSet<string>() { "follow", "like", "retweet" };
+            var apiCommands = new HashSet<string>() { "follow", "like", "retweet", "retweetc" };
             var onlyAPI = commands.Any() && commands.IsSubsetOf(apiCommands);
             var someAPI = commands.Intersect(apiCommands).Any();
 
@@ -931,7 +904,7 @@ namespace AirdropBot
                         var postNode = subNode.Attributes["post"];
                         if (postNode == null) continue;
                         if (postNode.Value == "") continue;
-                        RunTweetApi("retweet", ReplaceTokens(postNode.Value), consumerkey.Value, consumersecret.Value, accesstoken.Value, accesstokensecret.Value);
+                        RunTweetApi("retweetc", ReplaceTokens(postNode.Value), consumerkey.Value, consumersecret.Value, accesstoken.Value, accesstokensecret.Value);
                     }
                     else
                     {
@@ -1289,7 +1262,7 @@ namespace AirdropBot
                         right = (int)mainWindow.Bounds.Right;
                     }
 
-                    pointToClick = new System.Windows.Point((ltb.Item1 + right) / 2, (ltb.Item3 + (int)mainWindow.Bounds.Bottom) / 2);
+                    pointToClick = new System.Windows.Point((ltb.Item1 + right) / 2, ltb.Item3 + 20);
                     mainWindow.Mouse.Location = pointToClick;
 
                 }
@@ -1404,8 +1377,17 @@ namespace AirdropBot
                     }
                     if (subNode.Name == "waitforresponse")
                     {
+                        var wsecs = 30000; //30sec timeout
 
-                        using (Bitmap bitmapSub = CaptureScreen(false, right - ltb.Item1 - 200, 200, ltb.Item1 + 200, ltb.Item3 - 200))
+                        var timeout = subNode.Attributes["timeout"];
+
+                        if (timeout != null && timeout.Value.Trim() != "")
+                        {
+                            wsecs = int.Parse(timeout.Value.Trim()) * 1000;
+                        }
+                        var capw = right - ltb.Item1 - 200;
+                        if (capw < 100) capw = 300;
+                        using (Bitmap bitmapSub = CaptureScreen(false, capw, 200, ltb.Item1 + 200, ltb.Item3 - 200))
                         {
                             bitmapSub.Save(@"c:\temp\bitmapsub.jpg", ImageFormat.Jpeg);
                             var hsub = GetHash(bitmapSub);
@@ -1415,13 +1397,12 @@ namespace AirdropBot
                             Stopwatch sw = new Stopwatch();
                             sw.Start();
 
-                            var wsecs = 30000; //30sec timeout
                             var index = 0;
                             while (true)
                             {
                                 index++;
 
-                                using (Bitmap bitmapSubSub = CaptureScreen(false, right - ltb.Item1 - 200, 200, ltb.Item1 + 200, ltb.Item3 - 200))
+                                using (Bitmap bitmapSubSub = CaptureScreen(false, capw, 200, ltb.Item1 + 200, ltb.Item3 - 200))
                                 {
                                     bitmapSubSub.Save(@"c:\temp\bitmapsubsub" + index + ".jpg", ImageFormat.Jpeg);
 
@@ -1655,6 +1636,18 @@ namespace AirdropBot
             {
                 return "No action specified for email!";
             }
+            var variable = "";
+            var regex = "";
+            var variableNode = node.Attributes["variable"];
+            var regexNode = node.Attributes["regex"];
+            if (variableNode != null && !string.IsNullOrEmpty(variableNode.Value))
+            {
+                variable = variableNode.Value.Trim();
+            }
+            if (regexNode != null && !string.IsNullOrEmpty(regexNode.Value))
+            {
+                regex = regexNode.Value;
+            }
             //more than login
             stopped = false;
             foreach (XmlNode subNode in node.ChildNodes)
@@ -1673,7 +1666,7 @@ namespace AirdropBot
                         type = typeNode.Value;
                     }
 
-                    RunMailApi("search", type, ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value));
+                    RunMailApi("search", type, ReplaceTokens(textNode.Value), ReplaceTokens(user.Value), ReplaceTokens(password.Value), variable, regex);
 
                 }
                 else if (subNode.Name == "searchtill")//<searchtill text=\"\" retrytimes=\"1\" retrywaitsecs=\"3\"/>
@@ -1695,7 +1688,7 @@ namespace AirdropBot
                     for (int i = 0; i < retryTimes; i++)
                     {
                         if (RunMailApi("search", type, ReplaceTokens(textNode.Value), ReplaceTokens(user.Value),
-                                   ReplaceTokens(password.Value))) break;
+                                   ReplaceTokens(password.Value), variable, regex)) break;
                         Wait(retryWaitSecs);
                         if (stopped) break;
                     }
@@ -1711,13 +1704,38 @@ namespace AirdropBot
         }
 
         //default is search by subject
-        private bool RunMailApi(string action, string type, string value, string user, string pass)
+        private bool RunMailApi(string action, string type, string value, string user, string pass, string variable, string regex)
         {
             var botExe = Helper.AssemblyDirectory + "\\MailBot\\MailBot.exe";
             var output = Helper.StartProcess(botExe,
                                 string.Format("{0} {1} {2} {3}", user, pass, type, value), true);
             //wait for bot to respond
             Wait(5);
+            if (variable != "")
+            {
+                if (!localVariables.ContainsKey(variable))
+                {
+                    localVariables.Add(variable, "");
+                }
+
+
+                if (regex != "")
+                {
+                    var reg = new Regex(regex);
+                    var match = reg.Match(output);
+                    if (match.Success)
+                    {
+                        if (match.Groups.Count > 1)
+                        {
+                            output = match.Groups[1].Value;
+                        }
+                    }
+                }
+
+                localVariables[variable] = output;
+
+                return !output.StartsWith("No email found for ");
+            }
             var htmlFile = Helper.AssemblyDirectory + "\\temp.html";
             File.WriteAllText(htmlFile, output);
             CreateCBrowser(htmlFile + "?nonce=" + Guid.NewGuid(), "");
@@ -1987,6 +2005,13 @@ namespace AirdropBot
                 }
             }
 
+            var stopElementXpath = "";
+            var stopWhenElementRendered = node.Attributes["stopWhenElementRendered"];
+            if (stopWhenElementRendered != null && !string.IsNullOrEmpty(stopWhenElementRendered.Value))
+            {
+                stopElementXpath = stopWhenElementRendered.Value;
+            }
+
             cloadingFinished = false;
             try
             {
@@ -1998,6 +2023,15 @@ namespace AirdropBot
                 while (!cloadingFinished && !stopped)
                 {
                     Application.DoEvents();
+                    //check every sec for stopelemenrender
+                    if (stopElementXpath != "" && sw.ElapsedMilliseconds > 0 && sw.ElapsedMilliseconds % 1000 == 0)
+                    {
+                        if (ElementExists(stopElementXpath))
+                        {
+                            return "";
+                        }
+                    }
+
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
                     {
                         return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
@@ -2056,6 +2090,29 @@ namespace AirdropBot
             return "NOTFOUND";
         }
 
+        private bool ElementExists(string xpath)
+        {
+            if (string.IsNullOrEmpty(xpath)) return false;
+            if (!cbrowser.IsBrowserInitialized) return false;
+
+            string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return 'DEF'; }} x(); ", xpath, FindXPathScript);
+            var resp = "";
+            cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+            {
+                var response = x.Result;
+
+                if (response.Success && response.Result != null)
+                {
+                    resp = response.Result.ToString();
+                    //startDate is the value of a HTML element.
+                }
+            }).Wait();
+
+            return resp == "DEF";
+
+        }
+
+
         private string SetCElement(XmlNode node, string newValue)
         {
             var xpath = node.Attributes["xpath"];
@@ -2098,7 +2155,7 @@ namespace AirdropBot
             }
             //${Random(1,10)}
             itemRegex = new Regex(@"\$\{Random\((\d+)\,(\d+)\)\}");
-            foreach (Match ItemMatch in itemRegex.Matches(value))
+            foreach (Match ItemMatch in itemRegex.Matches(result))
             {
                 var randFrom = ItemMatch.Groups[1].Value;
                 var randTo = ItemMatch.Groups[2].Value;
@@ -2106,6 +2163,19 @@ namespace AirdropBot
                 var randVal = rnd.Next(int.Parse(randFrom), int.Parse(randTo));
                 result = result.Replace(ItemMatch.ToString(), randVal.ToString());
 
+            }
+
+            itemRegex = new Regex(@"\$\{RandomText\(([^\)]*)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var randStrs = ItemMatch.Groups[1].Value;
+                var items = randStrs.Split(new char[] { ',' }, StringSplitOptions.None);
+                if (items.Any())
+                {
+                    var rnd = new Random();
+                    var randVal = rnd.Next(0, items.Length);
+                    result = result.Replace(ItemMatch.ToString(), items[randVal]);
+                }
             }
 
             return result;
@@ -2179,7 +2249,7 @@ namespace AirdropBot
 
         private void navigateToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<navigate url=\"\" proxy=\"\"/>";
+            txtScenario.SelectedText = "<navigate url=\"\" proxy=\"\" stopWhenElementRendered=\"\" />";
         }
 
         private void setFieldToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -2337,7 +2407,7 @@ namespace AirdropBot
 
         private void getFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n<waitforresponse/>\r\n<detectbox/>\r\n</telegram>";
+            txtScenario.SelectedText = "<telegram user=\"${UserWinUser}\" pass=\"${UserWinPwd}\" group=\"\" chat=\"\">\r\n\t<click x=\"\" y=\"\"/>\r\n\t<message text=\"\"/>\r\n<waitforresponse timeout=\"30\"/>\r\n<detectbox/>\r\n</telegram>";
 
         }
 
@@ -2649,7 +2719,10 @@ namespace AirdropBot
         {
             var frmUsers = new FrmUsers();
             frmUsers.ShowDialog(this);
-            LoadUsers();
+            if (frmUsers.IsEdited)
+            {
+                LoadUsers();
+            }
         }
 
         private void LoadUsers()
@@ -2669,43 +2742,43 @@ namespace AirdropBot
 
         private void toPointToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void emptyToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byIdToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[@id='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[@id='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byNameToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[@name='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[@name='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[@class='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[@class='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byTagToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"TAG\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"TAG\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byTextToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[text()='']\" x=\"0\" y=\"0\"/>";
+            txtScenario.SelectedText = "<snap xpath=\"//*[text()='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
@@ -2759,7 +2832,7 @@ namespace AirdropBot
 
         private void kucoinToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<kucoin postno=\"\" formlink=\"\" twApiCust=\"${UserTwConsumerKey}\" twApiCustSec=\"${UserTwConsumerSecret}\"  twApiToken=\"${UserTwAccessToken}\" twApiTokenSec=\"${UserTwAccessTokenSecret}\" twitteruser=\"${UserTwName}\" fullname=\"${UserName} ${UserLastName}\" kucoinemail=\"${UserKucoinUser}\"/>";
+            txtScenario.SelectedText = "<kucoin postno=\"\" formlink=\"\"/>";
         }
 
         private void facebookToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2794,7 +2867,7 @@ namespace AirdropBot
 
         private void setFieldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\">\r\n<search text=\"\" type=\"subject\"/>\r\n<searchtill text=\"\" type=\"subject\" retrytimes=\"3\" retrywaitsecs=\"10\"/>\r\n</mail>";
+            txtScenario.SelectedText = "<mail user=\"${UserMail}\" pass=\"${UserMailPwd}\" variable=\"\" regex=\"\">\r\n<search text=\"\" type=\"subject\"/>\r\n<searchtill text=\"\" type=\"subject\" retrytimes=\"3\" retrywaitsecs=\"10\"/>\r\n</mail>";
 
         }
 
@@ -2882,46 +2955,15 @@ namespace AirdropBot
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Window mainWindow = null;
-            int waitsecs = 5;
-            int maxTryCount = 5;
-            int tryCount = 0;
-            var windowFound = false;
-            while (tryCount < maxTryCount)
-            {
-                tryCount++;
-                TestStack.White.Application app = TestStack.White.Application.Attach(@"Telegram");
-                if (app.GetWindows().Count > 0)
-                {
-                    mainWindow = app.GetWindows()[0];
-                    windowFound = true;
-                    break;
-                }
+            StartAnotherInstanceWithCheckedItems();
+        }
 
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                while (true)
-                {
-                    Application.DoEvents();
-                    if (sw.ElapsedMilliseconds >= waitsecs)
-                    {
-                        break;
-                    }
-                }
-            }
-            if (!windowFound)
-            {
-                return;
-            }
-            using (Bitmap bitmap = CaptureScreen(true, (int)mainWindow.Bounds.Right, (int)mainWindow.Bounds.Bottom, 0, 0))
-            {
-                var h = GetWhiteBox(bitmap);
-                var f = FindMost(h.ToArray(), "111111111111111111111000000000000000000000000", 20);
-                MessageBox.Show(f.Item1 + ": " + f.Item2 + ": " + f.Item3);
-
-
-            }
-
+        private void StartAnotherInstanceWithCheckedItems()
+        {
+            var exe = Helper.AssemblyDirectory + "\\AirdropBot.exe";
+            Helper.StartProcess(exe, GetArgList());
+            Thread.Sleep(100);
+            this.Close();
         }
 
         private string GetArgList()
@@ -2933,7 +2975,7 @@ namespace AirdropBot
                 arglist.Add(i.ToString());
             }
             if (!arglist.Any()) return "";
-            return lstUsers.SelectedIndex + " " + string.Join(" ", arglist);
+            return string.Join(" ", arglist);
         }
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
@@ -3013,7 +3055,28 @@ namespace AirdropBot
             return result;
         }
 
+        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<restart/>";
+
+        }
+
+        private void randomTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${RandomText(text1,text2,text3)}";
+
+        }
+
+        private void google2FAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void google2FAToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<google2fa param=\"\" secret=\"\"/>";
+
+        }
+
     }
-
-
 }
