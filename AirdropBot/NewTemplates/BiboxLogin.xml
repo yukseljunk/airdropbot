@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="https://www.bibox.com/login" proxy="${UserProxyIp}:${UserProxyPort}" />
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//*[@placeholder='Email']" x="%50" y="%150"/>
+  <sendkey value="${UserMail}"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//input[@type='password']" x="%50" y="%150"/>
+  <sendkey value="${UserStrongPassword}"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//button/span[text()='Log in']" x="%50" y="%150"/>
+  <wait for="10" formilisec=""/>
+
+  <snap xpath="//input" x="%50" y="%150"/>
+  <google2fa param="fakod" secret="${UserGSecret3}"/>
+  <sendkey value="${fakod}"/>
+
+</steps>

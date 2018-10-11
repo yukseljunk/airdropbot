@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="https://neotracker.io/wallet" proxy=""/>
+
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='OPEN WALLET']" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Private Key']/.." />
+  <wait for="2" formilisec=""/>
+  <snap xpath="//*[@id='textField-owpk-private-key']" x="%50" y="%150"/>
+  <sendkey value="${UserNeoPrivateKey}" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='UNLOCK']" />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='GO TO WALLET']/../.." />
+
+  <wait for="2" formilisec=""/>
+
+
+
+</steps>

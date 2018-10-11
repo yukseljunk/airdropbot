@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="https://www.coinex.com/account/signin" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="" />
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//span[text()='Mobile/Email']" x="%60" y="%150"/>
+  <sendkey value="${UserMail}"/>
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//span[text()='Password']" x="%60" y="%150"/>
+  <sendkey value="${UserStrongPassword}"/>
+  <wait for="1" formilisec=""/>
+
+
+  <wait for="1" formilisec=""/>
+  <click xpath="//button[text()='Sign In']"/>
+
+  <wait for="${Random(3,6)}" formilisec=""/>
+  <google2fa param="fa" secret="${UserGSecret1}"/>
+  <snap xpath="//button[text()='Verify']" x="%50" y="-15"/>
+  <sendkey value="${fa}"/>
+
+</steps>

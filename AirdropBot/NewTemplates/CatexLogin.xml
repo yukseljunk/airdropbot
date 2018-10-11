@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="www.catex.io/login" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="" />
+  <wait for="2" formilisec=""/>
+
+
+  <set value="${UserMail}" xpath="//*[@name='email']"/>
+
+  <set value="${UserStrongPassword}" xpath="//*[@name='password']"/>
+
+  <focus xpath="//*[@name='captcha']"/>
+
+  <wait for="1" formilisec=""/>
+  <waittill compare="LI" what="tagName" timeout="0" xpath="//*[@id='user_email']" regex=""/>
+  <wait for="1" formilisec=""/>
+
+
+</steps>

@@ -1,62 +1,178 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using System.Management;
+using Common;
 
 namespace AirdropBot
 {
     public class Helper
     {
-        public static string UsersFile = Helper.AssemblyDirectory + "\\users.csv";
+        public static Dictionary<string, string> Variables
+        {
+            get { return localVariables; }
+        }
+        private static Dictionary<string, string> localVariables = new Dictionary<string, string>();
 
-
-        public static string AssemblyDirectory
+        private static Dictionary<int, User> _users;
+        public static Dictionary<int, User> Users
         {
             get
             {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
-                return Path.GetDirectoryName(path);
+                if (_users != null) return _users;
+                if (File.Exists(CommonHelper.UsersFile))
+                {
+                    var userFactory = new UserFactory();
+                    _users = userFactory.GetUsers(CommonHelper.UsersFile, false);
+                }
+                return _users;
             }
         }
 
-        // Get a handle to an application window.
-        [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
-        public static extern IntPtr FindWindow(string lpClassName,
-                                               string lpWindowName);
+        public static string ReplaceTokens(string value)
+        {
+            var result = value;
+            var itemRegex = new Regex(@"\$\{(\w+)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(value))
+            {
+                var token = ItemMatch.Groups[1].Value;
+                if (localVariables.ContainsKey(token))
+                {
+                    result = result.Replace(ItemMatch.ToString(), localVariables[token]);
+                }
+                if (token == "Clipboard")
+                {
+                    result = result.Replace(ItemMatch.ToString(), Clipboard.GetText());
+                }
+            }
+            //${UserIndex}
+            //${Random(1,10)}
+            itemRegex = new Regex(@"\$\{Random\((\d+)\,(\d+)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var randFrom = ItemMatch.Groups[1].Value;
+                var randTo = ItemMatch.Groups[2].Value;
+                var rnd = new Random();
+                var randVal = rnd.Next(int.Parse(randFrom), int.Parse(randTo));
+                result = result.Replace(ItemMatch.ToString(), randVal.ToString());
+
+            }
+            //${RandomExcept(1,10,5)}
+            itemRegex = new Regex(@"\$\{RandomExcept\((\d+)\,(\d+)\,(\d+)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var randFrom = ItemMatch.Groups[1].Value;
+                var randTo = ItemMatch.Groups[2].Value;
+                var randExcept = int.Parse(ItemMatch.Groups[3].Value);
+                var rnd = new Random();
+                var randVal = rnd.Next(int.Parse(randFrom), int.Parse(randTo));
+                while (randVal == randExcept)
+                {
+                    randVal = rnd.Next(int.Parse(randFrom), int.Parse(randTo));
+                }
+                result = result.Replace(ItemMatch.ToString(), randVal.ToString());
+            }
+
+            //${RandomText(ali,veli,kirkk doggkuz)}
+            itemRegex = new Regex(@"\$\{RandomText\(([^\)]*)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var randStrs = ItemMatch.Groups[1].Value;
+                var items = randStrs.Split(new char[] { ',' }, StringSplitOptions.None);
+                if (items.Any())
+                {
+                    var rnd = new Random();
+                    var randVal = rnd.Next(0, items.Length);
+                    result = result.Replace(ItemMatch.ToString(), items[randVal]);
+                }
+            }
+
+            //${Eval(3+5*2)}
+            itemRegex = new Regex(@"\$\{Eval\(([^\)]*)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var expr = ItemMatch.Groups[1].Value;
+                DataTable dt = new DataTable();
+                var evalRes = dt.Compute(expr, "");
+                result = result.Replace(ItemMatch.ToString(), evalRes.ToString());
+
+            }
+
+            //${User0Name}
+            itemRegex = new Regex(@"\$\{User(\d+)(\w+)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var index = int.Parse(ItemMatch.Groups[1].Value);
+                var prop = ItemMatch.Groups[2].Value;
+
+                if (Users.ContainsKey(index))
+                {
+                    var propDict = new Dictionary<string, string>();
+                    Users[index].FillToDictionary(propDict);
+                    if (propDict.ContainsKey("User" + prop))
+                    {
+                        result = result.Replace(ItemMatch.ToString(), propDict["User" + prop]);
+                    }
+                }
+            }
+
+            return result;
+        }
 
 
-        // Activate an application window.
-        [DllImport("USER32.DLL")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
-
-        public static void CloseProcessAllInstances(string processName)
+        //
+        public static string OpenFirefox(string user, string password)
         {
             try
             {
                 //close all instances of telegram first
-                foreach (var p in Process.GetProcessesByName(processName))
+                foreach (var p in Process.GetProcessesByName("firefox"))
                 {
-                    p.Kill();
+                    // p.Kill();
                 }
             }
             catch
             {
             }
+
+            CommonHelper.StartProcess("runas",
+                         string.Format(
+                             "/user:{0} \"C:\\Program Files\\Mozilla Firefox\\firefox.exe\" ",
+                             user));
+            Thread.Sleep(2000);
+
+            // Get a handle to the tg application. The window class
+            // and window name were obtained using the Spy++ tool.
+            IntPtr runasHandle = CommonHelper.FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
+
+            // Verify that Calculator is a running process.
+            if (runasHandle == IntPtr.Zero)
+            {
+                {
+                    return "Runas.exe is not running.";
+                }
+            }
+
+            // Make tg the foreground application and send it 
+            // a set of calculations.
+            CommonHelper.SetForegroundWindow(runasHandle);
+            SendKeys.SendWait(password + "{ENTER}");
+            //wait for firefox to open
+            Thread.Sleep(1000);
+            return "";
         }
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+
 
         public static string OpenTelegram(string user, string args, string password)
         {
@@ -72,7 +188,7 @@ namespace AirdropBot
             {
             }
 
-            StartProcess("runas",
+            CommonHelper.StartProcess("runas",
                          string.Format(
                              "/user:{0} \"C:\\Users\\{0}\\AppData\\Roaming\\Telegram Desktop\\Telegram.exe {1}\" ",
                              user,
@@ -81,7 +197,7 @@ namespace AirdropBot
 
             // Get a handle to the tg application. The window class
             // and window name were obtained using the Spy++ tool.
-            IntPtr runasHandle = FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
+            IntPtr runasHandle = CommonHelper.FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
 
             // Verify that Calculator is a running process.
             if (runasHandle == IntPtr.Zero)
@@ -93,7 +209,7 @@ namespace AirdropBot
 
             // Make tg the foreground application and send it 
             // a set of calculations.
-            SetForegroundWindow(runasHandle);
+            CommonHelper.SetForegroundWindow(runasHandle);
             SendKeys.SendWait(password + "{ENTER}");
             //wait for telegram to open
             Thread.Sleep(1000);
@@ -101,45 +217,14 @@ namespace AirdropBot
         }
 
 
-        public static Dictionary<string, int> GetProcessUsers(string processName)
-        {
-            var result = new Dictionary<string, int>();
-            ObjectQuery x = new ObjectQuery("Select * From Win32_Process where Name='" + processName + "'");
-
-            ManagementObjectSearcher mos = new ManagementObjectSearcher(x);
-
-            foreach (ManagementObject mo in mos.Get())
-            {
-
-                string[] s = new string[2];
-
-                mo.InvokeMethod("GetOwner", (object[])s);
-                if (!result.ContainsKey(s[0]))
-                {
-                    result.Add(s[0], int.Parse(mo["PROCESSID"].ToString()));
-                }
-
-            }
-            return result;
-        }
-
-        [DllImport("advapi32.dll", SetLastError = true)]
-        private static extern bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle);
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool CloseHandle(IntPtr hObject);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
-
         public static string OpenTelegramMemu(string user, string mindex, string url, out Rect location, bool closeAll = true)
         {
-            IntPtr runasHandle = FindWindow("Qt5QWindowIcon", "(" + user + ")");
+            IntPtr runasHandle = CommonHelper.FindWindow("Qt5QWindowIcon", "(" + user + ")");
 
             // Verify that Calculator is a running process.
             var emulatorOpen = runasHandle != IntPtr.Zero;
             uint openEmulatorPidForUser = 0;
-            if (emulatorOpen) GetWindowThreadProcessId(runasHandle, out openEmulatorPidForUser);
+            if (emulatorOpen) CommonHelper.GetWindowThreadProcessId(runasHandle, out openEmulatorPidForUser);
 
             if (closeAll)
             {
@@ -159,7 +244,7 @@ namespace AirdropBot
             var arg = "MEmu";
             if (mindex != "0") arg += "_" + mindex.ToString();
             var memuFolder = ConfigurationManager.AppSettings["memupath"];
-            StartProcess(memuFolder + "MemuConsole.exe", arg, false, memuFolder);
+            CommonHelper.StartProcess(memuFolder + "MemuConsole.exe", arg, false, memuFolder);
             Thread.Sleep(100);
 
 
@@ -177,7 +262,7 @@ namespace AirdropBot
                     }
                     // Get a handle to the tg application. The window class
                     // and window name were obtained using the Spy++ tool.
-                    runasHandle = FindWindow("Qt5QWindowIcon", "(" + user + ")");
+                    runasHandle = CommonHelper.FindWindow("Qt5QWindowIcon", "(" + user + ")");
 
                     // Verify that Calculator is a running process.
                     if (runasHandle != IntPtr.Zero)
@@ -214,8 +299,8 @@ namespace AirdropBot
                 }
                 Thread.Sleep(1000);
             }
-            runasHandle = FindWindow("Qt5QWindowIcon", "(" + user + ")");
-            SetForegroundWindow(runasHandle);
+            runasHandle = CommonHelper.FindWindow("Qt5QWindowIcon", "(" + user + ")");
+            CommonHelper.SetForegroundWindow(runasHandle);
 
             location = new Rect();
             GetWindowRect(runasHandle, ref location);
@@ -225,7 +310,7 @@ namespace AirdropBot
             }
             Thread.Sleep(1000);
 
-            var tgPos = CalculateAbsolut(location, 80, 30);
+            var tgPos = CommonHelper.CalculateAbsolut(location, 80, 30);
 
             //go to browser if url is not empty
             if (!string.IsNullOrEmpty(url))
@@ -240,7 +325,7 @@ namespace AirdropBot
                 }
 
                 var scenarioFile = ConfigurationManager.AppSettings["memuscenariofile"];
-                File.Copy(AssemblyDirectory + "\\Templates\\MemuOpenBrowser1.txt", scenarioFile, true);
+                File.Copy(CommonHelper.AssemblyDirectory + "\\Templates\\MemuOpenBrowser1.txt", scenarioFile, true);
 
                 /* for (int i = 0; i < 10; i++)
                  {
@@ -278,124 +363,54 @@ namespace AirdropBot
         }
 
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, string windowTitle);
-
-
-        private static Point CalculateAbsolut(Rect location, int percX, int percY)
+        public static string OpenChrome(string user, string password)
         {
-            int calcX = location.Left + (int)((location.Right - location.Left) * percX / (double)100);
-            int calcY = location.Top + (int)((location.Bottom - location.Top) * percY / (double)100);
-            return new Point(calcX, calcY);
-        }
-
-
-        public static string StartProcess(string app, string args, bool output = false, string dir = null)
-        {
-            var process = new Process();
-            var startInfo = new ProcessStartInfo();
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-            startInfo.FileName = app;
-
-            if (output)
-            {
-                startInfo.UseShellExecute = false;
-                startInfo.RedirectStandardOutput = true;
-                startInfo.RedirectStandardError = true;
-                startInfo.CreateNoWindow = true;
-            }
-
-            startInfo.Arguments = args;
-            if (dir != null) startInfo.WorkingDirectory = dir;
-            process.StartInfo = startInfo;
-            process.Start();
-            var result = "";
-            if (output)
-            {
-                var res = new List<string>();
-                while (!process.StandardOutput.EndOfStream)
-                {
-                    res.Add(process.StandardOutput.ReadLine());
-                }
-                while (!process.StandardError.EndOfStream)
-                {
-                    res.Add(process.StandardError.ReadLine());
-                }
-
-
-                result = string.Join("\r\n", res);
-            }
-            return result;
-        }
-    }
-
-    public class WindowHandleInfo
-    {
-        private delegate bool EnumWindowProc(IntPtr hwnd, IntPtr lParam);
-
-        [DllImport("user32")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr lParam);
-
-        private IntPtr _MainHandle;
-
-        public WindowHandleInfo(IntPtr handle)
-        {
-            this._MainHandle = handle;
-        }
-
-        public List<string> GetAllChildHandles()
-        {
-            List<IntPtr> childHandles = new List<IntPtr>();
-            var result = new List<string>();
-
-            GCHandle gcChildhandlesList = GCHandle.Alloc(childHandles);
-            IntPtr pointerChildHandlesList = GCHandle.ToIntPtr(gcChildhandlesList);
-
             try
             {
-                EnumWindowProc childProc = new EnumWindowProc(EnumWindow);
-                EnumChildWindows(this._MainHandle, childProc, pointerChildHandlesList);
+                //close all instances of telegram first
+                foreach (var p in Process.GetProcessesByName("firefox"))
+                {
+                    //p.Kill();
+                }
             }
-            finally
+            catch
             {
-                gcChildhandlesList.Free();
             }
 
-            if (childHandles.Count > 0)
+            CommonHelper.StartProcess("runas",
+                         string.Format(
+                             "/user:{0} \"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\" ",
+                             user));
+            Thread.Sleep(2000);
+
+            // Get a handle to the tg application. The window class
+            // and window name were obtained using the Spy++ tool.
+            IntPtr runasHandle = CommonHelper.FindWindow("ConsoleWindowClass", @"C:\Windows\system32\runas.exe");
+
+            // Verify that Calculator is a running process.
+            if (runasHandle == IntPtr.Zero)
             {
-                foreach (var childHandle in childHandles)
                 {
-                    int capacity = GetWindowTextLength(new HandleRef(this, childHandle)) * 2;
-                    StringBuilder stringBuilder = new StringBuilder(capacity);
-                    var caption = GetWindowText(new HandleRef(this, childHandle), stringBuilder, stringBuilder.Capacity);
-                    result.Add(stringBuilder.ToString());
+                    return "Runas.exe is not running.";
                 }
             }
 
-            return result;
+            // Make tg the foreground application and send it 
+            // a set of calculations.
+            CommonHelper.SetForegroundWindow(runasHandle);
+            SendKeys.SendWait(password + "{ENTER}");
+            //wait for firefox to open
+            Thread.Sleep(1000);
+            return "";
         }
 
-        private bool EnumWindow(IntPtr hWnd, IntPtr lParam)
+        public static string Evaluate(string expresssion)
         {
-            GCHandle gcChildhandlesList = GCHandle.FromIntPtr(lParam);
+            DataTable dt = new DataTable();
+            return dt.Compute(expresssion, "").ToString();
 
-            if (gcChildhandlesList == null || gcChildhandlesList.Target == null)
-            {
-                return false;
-            }
-
-            List<IntPtr> childHandles = gcChildhandlesList.Target as List<IntPtr>;
-            childHandles.Add(hWnd);
-
-            return true;
         }
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern int GetWindowTextLength(HandleRef hWnd);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
     }
+
 }
 

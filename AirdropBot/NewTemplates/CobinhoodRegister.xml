@@ -1,0 +1,34 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+  <navigate url="https://cobinhood.com?referrerId=0e39b4a8-d4fd-48a2-81c3-266fff5a7fde" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="" />
+  <wait for="5" formilisec=""/>
+
+  <snap xpath="//input[@type='email']" x="%50" y="%150"/>
+  <sendkey value="${UserMail}"/>
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//input[@type='email']" x="%50" y="%450"/>
+  <sendkey value="${UserStrongPwdWithSign}"/>
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//input[@type='email']" x="%50" y="%750"/>
+  <sendkey value="${UserStrongPwdWithSign}"/>
+  <wait for="2" formilisec=""/>
+
+
+  <snap xpath="//input[@type='email']" x="10" y="%950"/>
+  <snap xpath="//input[@type='email']" x="10" y="%1120"/>
+
+  <wait for="100" formilisec=""/>
+
+  <mail user="${UserMail}" pass="${UserMailPwd}" variable="" regex="">
+    <searchtill text="COBINHOOD" type="from" retrytimes="3" retrywaitsecs="10"/>
+  </mail>
+  <wait for="2" formilisec=""/>
+  <get param="lnk" what="getAttribute('href')" xpath="//*[text()='ACTIVATE YOUR ACCOUNT']" regex=""/>
+
+  <navigate url="${lnk}" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="" />
+
+</steps>

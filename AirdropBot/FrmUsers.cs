@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using Common;
 
 namespace AirdropBot
 {
@@ -82,10 +83,10 @@ namespace AirdropBot
 
             }
             dgUsers.Columns[0].ReadOnly = true;
-            if (File.Exists(Helper.UsersFile))
+            if (File.Exists(CommonHelper.UsersFile))
             {
                 var userFactory = new UserFactory();
-                Users = userFactory.GetUsers(Helper.UsersFile, false);
+                Users = userFactory.GetUsers(CommonHelper.UsersFile, false);
                 FillUsers();
             }
             IsDirty = false;
@@ -253,7 +254,7 @@ namespace AirdropBot
             {
                 if (MessageBox.Show("Do you want to save your changes to users?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    SaveUsers(Helper.UsersFile);
+                    SaveUsers(CommonHelper.UsersFile);
                 }
             }
         }
@@ -505,7 +506,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create gmail address for empty name, lastname, mail address and mail password! " + (index + 1));
                     return;
                 }
-                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailReg.xml");
+                var gmailTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\GmailReg.xml");
                 gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 3).Replace("@gmail.com", "")).Replace("${3}", GetCell(index, 4));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
@@ -532,7 +533,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create twitter address for empty name, lastname, twitter user, twitter password and twitter name! " + (index + 1));
                     return;
                 }
-                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterReg.xml");
+                var twitterTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\TwitterReg.xml");
                 twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 16)).Replace("${3}", GetCell(index, 17)).Replace("${4}", GetCell(index, 18));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
@@ -559,7 +560,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check gmail address for empty mail address and mail password! " + (index + 1));
                     return;
                 }
-                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\GmailLogin.xml");
+                var gmailTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\GmailLogin.xml");
                 gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 4));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
@@ -589,7 +590,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot show balance for empty address! " + (index + 1));
                     return;
                 }
-                var gmailTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\EthBalance.xml");
+                var gmailTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\EthBalance.xml");
                 gmailTemplate = gmailTemplate.Replace("${0}", GetCell(index, 8));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = gmailTemplate };
@@ -617,7 +618,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create twitter followers for empty name, lastname, twitter name! " + (index + 1));
                     return;
                 }
-                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterFollower.xml");
+                var twitterTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\TwitterFollower.xml");
                 twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).Replace("${2}", GetCell(index, 18));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
@@ -646,7 +647,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create mew address for empty eth password! " + (index + 1));
                     return;
                 }
-                var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\MewReg.xml");
+                var mewTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\MewReg.xml");
                 mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 10));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
@@ -655,14 +656,14 @@ namespace AirdropBot
 
                 try
                 {
-                    if (frmMain.Variables.ContainsKey("prkey") && EmptyCell(index, 9))
+                    if (Helper.Variables.ContainsKey("prkey") && EmptyCell(index, 9))
                     {
-                        SetCell(index, 9, frmMain.Variables["prkey"]);
+                        SetCell(index, 9, Helper.Variables["prkey"]);
                     }
 
-                    if (frmMain.Variables.ContainsKey("pbkey") && EmptyCell(index, 8))
+                    if (Helper.Variables.ContainsKey("pbkey") && EmptyCell(index, 8))
                     {
-                        SetCell(index, 8, frmMain.Variables["pbkey"]);
+                        SetCell(index, 8, Helper.Variables["pbkey"]);
                     }
                 }
                 catch
@@ -690,7 +691,7 @@ namespace AirdropBot
                 MessageBox.Show("Cannot create kucoin address for empty email, email pwd or kucoin password! " + (index + 1));//email, pass, proxy
                 return;
             }
-            var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinReg.xml");
+            var mewTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\KucoinReg.xml");
             mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 20)).Replace("${2}", GetCell(index, 11) + ":" + GetCell(index, 12)).Replace("${3}", GetCell(index, 4));
 
             var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
@@ -712,9 +713,9 @@ namespace AirdropBot
                 MessageBox.Show("Cannot create kucoin address for empty kucoin user or kucoin password! " + (index + 1));//email, pass, proxy
                 return;
             }
-            var mewTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\KucoinLogin.xml");
-            mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 19)).Replace("${1}", GetCell(index, 20)).Replace("${2}", GetCell(index, 11) + ":" + GetCell(index, 12));
-
+            var mewTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\NewTemplates\\KucoinLogin.xml");
+            mewTemplate = mewTemplate.Replace("${UserKucoinUser}", GetCell(index, 19)).Replace("${UserKucoinPass}", GetCell(index, 20)).Replace("${UserProxyIp}", GetCell(index, 11)).Replace("${UserProxyPort}", GetCell(index, 12)).Replace("${UserKucoinGSecret}", GetCell(index, 35));
+            //
             var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
 
             frmMain.ShowDialog(this);
@@ -845,7 +846,7 @@ namespace AirdropBot
                 MessageBox.Show("Cannot create windows account for empty win user or win pwd ! " + (index + 1));//email, pass, proxy
                 return;
             }
-            RunasAdmin(Helper.AssemblyDirectory + "\\CreateUser.bat",
+            RunasAdmin(CommonHelper.AssemblyDirectory + "\\CreateUser.bat",
                      string.Format("{0} {1}", GetCell(index, 13), GetCell(index, 14)));
         }
 
@@ -877,7 +878,7 @@ namespace AirdropBot
                 MessageBox.Show("Cannot hide windows account for empty win user !" + (index + 1));//email, pass, proxy
                 return;
             }
-            RunasAdmin(Helper.AssemblyDirectory + "\\HideUser.bat",
+            RunasAdmin(CommonHelper.AssemblyDirectory + "\\HideUser.bat",
                      string.Format("{0}", GetCell(index, 13)));
         }
 
@@ -918,7 +919,7 @@ namespace AirdropBot
 
         private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveUsers(Helper.UsersFile);
+            SaveUsers(CommonHelper.UsersFile);
             IsDirty = false;
         }
 
@@ -1140,7 +1141,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check fb for empty fb user and fb password! " + (index + 1));
                     return;
                 }
-                var fbTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\FBLogin.xml");
+                var fbTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\FBLogin.xml");
                 fbTemplate = fbTemplate.Replace("${0}", GetCell(index, 21)).Replace("${1}", GetCell(index, 22));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = fbTemplate };
@@ -1168,7 +1169,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create facebook address for empty name, lastname, fb user and fb password! " + (index + 1));
                     return;
                 }
-                var fbTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\FBReg.xml");
+                var fbTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\FBReg.xml");
                 fbTemplate = fbTemplate.Replace("${0}", GetCell(index, 1)).Replace("${1}", GetCell(index, 2)).
                     Replace("${2}", GetCell(index, 21)).Replace("${3}", GetCell(index, 22));
 
@@ -1212,7 +1213,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check twitter address for empty twitter user or twitter password! " + (index + 1));
                     return;
                 }
-                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterLogin.xml");
+                var twitterTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\TwitterLogin.xml");
                 twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 16)).Replace("${1}", GetCell(index, 17));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
@@ -1248,10 +1249,10 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check twitter address for empty twitter user or twitter password! " + (index + 1));
                     return;
                 }
-                var twLoginTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\TwitterLogin.xml");
+                var twLoginTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\NewTemplates\\TwitterLogin.xml");
                 twLoginTemplate = twLoginTemplate.Replace("${UserTwUserName}", GetCell(index, 16)).Replace("${UserTwPwd}", GetCell(index, 17));
 
-                var twApiTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\TwitterCreateApi.xml");
+                var twApiTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\NewTemplates\\TwitterCreateApi.xml");
                 twApiTemplate = twApiTemplate.Replace("${UserTwName}", GetCell(index, 18));
 
                 var doc = new XmlDocument();
@@ -1282,22 +1283,22 @@ namespace AirdropBot
 
                 try
                 {
-                    if (frmMain.Variables.ContainsKey("consumerkey"))
+                    if (Helper.Variables.ContainsKey("consumerkey"))
                     {
-                        SetCell(index, 29, frmMain.Variables["consumerkey"]);
+                        SetCell(index, 29, Helper.Variables["consumerkey"]);
                     }
 
-                    if (frmMain.Variables.ContainsKey("consumersecret"))
+                    if (Helper.Variables.ContainsKey("consumersecret"))
                     {
-                        SetCell(index, 30, frmMain.Variables["consumersecret"]);
+                        SetCell(index, 30, Helper.Variables["consumersecret"]);
                     }
-                    if (frmMain.Variables.ContainsKey("accesstoken"))
+                    if (Helper.Variables.ContainsKey("accesstoken"))
                     {
-                        SetCell(index, 31, frmMain.Variables["accesstoken"]);
+                        SetCell(index, 31, Helper.Variables["accesstoken"]);
                     }
-                    if (frmMain.Variables.ContainsKey("accesstokensecret"))
+                    if (Helper.Variables.ContainsKey("accesstokensecret"))
                     {
-                        SetCell(index, 32, frmMain.Variables["accesstokensecret"]);
+                        SetCell(index, 32, Helper.Variables["accesstokensecret"]);
                     }
                 }
                 catch
@@ -1334,10 +1335,10 @@ namespace AirdropBot
                     MessageBox.Show("Cannot check twitter address for empty twitter user or twitter password! " + (index + 1));
                     return;
                 }
-                var twLoginTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterLogin.xml");
+                var twLoginTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\TwitterLogin.xml");
                 twLoginTemplate = twLoginTemplate.Replace("${0}", GetCell(index, 16)).Replace("${1}", GetCell(index, 17));
 
-                var twApiTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\TwitterUpdateApi.xml");
+                var twApiTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\TwitterUpdateApi.xml");
                 twApiTemplate = twApiTemplate.Replace("${0}", GetCell(index, 18));
 
 
@@ -1369,22 +1370,22 @@ namespace AirdropBot
 
                 try
                 {
-                    if (frmMain.Variables.ContainsKey("consumerkey"))
+                    if (Helper.Variables.ContainsKey("consumerkey"))
                     {
-                        SetCell(index, 29, frmMain.Variables["consumerkey"]);
+                        SetCell(index, 29, Helper.Variables["consumerkey"]);
                     }
 
-                    if (frmMain.Variables.ContainsKey("consumersecret"))
+                    if (Helper.Variables.ContainsKey("consumersecret"))
                     {
-                        SetCell(index, 30, frmMain.Variables["consumersecret"]);
+                        SetCell(index, 30, Helper.Variables["consumersecret"]);
                     }
-                    if (frmMain.Variables.ContainsKey("accesstoken"))
+                    if (Helper.Variables.ContainsKey("accesstoken"))
                     {
-                        SetCell(index, 31, frmMain.Variables["accesstoken"]);
+                        SetCell(index, 31, Helper.Variables["accesstoken"]);
                     }
-                    if (frmMain.Variables.ContainsKey("accesstokensecret"))
+                    if (Helper.Variables.ContainsKey("accesstokensecret"))
                     {
-                        SetCell(index, 32, frmMain.Variables["accesstokensecret"]);
+                        SetCell(index, 32, Helper.Variables["accesstokensecret"]);
                     }
                 }
                 catch
@@ -1409,12 +1410,12 @@ namespace AirdropBot
 
         private void closeAllInstancesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Helper.CloseProcessAllInstances("Telegram");
+            CommonHelper.CloseProcessAllInstances("Telegram");
         }
 
         private void closeAllInstancesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Helper.CloseProcessAllInstances("Telegram");
+            CommonHelper.CloseProcessAllInstances("Telegram");
 
         }
 
@@ -1453,7 +1454,7 @@ namespace AirdropBot
         {
             try
             {
-                var neoTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\NeoReg.xml");
+                var neoTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\NeoReg.xml");
                 neoTemplate = neoTemplate.Replace("${0}", GetCell(index, 6));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = neoTemplate };
@@ -1462,14 +1463,14 @@ namespace AirdropBot
 
                 try
                 {
-                    if (frmMain.Variables.ContainsKey("prkey") && EmptyCell(index, 34))
+                    if (Helper.Variables.ContainsKey("prkey") && EmptyCell(index, 34))
                     {
-                        SetCell(index, 34, frmMain.Variables["prkey"]);
+                        SetCell(index, 34, Helper.Variables["prkey"]);
                     }
 
-                    if (frmMain.Variables.ContainsKey("pbkey") && EmptyCell(index, 33))
+                    if (Helper.Variables.ContainsKey("pbkey") && EmptyCell(index, 33))
                     {
-                        SetCell(index, 33, frmMain.Variables["pbkey"]);
+                        SetCell(index, 33, Helper.Variables["pbkey"]);
                     }
                 }
                 catch
@@ -1498,7 +1499,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot show balance for empty NEO address! " + (index + 1));
                     return;
                 }
-                var template = File.ReadAllText(Helper.AssemblyDirectory + "\\Templates\\NeoCheck.xml");
+                var template = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\NeoCheck.xml");
                 template = template.Replace("${0}", GetCell(index, 33));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = template };
@@ -1541,7 +1542,7 @@ namespace AirdropBot
                     MessageBox.Show("Cannot create twitter followers for empty twitter name! " + (index + 1));
                     return;
                 }
-                var twitterTemplate = File.ReadAllText(Helper.AssemblyDirectory + "\\NewTemplates\\TwitterFollowEachOther.xml");
+                var twitterTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\NewTemplates\\TwitterFollowEachOther.xml");
                 twitterTemplate = twitterTemplate.Replace("${0}", GetCell(index, 18));
 
                 var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = twitterTemplate };
@@ -1553,6 +1554,55 @@ namespace AirdropBot
             {
                 MessageBox.Show(exception.ToString());
             }
+        }
+
+        private void openForUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFirefox(GetSelectedRow());
+        }
+
+        private void OpenFirefox(int index)
+        {
+
+            if (EmptyCell(index, 13) || EmptyCell(index, 14))
+            {
+                MessageBox.Show("Cannot open firefox for empty win user or win pwd !" + (index + 1));//email, pass, proxy
+                return;
+            }
+
+            Helper.OpenFirefox(GetCell(index, 13), GetCell(index, 14));
+        }
+
+        private void firefoxToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            OpenFirefox(rowIndex);
+        }
+
+        private void chromeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rowIndex = GetRowIndexForContextMenu();
+            if (rowIndex == -1) return;
+            OpenChrome(rowIndex);
+       
+        }
+
+        private void OpenChrome(int index)
+        {
+            if (EmptyCell(index, 13) || EmptyCell(index, 14))
+            {
+                MessageBox.Show("Cannot open chrome for empty win user or win pwd !" + (index + 1));//email, pass, proxy
+                return;
+            }
+
+            Helper.OpenChrome(GetCell(index, 13), GetCell(index, 14));
+        }
+
+        private void openForUserToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenChrome(GetSelectedRow());
+
         }
     }
 }

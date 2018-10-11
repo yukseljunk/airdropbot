@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+
+  <navigate url="about:blank"/>
+  <clearcookies/>
+
+  <navigate url="https://www.kucoin.com/#/login" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="//*[@id='username']"/>
+
+  <wait for="5"/>
+
+  <set value="" xpath="//*[@id='username']" />
+  <snap xpath="//*[@id='username']"  x="%50" y="%160"/>
+
+  <sendkey value="${UserKucoinUser}"/>
+  <wait for="2"/>
+  <snap xpath="//*[@id='password']"  x="%50" y="%160"/>
+  <sendkey value="${UserKucoinPass}"/>
+  <wait for="2"/>
+
+
+  <snap xpath="//*[@id='password']"  x="%50" y="%300"/>
+
+  <wait for="3"/>
+
+  <waittill compare="g2faCode" what="getAttribute('for')" timeout="0" xpath="//label[@for='g2faCode']" regex=""/>
+  <wait for="2" formilisec=""/>
+
+  <google2fa param="kcs" secret="${UserKucoinGSecret}"/>
+
+  <snap xpath="//*[@id='g2faCode']"  x="%50" y="%160"/>
+
+  <sendkey value="${kcs}" />
+  <wait for="1" formilisec=""/>
+
+</steps>

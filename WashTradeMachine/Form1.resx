@@ -117,33 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="openCsvFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>134, 17</value>
-  </metadata>
-  <metadata name="openScenarioFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>249, 17</value>
-  </metadata>
-  <metadata name="saveScenarioFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>394, 17</value>
-  </metadata>
-  <metadata name="openScenarios.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>534, 17</value>
-  </metadata>
-  <data name="txtScenario.Text" xml:space="preserve">
-    <value>&lt;?xml version="1.0"?&gt;
-&lt;steps&gt;
-&lt;navigate url="http://www.showmyip.co.uk/" proxy="${UserProxyIp2}:${UserProxyPort2}"/&gt;
-&lt;navigate url="http://www.google.com"/&gt;
-&lt;set name="q" value="amca"/&gt;
-&lt;click name="btnK" waitforbrowser="true"/&gt;
-&lt;get id="resultStats" param="stat" what="innertext"/&gt;
-&lt;set name="q" value="${stat}"/&gt;
-&lt;gmail user="${UserMail}" pass="${UserMailPwd}" search="coin" maxtry="5"/&gt;
-&lt;wait for="2"/&gt;
-&lt;click tag="a" innertext="Confirm my account" /&gt;
-&lt;/steps&gt;</value>
-  </data>
 </root>

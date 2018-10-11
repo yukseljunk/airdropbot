@@ -65,6 +65,8 @@
             this.facebookToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.firefoxToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +83,9 @@
             this.checkGmailAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.twitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createTwitterAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
             this.createTwitterFollowersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.followEachOtherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createAPIKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -105,10 +109,12 @@
             this.neoWalletToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.firefoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openForUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.openForUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openCsvFile = new System.Windows.Forms.OpenFileDialog();
             this.saveCsvFile = new System.Windows.Forms.SaveFileDialog();
-            this.followEachOtherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dgUsers)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -153,9 +159,11 @@
             this.neoToolStripMenuItem,
             this.kucoinToolStripMenuItem1,
             this.telegramToolStripMenuItem1,
-            this.facebookToolStripMenuItem1});
+            this.facebookToolStripMenuItem1,
+            this.firefoxToolStripMenuItem1,
+            this.chromeToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 214);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 258);
             // 
             // sallaToolStripMenuItem
             // 
@@ -400,6 +408,20 @@
             this.checkToolStripMenuItem3.Text = "Check";
             this.checkToolStripMenuItem3.Click += new System.EventHandler(this.checkToolStripMenuItem3_Click);
             // 
+            // firefoxToolStripMenuItem1
+            // 
+            this.firefoxToolStripMenuItem1.Name = "firefoxToolStripMenuItem1";
+            this.firefoxToolStripMenuItem1.Size = new System.Drawing.Size(204, 22);
+            this.firefoxToolStripMenuItem1.Text = "Firefox";
+            this.firefoxToolStripMenuItem1.Click += new System.EventHandler(this.firefoxToolStripMenuItem1_Click);
+            // 
+            // chromeToolStripMenuItem
+            // 
+            this.chromeToolStripMenuItem.Name = "chromeToolStripMenuItem";
+            this.chromeToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.chromeToolStripMenuItem.Text = "Chrome";
+            this.chromeToolStripMenuItem.Click += new System.EventHandler(this.chromeToolStripMenuItem_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -412,7 +434,9 @@
             this.kucoinToolStripMenuItem,
             this.telegramToolStripMenuItem,
             this.facebookToolStripMenuItem,
-            this.neoWalletToolStripMenuItem});
+            this.neoWalletToolStripMenuItem,
+            this.firefoxToolStripMenuItem,
+            this.chromeToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1399, 24);
@@ -543,12 +567,24 @@
             this.createTwitterAccountToolStripMenuItem.Text = "Create twitter account";
             this.createTwitterAccountToolStripMenuItem.Click += new System.EventHandler(this.createTwitterAccountToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem11
+            // 
+            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(193, 6);
+            // 
             // createTwitterFollowersToolStripMenuItem
             // 
             this.createTwitterFollowersToolStripMenuItem.Name = "createTwitterFollowersToolStripMenuItem";
             this.createTwitterFollowersToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.createTwitterFollowersToolStripMenuItem.Text = "Create twitter followers";
             this.createTwitterFollowersToolStripMenuItem.Click += new System.EventHandler(this.createTwitterFollowersToolStripMenuItem_Click);
+            // 
+            // followEachOtherToolStripMenuItem
+            // 
+            this.followEachOtherToolStripMenuItem.Name = "followEachOtherToolStripMenuItem";
+            this.followEachOtherToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.followEachOtherToolStripMenuItem.Text = "Follow each other";
+            this.followEachOtherToolStripMenuItem.Click += new System.EventHandler(this.followEachOtherToolStripMenuItem_Click);
             // 
             // createAPIKeysToolStripMenuItem
             // 
@@ -719,6 +755,36 @@
             this.checkToolStripMenuItem5.Text = "Check";
             this.checkToolStripMenuItem5.Click += new System.EventHandler(this.checkToolStripMenuItem5_Click);
             // 
+            // firefoxToolStripMenuItem
+            // 
+            this.firefoxToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openForUserToolStripMenuItem});
+            this.firefoxToolStripMenuItem.Name = "firefoxToolStripMenuItem";
+            this.firefoxToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.firefoxToolStripMenuItem.Text = "Firefox";
+            // 
+            // openForUserToolStripMenuItem
+            // 
+            this.openForUserToolStripMenuItem.Name = "openForUserToolStripMenuItem";
+            this.openForUserToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openForUserToolStripMenuItem.Text = "Open for user";
+            this.openForUserToolStripMenuItem.Click += new System.EventHandler(this.openForUserToolStripMenuItem_Click);
+            // 
+            // chromeToolStripMenuItem1
+            // 
+            this.chromeToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openForUserToolStripMenuItem1});
+            this.chromeToolStripMenuItem1.Name = "chromeToolStripMenuItem1";
+            this.chromeToolStripMenuItem1.Size = new System.Drawing.Size(62, 20);
+            this.chromeToolStripMenuItem1.Text = "Chrome";
+            // 
+            // openForUserToolStripMenuItem1
+            // 
+            this.openForUserToolStripMenuItem1.Name = "openForUserToolStripMenuItem1";
+            this.openForUserToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.openForUserToolStripMenuItem1.Text = "Open for user";
+            this.openForUserToolStripMenuItem1.Click += new System.EventHandler(this.openForUserToolStripMenuItem1_Click);
+            // 
             // openCsvFile
             // 
             this.openCsvFile.Filter = "CSV Files|*.csv";
@@ -729,18 +795,6 @@
             this.saveCsvFile.DefaultExt = "csv";
             this.saveCsvFile.Filter = "CSV Files|*.csv";
             this.saveCsvFile.RestoreDirectory = true;
-            // 
-            // followEachOtherToolStripMenuItem
-            // 
-            this.followEachOtherToolStripMenuItem.Name = "followEachOtherToolStripMenuItem";
-            this.followEachOtherToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.followEachOtherToolStripMenuItem.Text = "Follow each other";
-            this.followEachOtherToolStripMenuItem.Click += new System.EventHandler(this.followEachOtherToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem11
-            // 
-            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-            this.toolStripMenuItem11.Size = new System.Drawing.Size(193, 6);
             // 
             // FrmUsers
             // 
@@ -845,6 +899,12 @@
         private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem6;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
         private System.Windows.Forms.ToolStripMenuItem followEachOtherToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem firefoxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openForUserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem firefoxToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem chromeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chromeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem openForUserToolStripMenuItem1;
 
     }
 }

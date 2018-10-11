@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace AirdropBot
+namespace Common
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Rect
