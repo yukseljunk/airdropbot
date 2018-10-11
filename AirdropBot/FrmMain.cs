@@ -17,6 +17,7 @@ using CefSharp.WinForms;
 using Common;
 using TestStack.White.UIItems.WindowItems;
 using TestStack.White.WindowsAPI;
+using log4net;
 
 namespace AirdropBot
 {
@@ -26,6 +27,8 @@ namespace AirdropBot
     /// </summary>
     public partial class FrmMain : Form
     {
+        private static readonly ILog Log =
+              LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ChromiumWebBrowser cbrowser;
 
 
@@ -175,7 +178,7 @@ namespace AirdropBot
         private bool stopped = false;
         private void btnApplyScenario_Click(object sender, EventArgs e)
         {
-
+            Log.Info("Scenario started...");
             if (txtScenario.Text == "") return;
             EnDis(true);
             stopped = false;
@@ -326,6 +329,10 @@ namespace AirdropBot
                 if (command == "info")
                 {
                     commandResult = InfoCommand(node);
+                }
+                if (command == "log")
+                {
+                    commandResult = LogCommand(node);
                 }
                 if (command == "sendkey")
                 {
@@ -875,6 +882,13 @@ namespace AirdropBot
             return "";
         }
 
+        private string LogCommand(XmlNode node)
+        {
+            var xnode = node.Attributes["message"];
+            if (xnode == null) return "";
+            Log.Info(Helper.ReplaceTokens(xnode.Value));
+            return "";
+        }
         private string InfoCommand(XmlNode node)
         {
             var xnode = node.Attributes["value"];
@@ -3232,6 +3246,12 @@ namespace AirdropBot
         private void tryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<try>\r\n\r\n\r\n</try>\r\n<catch>\r\n<info value=\"${Exception}\"/>\r\n</catch>";
+        }
+
+        private void logToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<log message=\"\"/>";
+       
         }
     }
 }

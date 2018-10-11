@@ -190,6 +190,7 @@
             this.txtScenario = new System.Windows.Forms.TextBox();
             this.ContentPanel = new System.Windows.Forms.Panel();
             this.tryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -360,7 +361,8 @@
             this.inoToolStripMenuItem,
             this.repeatToolStripMenuItem,
             this.xIfToolStripMenuItem,
-            this.tryToolStripMenuItem});
+            this.tryToolStripMenuItem,
+            this.logToolStripMenuItem});
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.commandsToolStripMenuItem.Text = "Commands";
@@ -1518,6 +1520,13 @@
             this.tryToolStripMenuItem.Text = "Try";
             this.tryToolStripMenuItem.Click += new System.EventHandler(this.tryToolStripMenuItem_Click);
             // 
+            // logToolStripMenuItem
+            // 
+            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.logToolStripMenuItem.Text = "Log";
+            this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1709,6 +1718,7 @@
         private System.Windows.Forms.ToolStripMenuItem deleteFileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem waitForFileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem tryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
     }
 }
 
