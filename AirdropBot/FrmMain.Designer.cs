@@ -189,6 +189,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtScenario = new System.Windows.Forms.TextBox();
             this.ContentPanel = new System.Windows.Forms.Panel();
+            this.tryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -343,14 +344,10 @@
             this.twitterToolStripMenuItem,
             this.facebookToolStripMenuItem,
             this.getFieldToolStripMenuItem,
-            this.waitToolStripMenuItem,
-            this.inoToolStripMenuItem,
             this.google2FAToolStripMenuItem,
             this.recaptchaToolStripMenuItem,
             this.bringWindowFronToolStripMenuItem,
-            this.repeatToolStripMenuItem,
             this.restartToolStripMenuItem,
-            this.setVariableToolStripMenuItem,
             this.callTemplateToolStripMenuItem,
             this.fileToolStripMenuItem1,
             this.databaseToolStripMenuItem,
@@ -358,7 +355,12 @@
             this.toolStripMenuItem30,
             this.toolStripMenuItem31,
             this.toolStripMenuItem29,
-            this.xIfToolStripMenuItem});
+            this.waitToolStripMenuItem,
+            this.setVariableToolStripMenuItem,
+            this.inoToolStripMenuItem,
+            this.repeatToolStripMenuItem,
+            this.xIfToolStripMenuItem,
+            this.tryToolStripMenuItem});
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
             this.commandsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.commandsToolStripMenuItem.Text = "Commands";
@@ -1509,6 +1511,13 @@
             this.ContentPanel.TabIndex = 17;
             this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
             // 
+            // tryToolStripMenuItem
+            // 
+            this.tryToolStripMenuItem.Name = "tryToolStripMenuItem";
+            this.tryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tryToolStripMenuItem.Text = "Try";
+            this.tryToolStripMenuItem.Click += new System.EventHandler(this.tryToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1699,6 +1708,7 @@
         private System.Windows.Forms.ToolStripMenuItem readFileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem deleteFileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem waitForFileToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tryToolStripMenuItem;
     }
 }
 

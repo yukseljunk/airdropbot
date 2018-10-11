@@ -206,7 +206,7 @@ namespace AirdropBot
 
         }
 
-        private void Run(string cmd)
+        private string Run(string cmd, bool showErrorBox = true)
         {
             var xml = cmd;
             if (lstUsers.SelectedItem != null)
@@ -226,14 +226,14 @@ namespace AirdropBot
             catch (Exception ex)
             {
                 MessageBox.Show("Invalid xml! \r\n" + xml);
-                return;
+                return "";
             }
             var nodeList = doc.SelectNodes("/steps/*");
-            if (nodeList == null) return;
+            if (nodeList == null) return "";
             var stepNo = 1;
             foreach (XmlNode node in nodeList)
             {
-                if (breakCame) return;
+                if (breakCame) return "";
 
                 var command = node.Name.ToLower();
                 if (command != "") Debug.WriteLine(command + " " + DateTime.Now.ToString("hh:mm:ss"));
@@ -254,6 +254,10 @@ namespace AirdropBot
                 if (command == "restart")
                 {
                     commandResult = RestartCommand(node);
+                }
+                if (command == "try")
+                {
+                    commandResult = TryCommand(node);
                 }
                 if (command == "snap")
                 {
@@ -363,12 +367,12 @@ namespace AirdropBot
                 if (command == "xif")
                 {
                     commandResult = XIfCommand(node);
-                    
+
                 }
                 if (command == "break")
                 {
                     commandResult = BreakCommand(node);
-                    return;
+                    return "";
 
                 }
                 if (command == "continue")
@@ -378,13 +382,32 @@ namespace AirdropBot
 
                 if (commandResult != "")
                 {
-                    MessageBox.Show("Error in " + command + " @" + stepNo + ".step: " + commandResult + "\r\nCommand is : \r\n" + node.OuterXml);
+                    var res = "Error in " + command + " @" + stepNo + ".step: " + commandResult +
+                              "\r\nCommand is : \r\n" + node.OuterXml;
+                    if (showErrorBox) MessageBox.Show(res);
                     stopped = true;
-                    break;
+                    return res;
                 }
                 stepNo++;
             }
+            return "";
+        }
 
+        private string TryCommand(XmlNode node)
+        {
+            
+            var runResult = Run(node.InnerXml, false);
+            if (!Helper.Variables.ContainsKey("Exception"))
+            {
+                Helper.Variables.Add("Exception", runResult);
+            }
+            Helper.Variables["Exception"] = runResult;
+            if (node.NextSibling != null && node.NextSibling.Name == "catch")
+            {
+                stopped = false;
+                Run(node.NextSibling.InnerXml);
+            }
+            return "";
         }
 
         private bool continueCame = false;
@@ -560,8 +583,8 @@ namespace AirdropBot
             StartAnotherInstanceWithCheckedItems();
             return "";
         }
-        private bool breakCame= false;
-        
+        private bool breakCame = false;
+
         private string RepeatCommand(XmlNode node)
         {
             var times = node.Attributes["times"];
@@ -569,7 +592,7 @@ namespace AirdropBot
             if (times.Value == "") return "Repeat times is empty!";
             var variable = node.Attributes["variable"];
             var iterVariable = "";
-            if(variable!=null)
+            if (variable != null)
             {
                 iterVariable = variable.Value;
             }
@@ -587,11 +610,11 @@ namespace AirdropBot
                 }
                 if (!Helper.Variables.ContainsKey(iterVariable))
                 {
-                    Helper.Variables.Add(iterVariable, i.ToString());                   
+                    Helper.Variables.Add(iterVariable, i.ToString());
                 }
                 Helper.Variables[iterVariable] = i.ToString();
                 Run(node.InnerXml);
-                            }
+            }
             return "";
         }
 
@@ -638,7 +661,7 @@ namespace AirdropBot
             if (compare == null) return "Compare is not defined!";
             if (compare.Value == "") return "Compare is empty!";
             var itemValue = GetItemValue(node);
-            if(!itemValue.Item1)
+            if (!itemValue.Item1)
             {
                 return itemValue.Item2;
             }
@@ -652,12 +675,12 @@ namespace AirdropBot
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
             var xpath = node.Attributes["xpath"];
-            if (what == null || xpath == null) return new Tuple<bool, string>(false,"What or xpath is not defined!");
+            if (what == null || xpath == null) return new Tuple<bool, string>(false, "What or xpath is not defined!");
             if (what.Value == "" || xpath.Value == "") return new Tuple<bool, string>(false, "What or xpath is empty!");
             var result = GetCElement(node);
             if (result == "UNDEF")
             {
-                return new Tuple<bool, string>(false,"Element cannot be found!");
+                return new Tuple<bool, string>(false, "Element cannot be found!");
             }
             if (regex != null && regex.Value != "")
             {
@@ -677,13 +700,13 @@ namespace AirdropBot
         private string XIfCommand(XmlNode node)
         {
             var test = node.Attributes["test"];
-            
-            if (test == null ) return "test is not defined!";
-            if (test.Value == "" ) return "test is empty!";
+
+            if (test == null) return "test is not defined!";
+            if (test.Value == "") return "test is empty!";
 
             var result = Helper.Evaluate(Helper.ReplaceTokens(test.Value)).ToLower();
-        
-            if (new List<string>(){"1","t","true","y","yes"}.Contains(result))//criteria met
+
+            if (new List<string>() { "1", "t", "true", "y", "yes" }.Contains(result))//criteria met
             {
                 Run(node.InnerXml);
             }
@@ -947,7 +970,7 @@ namespace AirdropBot
             return int.Parse(s);
         }
 
-     
+
         private void RunTemplate(string templateName, params  string[] args)
         {
             var template = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\" + templateName + ".xml");
@@ -1936,7 +1959,7 @@ namespace AirdropBot
             return el;
         }
 
-      
+
         private string GetCSubmit(XmlNode node)
         {
             var xpath = node.Attributes["xpath"];
@@ -1993,7 +2016,7 @@ namespace AirdropBot
             }
             return "XPath not specified!";
         }
-      
+
 
         private string WaitTillCommand(XmlNode node)
         {
@@ -2049,9 +2072,9 @@ namespace AirdropBot
         private string GetCommand(XmlNode node)
         {
             var param = node.Attributes["param"];
-            
-            if (param == null ) return "Param is not defined!";
-            if (param.Value == "" ) return "Param is empty!";
+
+            if (param == null) return "Param is not defined!";
+            if (param.Value == "") return "Param is empty!";
 
             var result = GetItemValue(node);
             if (!result.Item1) return result.Item2;
@@ -2063,7 +2086,7 @@ namespace AirdropBot
             return "";
 
         }
-        
+
         private string SetCommand(XmlNode node)
         {
             var value = node.Attributes["value"];
@@ -2433,7 +2456,7 @@ namespace AirdropBot
 
         private void clearCookiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText =GetHtmlForCommand("clearcookies");
+            txtScenario.SelectedText = GetHtmlForCommand("clearcookies");
 
         }
 
@@ -2636,9 +2659,9 @@ namespace AirdropBot
 
         private void SetGetCommand(string xpath)
         {
-            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\""+xpath+"\" regex=\"\"/>";
+            txtScenario.SelectedText = "<get param=\"\" what=\"\" xpath=\"" + xpath + "\" regex=\"\"/>";
         }
-        
+
 
         private void emptyToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -3081,7 +3104,7 @@ namespace AirdropBot
 
         private void google2FAToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = GetHtmlForCommand("google2fa"); 
+            txtScenario.SelectedText = GetHtmlForCommand("google2fa");
         }
 
         private void recaptchaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3173,13 +3196,13 @@ namespace AirdropBot
         private void toolStripMenuItem30_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = GetHtmlForCommand("readhtml");
-  
+
         }
 
         private void toolStripMenuItem31_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = GetHtmlForCommand("getfromhtml");
-  
+
         }
 
         private void writeToFileToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -3204,6 +3227,11 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = GetHtmlForCommand("waitforfile");
 
+        }
+
+        private void tryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<try>\r\n\r\n\r\n</try>\r\n<catch>\r\n<info value=\"${Exception}\"/>\r\n</catch>";
         }
     }
 }
