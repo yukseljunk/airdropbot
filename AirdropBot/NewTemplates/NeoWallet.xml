@@ -14,7 +14,15 @@
   <wait for="2" formilisec=""/>
   <click xpath="//*[text()='GO TO WALLET']/../.." />
 
+  <wait for="3" formilisec=""/>
+  <snap xpath="//*[@id='textField-st-address']" x="%50" y="%150"/>
   <wait for="2" formilisec=""/>
+  <sendkey value="${transferaddress}" />
+
+  <snap xpath="//*[@id='textField-st-amount']" x="%50" y="%150"/>
+  <wait for="2" formilisec=""/>
+  <sendkey value="${transferamount}" />
+
 
 
 
