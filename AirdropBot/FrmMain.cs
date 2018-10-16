@@ -29,7 +29,10 @@ namespace AirdropBot
     {
         private static readonly ILog Log =
               LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private ChromiumWebBrowser cbrowser;
+        private ChromiumWebBrowser activebrowser;
+
+        private List<bool> loadingFinished = new List<bool>(){false};
+
 
 
         public FrmMain()
@@ -173,8 +176,7 @@ namespace AirdropBot
             }
         }
 
-        private bool cloadingFinished = false;
-
+      
         private bool stopped = false;
         private void btnApplyScenario_Click(object sender, EventArgs e)
         {
@@ -244,7 +246,7 @@ namespace AirdropBot
                 var commandResult = "";
 
                 var commandFactory = new CommandFactory();
-                commandFactory.CBrowser = cbrowser;
+                commandFactory.CBrowser = activebrowser;
                 var commandClass = commandFactory.GetCommand(command);
                 if (commandClass != null)
                 {
@@ -254,6 +256,11 @@ namespace AirdropBot
                 {
                     commandResult = NavigateCommand(node);
                 }
+                if (command == "addtab")
+                {
+                    commandResult = AddTabCommand(node);
+                }
+                
                 if (command == "restart")
                 {
                     commandResult = RestartCommand(node);
@@ -401,6 +408,17 @@ namespace AirdropBot
             return "";
         }
 
+        private string AddTabCommand(XmlNode node)
+        {
+            tabBrowser.TabPages.Add("about:blank");
+            var contentPanel = new Panel {Visible = true, Top = ContentPanel.Top,Left= ContentPanel.Left, Width = ContentPanel.Width, Height = ContentPanel.Height, Anchor = ContentPanel.Anchor, BackColor = ContentPanel.BackColor};
+
+            tabBrowser.TabPages[tabBrowser.TabPages.Count-1].Controls.Add(contentPanel);
+
+            
+            return "";
+        }
+
         private string TryCommand(XmlNode node)
         {
             
@@ -529,7 +547,7 @@ namespace AirdropBot
             }
 
 
-            var cid = gcaptcha.SendRecaptchav2Request(sitekey, cbrowser.Address, invisibleCaptcha);
+            var cid = gcaptcha.SendRecaptchav2Request(sitekey, activebrowser.Address, invisibleCaptcha);
 
             string token = "";
             do
@@ -548,7 +566,7 @@ namespace AirdropBot
 
             string scr = string.Format(" function x(){{ document.getElementById(\"g-recaptcha-response\").innerHTML=\"{0}\";}} x(); ", token);
             var resp = "";
-            cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+            activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
             {
                 var response = x.Result;
 
@@ -567,7 +585,7 @@ namespace AirdropBot
 
             scr = string.Format(" {0}(); ", callback);
             resp = "";
-            cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+            activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
             {
                 var response = x.Result;
 
@@ -778,13 +796,13 @@ namespace AirdropBot
 
         private string SubmitCommand(XmlNode node)
         {
-            cloadingFinished = false;
+            loadingFinished[tabBrowser.SelectedIndex] = false;
             var el = GetCSubmit(node);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
             stopped = false;
-            while (!cloadingFinished && !stopped)
+            while (!loadingFinished[tabBrowser.SelectedIndex] && !stopped)
             {
                 Application.DoEvents();
                 if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -805,21 +823,33 @@ namespace AirdropBot
         }
         private void CreateCBrowser(string url, string proxy)
         {
-
-            ContentPanel.Controls.Clear();
+            var contentPanel=tabBrowser.SelectedTab.Controls[0];
+            if(contentPanel.Controls.Count==1 && contentPanel.Controls[0] is ChromiumWebBrowser)
+            {
+                contentPanel.Controls[0].Dispose();
+                contentPanel.Controls.Clear();
+            }
             // Configure(proxy);
             cproxy = proxy;
-            if (cbrowser != null) cbrowser.Dispose();
-            cbrowser = new ChromiumWebBrowser(url)
+
+            //if (cbrowser != null) cbrowser.Dispose();
+            var browser = new ChromiumWebBrowser(url)
             {
                 Dock = DockStyle.Fill
             };
-            cbrowser.BrowserSettings.FileAccessFromFileUrls = CefState.Enabled;
-            cbrowser.BrowserSettings.UniversalAccessFromFileUrls = CefState.Enabled;
-            ContentPanel.Controls.Add(cbrowser);
-            cbrowser.IsBrowserInitializedChanged += cbrowser_initalize;
+            browser.BrowserSettings.FileAccessFromFileUrls = CefState.Enabled;
+            browser.BrowserSettings.UniversalAccessFromFileUrls = CefState.Enabled;
+            contentPanel.Controls.Add(browser);
+            if(loadingFinished.Count<tabBrowser.SelectedIndex+1)
+            {
+                loadingFinished.Add(false);
+            }
+            loadingFinished[tabBrowser.SelectedIndex] = false;
+            ActiveBrowserIndex = tabBrowser.SelectedIndex;
 
-            cbrowser.LoadingStateChanged += OnLoadingStateChanged;
+            browser.IsBrowserInitializedChanged += cbrowser_initalize;
+            browser.LoadingStateChanged += OnLoadingStateChanged;
+            activebrowser = browser;
             /*            browser.ConsoleMessage += OnBrowserConsoleMessage;
                         browser.StatusMessage += OnBrowserStatusMessage;
                         browser.TitleChanged += OnBrowserTitleChanged;
@@ -827,11 +857,32 @@ namespace AirdropBot
               */
         }
 
+        private int ActiveBrowserIndex = -1;
+
+        delegate void SetTextCallback();
+
+        private void SetText()
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (tabBrowser.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] {  });
+            }
+            else
+            {
+                loadingFinished[tabBrowser.SelectedIndex] = true;
+            }
+        }
+
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
             if (!e.IsLoading)//loading done
             {
-                cloadingFinished = true;
+                SetText();
+ //               loadingFinished[tabBrowser.SelectedIndex] = true;
             }
         }
 
@@ -846,7 +897,7 @@ namespace AirdropBot
                 {
                     Cef.UIThreadTaskFactory.StartNew(delegate
                                                          {
-                                                             var rc = cbrowser.GetBrowser().GetHost().RequestContext;
+                                                             var rc = activebrowser.GetBrowser().GetHost().RequestContext;
                                                              var v = new Dictionary<string, object>();
                                                              v["mode"] = "fixed_servers";
                                                              v["server"] = "http://" + cproxy;
@@ -857,7 +908,7 @@ namespace AirdropBot
                 {
                     Cef.UIThreadTaskFactory.StartNew(delegate
                     {
-                        var rc = cbrowser.GetBrowser().GetHost().RequestContext;
+                        var rc = activebrowser.GetBrowser().GetHost().RequestContext;
                         var v = new Dictionary<string, object>();
                         v["mode"] = "direct";
                         bool success = rc.SetPreference("proxy", v, out error);
@@ -921,13 +972,13 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                cbrowser.ExecuteScriptAsync(String.Format("window.scrollBy({0}, {1});", -10000, -10000));
+                activebrowser.ExecuteScriptAsync(String.Format("window.scrollBy({0}, {1});", -10000, -10000));
 
 
 
                 string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; var rect= getElementByXpath(\"{0}\").getBoundingClientRect(); return rect.top + ':'+ rect.right+ ':'+ rect.bottom+ ':'+ rect.left;}} x(); ", Helper.ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
-                cbrowser.EvaluateScriptAsync(scr).ContinueWith(xabc =>
+                activebrowser.EvaluateScriptAsync(scr).ContinueWith(xabc =>
                 {
                     var response = xabc.Result;
 
@@ -1957,7 +2008,7 @@ namespace AirdropBot
                                node.Attributes["waitforbrowser"].Value == "true";
             if (wait4browser)
             {
-                cloadingFinished = false;
+                loadingFinished[tabBrowser.SelectedIndex] = false;
             }
             var el = GetCClick(node);
 
@@ -1966,7 +2017,7 @@ namespace AirdropBot
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 stopped = false;
-                while (!cloadingFinished && !stopped)
+                while (!loadingFinished[tabBrowser.SelectedIndex] && !stopped)
                 {
                     Application.DoEvents();
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -1986,7 +2037,7 @@ namespace AirdropBot
             {
                 string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").submit();}} x(); ", Helper.ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
-                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
                     var response = x.Result;
 
@@ -2013,10 +2064,10 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                if (!cbrowser.IsBrowserInitialized) return "";
+                if (!activebrowser.IsBrowserInitialized) return "";
                 string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; getElementByXpath(\"{0}\").click();}} x(); ", Helper.ReplaceTokens(xpath.Value), FindXPathScript);
                 var resp = "";
-                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
                     var response = x.Result;
 
@@ -2129,7 +2180,7 @@ namespace AirdropBot
                     c_proxy = proxy;
                 }
             }
-
+            var url = Helper.ReplaceTokens(node.Attributes["url"].Value);
             var stopElementXpath = "";
             var stopWhenElementRendered = node.Attributes["stopWhenElementRendered"];
             if (stopWhenElementRendered != null && !string.IsNullOrEmpty(stopWhenElementRendered.Value))
@@ -2137,15 +2188,17 @@ namespace AirdropBot
                 stopElementXpath = stopWhenElementRendered.Value;
             }
 
-            cloadingFinished = false;
+            loadingFinished[tabBrowser.SelectedIndex] = false;
             try
             {
-                CreateCBrowser(Helper.ReplaceTokens(node.Attributes["url"].Value), c_proxy);
+                tabBrowser.TabPages[0].Text = "Opening " + url + " ...";
+
+                CreateCBrowser(url, c_proxy);
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 stopped = false;
-                while (!cloadingFinished && !stopped)
+                while (!loadingFinished[tabBrowser.SelectedIndex] && !stopped)
                 {
                     Application.DoEvents();
                     //check every sec for stopelemenrender
@@ -2167,6 +2220,7 @@ namespace AirdropBot
             {
                 return exception.ToString();
             }
+            tabBrowser.TabPages[0].Text = url;
             return "";
         }
 
@@ -2180,10 +2234,10 @@ namespace AirdropBot
             var xpath = node.Attributes["xpath"];
             if (xpath != null && xpath.Value != "")
             {
-                if (!cbrowser.IsBrowserInitialized) return "UNDEF";
+                if (!activebrowser.IsBrowserInitialized) return "UNDEF";
                 string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return getElementByXpath(\"{0}\").{2}; }} x(); ", Helper.ReplaceTokens(xpath.Value), FindXPathScript, what == null ? "tagName" : what.Value);
                 var resp = "";
-                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                 {
                     var response = x.Result;
 
@@ -2203,11 +2257,11 @@ namespace AirdropBot
         private bool ElementExists(string xpath)
         {
             if (string.IsNullOrEmpty(xpath)) return false;
-            if (!cbrowser.IsBrowserInitialized) return false;
+            if (!activebrowser.IsBrowserInitialized) return false;
 
             string scr = string.Format("{1} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'UNDEF'; return 'DEF'; }} x(); ", xpath, FindXPathScript);
             var resp = "";
-            cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+            activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
             {
                 var response = x.Result;
 
@@ -2229,7 +2283,7 @@ namespace AirdropBot
             {
                 string scr = string.Format("{2} function x(){{ if(getElementByXpath(\"{0}\")==null)  return 'Cannot find element!'; getElementByXpath(\"{0}\").value =\"{1}\";}} x(); ", Helper.ReplaceTokens(xpath.Value), newValue, FindXPathScript);
                 var resp = "";
-                cbrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
+                activebrowser.EvaluateScriptAsync(scr).ContinueWith(x =>
                                 {
                                     var response = x.Result;
 
@@ -2562,8 +2616,8 @@ namespace AirdropBot
 
         private void showDevToolsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cbrowser == null) return;
-            cbrowser.ShowDevTools();
+            if (activebrowser == null) return;
+            activebrowser.ShowDevTools();
         }
 
         private void submitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2606,7 +2660,7 @@ namespace AirdropBot
         {
             try
             {
-                if (cbrowser != null) cbrowser.Dispose();
+                if (activebrowser != null) activebrowser.Dispose();
             }
             catch
             {
@@ -2979,24 +3033,24 @@ namespace AirdropBot
         private double zlevel = 1.0;
         private void toolStripMenuItem23_Click(object sender, EventArgs e)
         {
-            if (cbrowser == null) return;
+            if (activebrowser == null) return;
             zlevel *= 2;
-            cbrowser.SetZoomLevel(zlevel);
+            activebrowser.SetZoomLevel(zlevel);
 
         }
 
         private void outToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cbrowser == null) return;
+            if (activebrowser == null) return;
             zlevel /= 2;
-            cbrowser.SetZoomLevel(zlevel);
+            activebrowser.SetZoomLevel(zlevel);
 
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cbrowser == null) return;
-            cbrowser.Reload(true);
+            if (activebrowser == null) return;
+            activebrowser.Reload(true);
 
         }
 
@@ -3257,6 +3311,18 @@ namespace AirdropBot
         {
             txtScenario.SelectedText = "<log message=\"\"/>";
        
+        }
+
+        private void toolStripMenuItem32_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<addtab/>";
+     
+        }
+
+        private void tabBrowser_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActiveBrowserIndex = tabBrowser.SelectedIndex;
+
         }
     }
 }
