@@ -392,6 +392,7 @@ namespace AirdropBot
                     var res = "Error in " + command + " @" + stepNo + ".step: " + commandResult +
                               "\r\nCommand is : \r\n" + node.OuterXml;
                     if (showErrorBox) MessageBox.Show(res);
+                    Log.Error(res);
                     stopped = true;
                     return res;
                 }
@@ -610,6 +611,10 @@ namespace AirdropBot
                     breakCame = false;
                     break;
                 }
+                if(stopped)
+                {
+                    break;
+                }
                 if (continueCame)
                 {
                     continueCame = false;
@@ -677,7 +682,7 @@ namespace AirdropBot
             return "";
         }
 
-        private Tuple<bool, string> GetItemValue(XmlNode node)
+        private Tuple<bool, string> GetItemValue(XmlNode node, bool returnErrorWhenNotFound=false)
         {
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
@@ -685,7 +690,7 @@ namespace AirdropBot
             if (what == null || xpath == null) return new Tuple<bool, string>(false, "What or xpath is not defined!");
             if (what.Value == "" || xpath.Value == "") return new Tuple<bool, string>(false, "What or xpath is empty!");
             var result = GetCElement(node);
-            if (result == "UNDEF")
+            if (result == "UNDEF" && returnErrorWhenNotFound)
             {
                 return new Tuple<bool, string>(false, "Element cannot be found!");
             }
@@ -2090,7 +2095,7 @@ namespace AirdropBot
             if (param == null) return "Param is not defined!";
             if (param.Value == "") return "Param is empty!";
 
-            var result = GetItemValue(node);
+            var result = GetItemValue(node, true);
             if (!result.Item1) return result.Item2;
             if (!Helper.Variables.ContainsKey(param.Value))
             {
