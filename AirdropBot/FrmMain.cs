@@ -2140,8 +2140,9 @@ namespace AirdropBot
             cloadingFinished = false;
             try
             {
-                CreateCBrowser(Helper.ReplaceTokens(node.Attributes["url"].Value), c_proxy);
-
+                var url = Helper.ReplaceTokens(node.Attributes["url"].Value);
+                CreateCBrowser(url, c_proxy);
+                tabBrowser.TabPages[0].Text = "Navigating to "+ url + " ...";
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 stopped = false;
@@ -2153,6 +2154,8 @@ namespace AirdropBot
                     {
                         if (ElementExists(stopElementXpath))
                         {
+                            tabBrowser.TabPages[0].Text = url ;
+
                             return "";
                         }
                     }
@@ -2162,11 +2165,13 @@ namespace AirdropBot
                         return "Timeout after secs " + browsertimeoutSecs * 1000;//timeout
                     }
                 }
+                tabBrowser.TabPages[0].Text = url;
             }
             catch (Exception exception)
             {
                 return exception.ToString();
             }
+
             return "";
         }
 
