@@ -122,7 +122,27 @@ namespace AirdropBot
 
         private void NLMenu_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<template name=\"" + ((ToolStripMenuItem)sender).Text + "\"/>";
+            var name = ((ToolStripMenuItem)sender).Text;
+            var templateFile = string.Format("{0}\\NewTemplates\\{1}.xml", CommonHelper.AssemblyDirectory, name);
+            if (!File.Exists(templateFile))
+            {
+                MessageBox.Show("cannot find template under newtemplates folder: " + name);
+                return;
+            }
+            var parameters = new List<string>();
+            var template = File.ReadAllText(templateFile);
+            var itemRegex = new Regex(@"\$\{(\w+)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(template))
+            {
+                var token = ItemMatch.Groups[1].Value;
+                if (!Helper.Variables.ContainsKey(token))
+                {
+                    parameters.Add(token);
+                }
+            }
+            parameters.Add("");
+            var paramXml = string.Join("=\"\" ", parameters);
+            txtScenario.SelectedText = "<template name=\"" + name + "\" " + paramXml + "/>";
         }
 
         private void RestoreLastSelectedUser()
@@ -403,7 +423,7 @@ namespace AirdropBot
 
         private string TryCommand(XmlNode node)
         {
-            
+
             var runResult = Run(node.InnerXml, false);
             if (!Helper.Variables.ContainsKey("Exception"))
             {
@@ -454,10 +474,20 @@ namespace AirdropBot
             var name = node.Attributes["name"];
             if (name == null) return "template name not defined";
             if (string.IsNullOrEmpty(name.Value)) return "template name cannot be empty!";
+            var parameters = new Dictionary<string, string>();
+            foreach (XmlAttribute attr in node.Attributes)
+            {
+                if (attr.Name == "name" || attr.Name == "alias") continue;
+                parameters.Add(attr.Name, Helper.ReplaceTokens(attr.Value));
+            }
             var templateFile = string.Format("{0}\\NewTemplates\\{1}.xml", CommonHelper.AssemblyDirectory, name.Value);
             if (!File.Exists(templateFile)) return "cannot find template under newtemplates folder: " + name.Value;
 
             var template = File.ReadAllText(templateFile);
+            foreach (var parameter in parameters)
+            {
+                template = template.Replace("${" + parameter.Key + "}", parameter.Value);
+            }
             Run(template);
 
             return "";
@@ -611,7 +641,7 @@ namespace AirdropBot
                     breakCame = false;
                     break;
                 }
-                if(stopped)
+                if (stopped)
                 {
                     break;
                 }
@@ -682,7 +712,7 @@ namespace AirdropBot
             return "";
         }
 
-        private Tuple<bool, string> GetItemValue(XmlNode node, bool returnErrorWhenNotFound=false)
+        private Tuple<bool, string> GetItemValue(XmlNode node, bool returnErrorWhenNotFound = false)
         {
             var what = node.Attributes["what"];
             var regex = node.Attributes["regex"];
@@ -965,7 +995,7 @@ namespace AirdropBot
 
             }
 
-            MouseOperations.SetCursorPosition(this.Left + ContentPanel.Left + splitContainer1.Left + splitContainer1.Panel2.Left + x, this.Top + splitContainer1.Top + ContentPanel.Top + y);
+            MouseOperations.SetCursorPosition(this.Left + ContentPanel.Left + splitContainer1.Left + splitContainer1.Panel2.Left + x, this.Top + splitContainer1.Top + ContentPanel.Top + y + tabBrowser.Top + 20);
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
 
@@ -2142,7 +2172,7 @@ namespace AirdropBot
             {
                 var url = Helper.ReplaceTokens(node.Attributes["url"].Value);
                 CreateCBrowser(url, c_proxy);
-                tabBrowser.TabPages[0].Text = "Navigating to "+ url + " ...";
+                tabBrowser.TabPages[0].Text = "Navigating to " + url + " ...";
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 stopped = false;
@@ -2154,7 +2184,7 @@ namespace AirdropBot
                     {
                         if (ElementExists(stopElementXpath))
                         {
-                            tabBrowser.TabPages[0].Text = url ;
+                            tabBrowser.TabPages[0].Text = url;
 
                             return "";
                         }
@@ -3261,7 +3291,7 @@ namespace AirdropBot
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtScenario.SelectedText = "<log message=\"\"/>";
-       
+
         }
     }
 }
