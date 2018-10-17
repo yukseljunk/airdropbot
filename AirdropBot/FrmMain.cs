@@ -129,8 +129,9 @@ namespace AirdropBot
                 MessageBox.Show("cannot find template under newtemplates folder: " + name);
                 return;
             }
-            var parameters = new List<string>();
+            var parameters = new HashSet<string>();
             var template = File.ReadAllText(templateFile);
+            //exclude <setparam param="spenteth" 
             var itemRegex = new Regex(@"\$\{(\w+)\}");
             foreach (Match ItemMatch in itemRegex.Matches(template))
             {
@@ -139,6 +140,13 @@ namespace AirdropBot
                 {
                     parameters.Add(token);
                 }
+            }
+            itemRegex = new Regex(@" param=""(\w+)""");
+            foreach (Match ItemMatch in itemRegex.Matches(template))
+            {
+                var token = ItemMatch.Groups[1].Value;
+                parameters.Remove(token);
+                
             }
             parameters.Add("");
             var paramXml = string.Join("=\"\" ", parameters);

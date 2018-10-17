@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<steps>
+    <!--find last amounts of coins-->
+
+  <navigate url="https://www.catex.io/manager/asset" proxy="${UserProxyIp}:${UserProxyPort}" />
+  <wait for="2" formilisec=""/>
+  <get param="ethamount2" what="innerText" xpath="//*[@id='asset_table']//td[text()='${BaseCoin}']/../td[3]" regex=""/>
+
+  <get param="ltcamount2" what="innerText" xpath="//*[@id='asset_table']//td[text()='${TargetCoin}']/../td[3]" regex=""/>
+
+  <!--/find last amounts of coins-->
+
+
+  <!-- calculate for how much you should sell -->
+
+  <setparam param="spenteth" eval="${baseinitialamount}-${ethamount2}" value="" regex="," replace="."/>
+
+  <setparam param="spentltc" eval="${targetinitialamount}-${ltcamount2}" value="" regex="," replace="."/>
+
+  <setparam param="spentltcineth" eval="${spentltc}*${middleamountdot}" value="" regex="," replace="."/>
+
+
+  <navigate url="https://www.catex.io/manager/index" proxy="${UserProxyIp}:${UserProxyPort}" />
+  <wait for="2" formilisec=""/>
+
+  <get param="mycattmined2" what="innerText" xpath="//*[text()='My CATT mined this hour']/following-sibling::div" regex="([0-9,]*)"/>
+
+  <setparam param="mycattmineddot2"  value="${mycattmined2}" regex="," replace=""/>
+  <setparam param="mycattmineddot2" value="" eval="${mycattmineddot2}-${mycattminedinitial}" />
+
+  <setparam param="sellpercatt" eval="(${spenteth}+${spentltcineth})/(${mycattmineddot2}+1)" value="" regex="," replace="."/>
+
+  <xif test="${spenteth}+${spentltcineth}&gt;0">
+    <log message="${spenteth} ${BaseCoin} spent, sell ${mycattmineddot2} per ${sellpercatt}"/>
+
+  </xif>
+
+</steps>
