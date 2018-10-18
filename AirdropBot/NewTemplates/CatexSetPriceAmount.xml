@@ -1,0 +1,41 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <!--Set price start -->
+
+  <get param="sellOrder" what="outerText" xpath="//td[text()='S1']//..//td[2]" regex=""/>
+
+  <get param="buyOrder" what="outerText" xpath="//td[text()='B1']//..//td[2]" regex=""/>
+
+  <setparam param="middleamount" value="${Eval(${buyOrder}/2+${sellOrder}/2)}" />
+
+  <setparam param="middleamountdot" value="${middleamount}" regex="," replace="."/>
+
+  <set value="${middleamountdot}" xpath="//*[@id='sell_price']"/>
+
+  <set value="${middleamountdot}" xpath="//*[@id='buy_price']"/>
+
+  <!--Set price end -->
+
+  <!-- Calculate how much you can buy from target-->
+  <get param="baseamount" what="innerText" xpath="//*[@id='baseCoin_asset_availableAmount']" regex=""/>
+
+  <setparam param="amountCanBeBought" value="" eval="${baseamount} / ${middleamountdot}" regex="," replace="."/>
+
+  <get param="targetamount" what="innerText" xpath="//*[@id='coin_asset_availableAmount']" regex=""/>
+
+  <setparam param="amountdot" eval="" value="0.000001" regex="" replace=""/>
+
+  <xif test="${targetamount}&lt;${amountCanBeBought}">
+    <setparam param="amountdot" eval="${targetamount}*995/1000" value="" regex="," replace="."/>
+  </xif>
+  <xif test="${targetamount}&gt;=${amountCanBeBought}">
+    <setparam param="amountdot" eval="${amountCanBeBought}*995/1000" value="" regex="," replace="."/>
+  </xif>
+
+  <set value="${amountdot}" xpath="//*[@id='buy_amount']"/>
+  <set value="${amountdot}" xpath="//*[@id='sell_amount']"/>
+
+  <!--Find amount end -->
+
+</steps>

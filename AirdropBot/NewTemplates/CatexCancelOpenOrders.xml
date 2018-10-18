@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <!--Cancel all open orders-->
+  <repeat variable="openOrderCounter" times="100">
+
+    <if compare="A" what="tagName" xpath="//div[@class='my_entrust_list my_list tab_css']/div[2]/table//tr//a">
+      <click xpath="//div[@class='my_entrust_list my_list tab_css']/div[2]/table//tr//a"/>
+      <wait for="1" formilisec=""/>
+    </if>
+    <ifnot compare="A" what="tagName" xpath="//div[@class='my_entrust_list my_list tab_css']/div[2]/table//tr//a">
+      <break/>
+    </ifnot>
+    <wait formilisec="500"/>
+  </repeat>
+  <!--End of Cancel all open orders-->
+
+</steps>

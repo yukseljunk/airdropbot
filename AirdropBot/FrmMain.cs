@@ -438,7 +438,7 @@ namespace AirdropBot
                 Helper.Variables.Add("Exception", runResult);
             }
             Helper.Variables["Exception"] = runResult;
-            if (node.NextSibling != null && node.NextSibling.Name == "catch")
+            if (node.NextSibling != null && node.NextSibling.Name == "catch" && runResult!="")
             {
                 stopped = false;
                 Run(node.NextSibling.InnerXml);
@@ -485,7 +485,7 @@ namespace AirdropBot
             var parameters = new Dictionary<string, string>();
             foreach (XmlAttribute attr in node.Attributes)
             {
-                if (attr.Name == "name" || attr.Name == "alias") continue;
+                if (attr.Name == "name") continue;
                 parameters.Add(attr.Name, Helper.ReplaceTokens(attr.Value));
             }
             var templateFile = string.Format("{0}\\NewTemplates\\{1}.xml", CommonHelper.AssemblyDirectory, name.Value);
@@ -861,8 +861,18 @@ namespace AirdropBot
             /*            browser.ConsoleMessage += OnBrowserConsoleMessage;
                         browser.StatusMessage += OnBrowserStatusMessage;
                         browser.TitleChanged += OnBrowserTitleChanged;
-                        browser.AddressChanged += OnBrowserAddressChanged;
               */
+           // cbrowser.AddressChanged += OnBrowserAddressChanged;
+
+        }
+
+        private void OnBrowserAddressChanged(object sender, AddressChangedEventArgs e)
+        {
+            tabBrowser.TabPages[0].Invoke((MethodInvoker) delegate
+                                                              {
+                                                                  tabBrowser.TabPages[0].Text = e.Address;                                                      
+                                                              });
+            
         }
 
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)

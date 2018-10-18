@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0"?>
 <steps>
+  <log message="Start Calculating final amounts and how much to sell"/>
+
     <!--find last amounts of coins-->
 
   <navigate url="https://www.catex.io/manager/asset" proxy="${UserProxyIp}:${UserProxyPort}" />
@@ -8,6 +10,13 @@
 
   <get param="ltcamount2" what="innerText" xpath="//*[@id='asset_table']//td[text()='${TargetCoin}']/../td[3]" regex=""/>
 
+
+  <get param="ethamountinbtc" what="innerText" xpath="//*[@id='asset_table']//td[text()='${BaseCoin}']/../td[6]" regex=""/>
+
+  <get param="ltcamountinbtc" what="innerText" xpath="//*[@id='asset_table']//td[text()='${TargetCoin}']/../td[6]" regex=""/>
+
+  <setparam param="ltcineth" eval="(${ltcamountinbtc}/${targetinitialamount})/(${ethamountinbtc}/${baseinitialamount})" value="" regex="," replace="."/>
+  
   <!--/find last amounts of coins-->
 
 
@@ -17,7 +26,7 @@
 
   <setparam param="spentltc" eval="${targetinitialamount}-${ltcamount2}" value="" regex="," replace="."/>
 
-  <setparam param="spentltcineth" eval="${spentltc}*${middleamountdot}" value="" regex="," replace="."/>
+  <setparam param="spentltcineth" eval="${spentltc}*${ltcineth}" value="" regex="," replace="."/>
 
 
   <navigate url="https://www.catex.io/manager/index" proxy="${UserProxyIp}:${UserProxyPort}" />
@@ -26,7 +35,9 @@
   <get param="mycattmined2" what="innerText" xpath="//*[text()='My CATT mined this hour']/following-sibling::div" regex="([0-9,]*)"/>
 
   <setparam param="mycattmineddot2"  value="${mycattmined2}" regex="," replace=""/>
+  <log message="Final amounts: ${ethamount2} ${BaseCoin}, ${ltcamount2} ${TargetCoin}, ${mycattmineddot2} CATT"/>
   <setparam param="mycattmineddot2" value="" eval="${mycattmineddot2}-${mycattminedinitial}" />
+
 
   <setparam param="sellpercatt" eval="(${spenteth}+${spentltcineth})/(${mycattmineddot2}+1)" value="" regex="," replace="."/>
 
@@ -34,5 +45,65 @@
     <log message="${spenteth} ${BaseCoin} spent, sell ${mycattmineddot2} per ${sellpercatt}"/>
 
   </xif>
+  
+  <xif test="${spenteth}+${spentltcineth}=0">
+    <log message="nothing spent"/>
+
+  </xif>
+
+  <xif test="${sellmined}=true">
+    
+    <log message="try to sell mined CATT"/>
+
+    <xif test="${mycattmineddot2} &lt; 1000">
+      <log message="will not sell mined Catt less than 1000"/>
+    </xif>
+    <xif test="${spenteth}+${spentltcineth} &gt; 0 and ${mycattmineddot2} &gt;= 1000">
+
+      <navigate url="https://www.catex.io/trading/CATT/ETH" stopWhenElementRendered="//div[@class='trading_top']" proxy="${UserProxyIp}:${UserProxyPort}" />
+      <wait for="2" formilisec=""/>
+
+      <!--calculate market value of catt mined-->
+      <setparam param="amountLeft" value="${mycattmineddot2}" />
+      <setparam param="cumTotal" value="0" />
+
+      <repeat variable="rowIndexor" times="16">
+
+        <get param="buyAm" what="outerText" xpath="//td[text()='B${Eval(${rowIndexor}+1)}']//..//td[3]" regex="([0-9,]*)"/>
+        <get param="buyPr" what="outerText" xpath="//td[text()='B${Eval(${rowIndexor}+1)}']//..//td[2]" regex=""/>
+
+        <xif test="${buyAm} &gt;= ${amountLeft}">
+          <setparam param="cumTotal" value="" eval="${cumTotal}+${amountLeft}*${buyPr}" regex="," replace="."/>
+
+          <log message="sell ${amountLeft} from ${buyPr} with cum ${cumTotal} "/>
+          <setparam param="amountLeft" value="0" />
+
+        </xif>
+
+        <xif test="${buyAm} &lt; ${amountLeft}">
+          <setparam param="cumTotal" value="" eval="${cumTotal}+${buyAm}*${buyPr}" regex="," replace="." />
+
+          <log message="sell ${buyAm} from ${buyPr} with cum ${cumTotal} "/>
+          <setparam param="amountLeft" value="" eval="${amountLeft}-${buyAm}" />
+
+        </xif>
+
+        <xif test=" ${amountLeft} &lt;= 0">
+          <break/>
+        </xif>
+      </repeat>
+
+      <!--min 2 percent profit-->
+      <xif test=" ${cumTotal} &gt; ${mycattmineddot2}*${sellpercatt}*103/100">
+        <log message="Selling ${mycattmineddot2} in market for ${cumTotal} ETH "/>
+        <set value="${mycattmineddot2}" xpath="//*[@id='sell_amount']"/>
+        <set value="MARKET" xpath="//*[@id='sell_model']"/>
+        <template name="CatexLimitSell" />
+      </xif>
+
+    </xif>
+  
+  </xif>
+
 
 </steps>

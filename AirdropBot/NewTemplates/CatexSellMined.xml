@@ -1,0 +1,53 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <xif test="${spenteth}+${spentltcineth} &gt; 0 and ${mycattmineddot2} &gt;= 1000">
+
+    <navigate url="https://www.catex.io/trading/CATT/ETH" stopWhenElementRendered="//div[@class='trading_top']" proxy="${UserProxyIp}:${UserProxyPort}" />
+    <wait for="2" formilisec=""/>
+
+    <!--calculate market value of catt mined-->
+    <setparam param="amountLeft" value="${mycattmineddot2}" />
+    <setparam param="cumTotal" value="0" />
+
+    <repeat variable="rowIndexor" times="16">
+
+      <get param="buyAm" what="outerText" xpath="//td[text()='B${Eval(${rowIndexor}+1)}']//..//td[3]" regex="([0-9,]*)"/>
+      <get param="buyPr" what="outerText" xpath="//td[text()='B${Eval(${rowIndexor}+1)}']//..//td[2]" regex=""/>
+
+      <xif test="${buyAm} &gt;= ${amountLeft}">
+        <setparam param="cumTotal" value="" eval="${cumTotal}+${amountLeft}*${buyPr}" regex="," replace="."/>
+
+        <log message="sell ${amountLeft} from ${buyPr} with cum ${cumTotal} "/>
+        <setparam param="amountLeft" value="0" />
+
+      </xif>
+
+      <xif test="${buyAm} &lt; ${amountLeft}">
+        <setparam param="cumTotal" value="" eval="${cumTotal}+${buyAm}*${buyPr}" regex="," replace="." />
+
+        <log message="sell ${buyAm} from ${buyPr} with cum ${cumTotal} "/>
+        <setparam param="amountLeft" value="" eval="${amountLeft}-${buyAm}" />
+
+      </xif>
+
+      <xif test=" ${amountLeft} &lt;= 0">
+        <break/>
+      </xif>
+    </repeat>
+
+    <!--min 2 percent profit-->
+    <xif test=" ${cumTotal} &gt; ${mycattmineddot2}*${sellpercatt}*103/100">
+      <log message="Selling ${mycattmineddot2} in market for ${cumTotal} ETH "/>
+      <set value="${mycattmineddot2}" xpath="//*[@id='sell_amount']"/>
+      <set value="MARKET" xpath="//*[@id='sell_model']"/>
+      <template name="CatexLimitSell" />
+    </xif>
+
+  </xif>
+  <xif test="${mycattmineddot2} &lt; 1000">
+    <log message="will not sell mined Catt less than 1000"/>
+  </xif>
+
+
+</steps>

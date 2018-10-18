@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<steps>
+  
+  <!--find first amounts of coins-->
+
+  <navigate url="https://www.catex.io/manager/asset" proxy="${UserProxyIp}:${UserProxyPort}" />
+  <wait for="2" formilisec=""/>
+  <get param="ethamount" what="innerText" xpath="//*[@id='asset_table']//td[text()='${BaseCoin}']/../td[3]" regex=""/>
+
+  <get param="ltcamount" what="innerText" xpath="//*[@id='asset_table']//td[text()='${TargetCoin}']/../td[3]" regex=""/>
+
+  <!--find initial mycatt mined-->
+
+  <navigate url="https://www.catex.io/manager/index" proxy="${UserProxyIp}:${UserProxyPort}" />
+  <get param="mycattmined" what="innerText" xpath="//*[text()='My CATT mined this hour']/following-sibling::div" regex="([0-9,]*)"/>
+
+  <setparam param="mycattmineddot" value="${mycattmined}" regex="," replace=""/>
+
+  <log message="Initial amounts: ${ethamount} ${BaseCoin}, ${ltcamount} ${TargetCoin}, ${mycattmineddot} CATT"/>
+  <!--/find initial mycatt mined-->
+</steps>

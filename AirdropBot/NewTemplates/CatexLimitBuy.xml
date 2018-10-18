@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+  <setstatuscolor code="yellow"/>
+  <click xpath="//*[@id='buy_submit']"/>
+  <wait for="0" formilisec="500"/>
+  <waittill compare="Confirm" what="innerText" timeout="30" xpath="//*[text()='Confirm']" regex="" name="till1"/>
+  <wait for="0" formilisec="200"/>
+
+  <click xpath="//*[text()='Confirm']" />
+  <wait for="0" formilisec="500"/>
+
+  <waittill compare="success!" what="innerText" timeout="30" xpath="//*[text()='success!']" regex="" name="till2"/>
+  <click xpath="//*[text()='Confirm']" />
+  <wait for="0" formilisec="200"/>
+
+</steps>

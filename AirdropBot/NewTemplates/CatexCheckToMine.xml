@@ -1,0 +1,37 @@
+﻿<?xml version="1.0"?>
+<steps>
+
+
+  <!-- Check if you should mine -->
+
+  <navigate url="https://www.catex.io/manager/index" proxy="${UserProxyIp}:${UserProxyPort}" />
+  <wait for="2" formilisec=""/>
+
+
+  <get param="mycattmined" what="innerText" xpath="//*[text()='My CATT mined this hour']/following-sibling::div" regex="([0-9,]*)"/>
+
+  <get param="mycattcanbemined" what="innerText" xpath="//*[text()='My CATT can be mined per hour']/following-sibling::div" regex="([0-9,]*)"/>
+
+  <setparam param="mycattminednosep" eval="" value="${mycattmined}" regex="," replace=""/>
+  <setparam param="mycattcanbeminednosep" eval="" value="${mycattcanbemined}" regex="," replace=""/>
+
+
+  <xif test="${mycattminednosep} &gt; ${mycattcanbeminednosep}*96/100">
+    <log message="no mining - my quota reached"/>
+    <break/>
+  </xif>
+
+  <get param="plcattmined" what="innerText" xpath="//*[text()='Platform CATT mined this hour']/following-sibling::div" regex="([0-9,]*)"/>
+
+  <get param="plcattcanbemined" what="innerText" xpath="//*[text()='Platform CATT can be mined per hour']/following-sibling::div" regex="([0-9,]*)"/>
+
+  <setparam param="plcattminednosep" eval="" value="${plcattmined}" regex="," replace=""/>
+  <setparam param="plcattcanbeminednosep" eval="" value="${plcattcanbemined}" regex="," replace=""/>
+
+  <xif test="${plcattminednosep} &gt; ${plcattcanbeminednosep}*98/100">
+    <log message="no mining - platform quota reached"/>
+    <break/>
+  </xif>
+
+  <!-- End of mine check -->
+</steps>
