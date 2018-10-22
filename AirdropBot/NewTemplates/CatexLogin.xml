@@ -18,6 +18,14 @@
       <waittill compare="LI" what="tagName" timeout="0" xpath="//*[@id='user_email']" regex=""/>
       <wait for="1" formilisec=""/>
 
+      <if compare="INPUT" what="tagName" xpath="//input[@name='tfa']" regex="">
+        <google2fa param="cattexgkey" secret="${UserGSecret4}"/>
+        <set value="${cattexgkey}" xpath="//input[@name='tfa']"/>
+        <click xpath="//*[@name='submit']" waitforbrowser="true"/>
+        <wait for="1" formilisec=""/>
+      </if>
+
+
 
     </if>
   </xif>
@@ -38,6 +46,14 @@
     <wait for="1" formilisec=""/>
     <waittill compare="LI" what="tagName" timeout="0" xpath="//*[@id='user_email']" regex=""/>
     <wait for="1" formilisec=""/>
+
+    <if compare="INPUT" what="tagName" xpath="//input[@name='tfa']" regex="">
+      <google2fa param="cattexgkey" secret="${UserGSecret4}"/>
+      <set value="${cattexgkey}" xpath="//input[@name='tfa']"/>
+      <click xpath="//*[@name='submit']" waitforbrowser="true"/>
+      <wait for="1" formilisec=""/>
+    </if>
+
 
   </xif>
 
