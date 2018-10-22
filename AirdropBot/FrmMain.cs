@@ -146,7 +146,7 @@ namespace AirdropBot
             {
                 var token = ItemMatch.Groups[1].Value;
                 parameters.Remove(token);
-                
+
             }
             parameters.Add("");
             var paramXml = string.Join("=\"\" ", parameters);
@@ -288,7 +288,7 @@ namespace AirdropBot
                 }
                 if (command == "try")
                 {
-                    commandResult = TryCommand(node);
+                    commandResult = TryCommand(node, showErrorBox);
                 }
                 if (command == "snap")
                 {
@@ -328,7 +328,7 @@ namespace AirdropBot
 
                 if (command == "repeat")
                 {
-                    commandResult = RepeatCommand(node);
+                    commandResult = RepeatCommand(node, showErrorBox);
                 }
 
                 if (command == "wait")
@@ -377,11 +377,11 @@ namespace AirdropBot
                 }
                 if (command == "if")
                 {
-                    commandResult = IfCommand(node);
+                    commandResult = IfCommand(node, showErrorBox);
                 }
                 if (command == "ifnot")
                 {
-                    commandResult = IfNotCommand(node);
+                    commandResult = IfNotCommand(node, showErrorBox);
                 }
                 if (command == "recaptcha")
                 {
@@ -393,7 +393,7 @@ namespace AirdropBot
                 }
                 if (command == "template")
                 {
-                    commandResult = CallTemplate(node);
+                    commandResult = CallTemplate(node, showErrorBox);
                 }
                 if (command == "setstatuscolor")
                 {
@@ -401,7 +401,7 @@ namespace AirdropBot
                 }
                 if (command == "xif")
                 {
-                    commandResult = XIfCommand(node);
+                    commandResult = XIfCommand(node, showErrorBox);
 
                 }
                 if (command == "break")
@@ -429,7 +429,7 @@ namespace AirdropBot
             return "";
         }
 
-        private string TryCommand(XmlNode node)
+        private string TryCommand(XmlNode node, bool showErrorBox)
         {
 
             var runResult = Run(node.InnerXml, false);
@@ -438,10 +438,10 @@ namespace AirdropBot
                 Helper.Variables.Add("Exception", runResult);
             }
             Helper.Variables["Exception"] = runResult;
-            if (node.NextSibling != null && node.NextSibling.Name == "catch" && runResult!="")
+            if (node.NextSibling != null && node.NextSibling.Name == "catch" && runResult != "")
             {
                 stopped = false;
-                Run(node.NextSibling.InnerXml);
+                Run(node.NextSibling.InnerXml, showErrorBox);
             }
             return "";
         }
@@ -477,7 +477,7 @@ namespace AirdropBot
         }
 
 
-        private string CallTemplate(XmlNode node)
+        private string CallTemplate(XmlNode node, bool showErrorBox)
         {
             var name = node.Attributes["name"];
             if (name == null) return "template name not defined";
@@ -496,7 +496,7 @@ namespace AirdropBot
             {
                 template = template.Replace("${" + parameter.Key + "}", parameter.Value);
             }
-            Run(template);
+            Run(template, showErrorBox);
 
             return "";
 
@@ -631,7 +631,7 @@ namespace AirdropBot
         }
         private bool breakCame = false;
 
-        private string RepeatCommand(XmlNode node)
+        private string RepeatCommand(XmlNode node, bool showErrorBox)
         {
             var times = node.Attributes["times"];
             if (times == null) return "Repeat times is not defined!";
@@ -663,7 +663,7 @@ namespace AirdropBot
                     Helper.Variables.Add(iterVariable, i.ToString());
                 }
                 Helper.Variables[iterVariable] = i.ToString();
-                Run(node.InnerXml);
+                Run(node.InnerXml, showErrorBox);
             }
             return "";
         }
@@ -690,7 +690,7 @@ namespace AirdropBot
         }
 
 
-        private string IfNotCommand(XmlNode node)
+        private string IfNotCommand(XmlNode node, bool showErrorBox)
         {
             var compare = node.Attributes["compare"];
             if (compare == null) return "Compare is not defined!";
@@ -701,11 +701,11 @@ namespace AirdropBot
                 return itemValue.Item2;
             }
             if (itemValue.Item2 == Helper.ReplaceTokens(compare.Value)) return "";
-            Run(node.InnerXml);
+            Run(node.InnerXml, showErrorBox);
             return "";
         }
 
-        private string IfCommand(XmlNode node)
+        private string IfCommand(XmlNode node, bool showErrorBox)
         {
             var compare = node.Attributes["compare"];
             if (compare == null) return "Compare is not defined!";
@@ -716,7 +716,7 @@ namespace AirdropBot
                 return itemValue.Item2;
             }
             if (itemValue.Item2 != Helper.ReplaceTokens(compare.Value)) return "";
-            Run(node.InnerXml);
+            Run(node.InnerXml, showErrorBox);
             return "";
         }
 
@@ -747,7 +747,7 @@ namespace AirdropBot
             return new Tuple<bool, string>(true, result);
         }
 
-        private string XIfCommand(XmlNode node)
+        private string XIfCommand(XmlNode node, bool showErrorBox)
         {
             var test = node.Attributes["test"];
 
@@ -758,7 +758,7 @@ namespace AirdropBot
 
             if (new List<string>() { "1", "t", "true", "y", "yes" }.Contains(result))//criteria met
             {
-                Run(node.InnerXml);
+                Run(node.InnerXml, showErrorBox);
             }
 
             return "";
@@ -862,17 +862,17 @@ namespace AirdropBot
                         browser.StatusMessage += OnBrowserStatusMessage;
                         browser.TitleChanged += OnBrowserTitleChanged;
               */
-           // cbrowser.AddressChanged += OnBrowserAddressChanged;
+            // cbrowser.AddressChanged += OnBrowserAddressChanged;
 
         }
 
         private void OnBrowserAddressChanged(object sender, AddressChangedEventArgs e)
         {
-            tabBrowser.TabPages[0].Invoke((MethodInvoker) delegate
+            tabBrowser.TabPages[0].Invoke((MethodInvoker)delegate
                                                               {
-                                                                  tabBrowser.TabPages[0].Text = e.Address;                                                      
+                                                                  tabBrowser.TabPages[0].Text = e.Address;
                                                               });
-            
+
         }
 
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
