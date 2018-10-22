@@ -22,7 +22,7 @@
 
   <!-- calculate for how much you should sell -->
 
-  <setparam param="eth" eval="${baseinitialamount}-${ethamount2}" value="" regex="," replace="."/>
+  <setparam param="spenteth" eval="${baseinitialamount}-${ethamount2}" value="" regex="," replace="."/>
 
   <setparam param="spentltc" eval="${targetinitialamount}-${ltcamount2}" value="" regex="," replace="."/>
 
