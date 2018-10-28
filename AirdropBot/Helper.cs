@@ -94,6 +94,16 @@ namespace AirdropBot
                     result = result.Replace(ItemMatch.ToString(), items[randVal]);
                 }
             }
+            //${CurrentDate(mmDDyyyy)}
+          
+            itemRegex = new Regex(@"\$\{CurrentDate\(([^\)]*)\)\}");
+            foreach (Match ItemMatch in itemRegex.Matches(result))
+            {
+                var format = ItemMatch.Groups[1].Value;
+                result = result.Replace(ItemMatch.ToString(), DateTime.Now.ToString(format));
+
+            }
+          
 
             //${Eval(3+5*2)}
             itemRegex = new Regex(@"\$\{Eval\(([^\)]*)\)\}");

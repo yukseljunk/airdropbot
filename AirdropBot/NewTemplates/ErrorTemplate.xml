@@ -7,12 +7,10 @@
 
 
 
-  <repeat variable="i" times="2">
 
     <click xpath="//*[@placeholder='Email']" />
     <wait formilisec="100"/>
 
-  </repeat>
 
 
   

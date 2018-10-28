@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0"?>
 <steps>
 
+  <waittill compare="TD" what="tagName" timeout="0" xpath="//td[text()='S1']//..//td[2]" regex=""/>
+  <waittill compare="TD" what="tagName" timeout="0" xpath="//td[text()='B1']//..//td[2]" regex=""/>
+  <wait for="1" formilisec=""/>
   <!--Set price start -->
 
   <get param="sellOrder" what="outerText" xpath="//td[text()='S1']//..//td[2]" regex=""/>

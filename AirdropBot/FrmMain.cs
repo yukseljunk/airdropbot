@@ -203,13 +203,13 @@ namespace AirdropBot
 
         private bool cloadingFinished = false;
 
-        private bool stopped = false;
+        private bool halted = false;
         private void btnApplyScenario_Click(object sender, EventArgs e)
         {
             Log.Info("Scenario started...");
             if (txtScenario.Text == "") return;
             EnDis(true);
-            stopped = false;
+            halted = false;
             var scenario = txtScenario.Text;
             if (txtScenario.SelectionLength > 0)
             {
@@ -268,7 +268,8 @@ namespace AirdropBot
 
                 var command = node.Name.ToLower();
                 if (command != "") Debug.WriteLine(command + " " + DateTime.Now.ToString("hh:mm:ss"));
-                if (stopped) break;
+                if (halted) break;
+                if (continueCame) continue;
                 var commandResult = "";
 
                 var commandFactory = new CommandFactory();
@@ -421,7 +422,6 @@ namespace AirdropBot
                               "\r\nCommand is : \r\n" + node.OuterXml;
                     if (showErrorBox) MessageBox.Show(res);
                     Log.Error(res);
-                    stopped = true;
                     return res;
                 }
                 stepNo++;
@@ -440,7 +440,7 @@ namespace AirdropBot
             Helper.Variables["Exception"] = runResult;
             if (node.NextSibling != null && node.NextSibling.Name == "catch" && runResult != "")
             {
-                stopped = false;
+                halted = false;
                 Run(node.NextSibling.InnerXml, showErrorBox);
             }
             return "";
@@ -496,9 +496,8 @@ namespace AirdropBot
             {
                 template = template.Replace("${" + parameter.Key + "}", parameter.Value);
             }
-            Run(template, showErrorBox);
+            return Run(template, showErrorBox);
 
-            return "";
 
         }
 
@@ -642,30 +641,31 @@ namespace AirdropBot
             {
                 iterVariable = variable.Value;
             }
+            var retResult = "";
             for (int i = 0; i < int.Parse(Helper.ReplaceTokens(times.Value)); i++)
             {
+                if(continueCame)
+                {
+                    continueCame = false;
+                }
                 if (breakCame)
                 {
                     breakCame = false;
                     break;
                 }
-                if (stopped)
+                if (halted)
                 {
                     break;
-                }
-                if (continueCame)
-                {
-                    continueCame = false;
-                    continue;
                 }
                 if (!Helper.Variables.ContainsKey(iterVariable))
                 {
                     Helper.Variables.Add(iterVariable, i.ToString());
                 }
                 Helper.Variables[iterVariable] = i.ToString();
-                Run(node.InnerXml, showErrorBox);
+                retResult = Run(node.InnerXml, showErrorBox);
+                if (retResult != "") break;
             }
-            return "";
+            return retResult;
         }
 
         private string ScreenShotCommand(XmlNode node)
@@ -701,8 +701,7 @@ namespace AirdropBot
                 return itemValue.Item2;
             }
             if (itemValue.Item2 == Helper.ReplaceTokens(compare.Value)) return "";
-            Run(node.InnerXml, showErrorBox);
-            return "";
+            return Run(node.InnerXml, showErrorBox);
         }
 
         private string IfCommand(XmlNode node, bool showErrorBox)
@@ -716,8 +715,7 @@ namespace AirdropBot
                 return itemValue.Item2;
             }
             if (itemValue.Item2 != Helper.ReplaceTokens(compare.Value)) return "";
-            Run(node.InnerXml, showErrorBox);
-            return "";
+            return Run(node.InnerXml, showErrorBox);
         }
 
         private Tuple<bool, string> GetItemValue(XmlNode node, bool returnErrorWhenNotFound = false)
@@ -758,7 +756,7 @@ namespace AirdropBot
 
             if (new List<string>() { "1", "t", "true", "y", "yes" }.Contains(result))//criteria met
             {
-                Run(node.InnerXml, showErrorBox);
+                return Run(node.InnerXml, showErrorBox);
             }
 
             return "";
@@ -821,8 +819,8 @@ namespace AirdropBot
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            stopped = false;
-            while (!cloadingFinished && !stopped)
+            halted = false;
+            while (!cloadingFinished && !halted)
             {
                 Application.DoEvents();
                 if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -1038,7 +1036,7 @@ namespace AirdropBot
         }
 
 
-        private void RunTemplate(string templateName, params  string[] args)
+        private string RunTemplate(string templateName, params  string[] args)
         {
             var template = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\" + templateName + ".xml");
             var argIndex = 0;
@@ -1047,7 +1045,7 @@ namespace AirdropBot
                 template = template.Replace("${" + argIndex + "}", s);
                 argIndex++;
             }
-            Run(template);
+            return Run(template);
         }
 
         private string TwitterCommand(XmlNode node)
@@ -1096,10 +1094,10 @@ namespace AirdropBot
 
             if (node.HasChildNodes)
             {
-                stopped = false;
+                halted = false;
                 foreach (XmlNode subNode in node.ChildNodes)
                 {
-                    if (stopped) break;
+                    if (halted) break;
                     if (subNode.Name == "search")
                     {
                         var textNode = subNode.Attributes["text"];
@@ -1172,10 +1170,10 @@ namespace AirdropBot
 
             if (node.HasChildNodes)
             {
-                stopped = false;
+                halted = false;
                 foreach (XmlNode subNode in node.ChildNodes)
                 {
-                    if (stopped) break;
+                    if (halted) break;
                     if (subNode.Name == "search")
                     {
                         var textNode = subNode.Attributes["text"];
@@ -1270,10 +1268,10 @@ namespace AirdropBot
 
             if (node.HasChildNodes)
             {
-                stopped = false;
+                halted = false;
                 foreach (XmlNode subNode in node.ChildNodes)
                 {
-                    if (stopped) break;
+                    if (halted) break;
                     if (subNode.Name == "click")
                     {
                         var x = subNode.Attributes["x"];
@@ -1458,7 +1456,7 @@ namespace AirdropBot
                         right = (int)mainWindow.Bounds.Right;
                     }
 
-                    stopped = false;
+                    halted = false;
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
 
@@ -1474,7 +1472,7 @@ namespace AirdropBot
                             ltb = FindMost(h2.ToArray(), search);
                             r = FindMost(h2.ToArray(), search2, search2.Length - 10);
                         }
-                        if (stopped) return "";
+                        if (halted) return "";
                         Application.DoEvents();
                         if (sw.ElapsedMilliseconds >= wsecs)
                         {
@@ -1510,7 +1508,7 @@ namespace AirdropBot
                     var h = GetWhiteBox(bitmap);
                     ltb = FindMost(h.ToArray(), "111111111111111111111000000000000000000000000", 20);
 
-                    stopped = false;
+                    halted = false;
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
 
@@ -1527,7 +1525,7 @@ namespace AirdropBot
 
                             ltb = FindMost(h2.ToArray(), search);
                         }
-                        if (stopped) return "";
+                        if (halted) return "";
                         Application.DoEvents();
                         if (sw.ElapsedMilliseconds >= wsecs)
                         {
@@ -1544,10 +1542,10 @@ namespace AirdropBot
             }
             if (node.HasChildNodes)
             {
-                stopped = false;
+                halted = false;
                 foreach (XmlNode subNode in node.ChildNodes)
                 {
-                    if (stopped) break;
+                    if (halted) break;
                     if (subNode.Name == "click")
                     {
                         var x = subNode.Attributes["x"];
@@ -1618,7 +1616,7 @@ namespace AirdropBot
                             var hsub = GetHash(bitmapSub);
 
 
-                            stopped = false;
+                            halted = false;
                             Stopwatch sw = new Stopwatch();
                             sw.Start();
 
@@ -1649,7 +1647,7 @@ namespace AirdropBot
                                 }
                                 Thread.Sleep(50);
 
-                                if (stopped) return "";
+                                if (halted) return "";
                                 Application.DoEvents();
                                 if (sw.ElapsedMilliseconds >= wsecs)
                                 {
@@ -1874,10 +1872,10 @@ namespace AirdropBot
                 regex = regexNode.Value;
             }
             //more than login
-            stopped = false;
+            halted = false;
             foreach (XmlNode subNode in node.ChildNodes)
             {
-                if (stopped) break;
+                if (halted) break;
                 if (subNode.Name == "search")
                 {
                     var textNode = subNode.Attributes["text"];
@@ -1909,13 +1907,13 @@ namespace AirdropBot
                     {
                         type = typeNode.Value;
                     }
-                    stopped = false;
+                    halted = false;
                     for (int i = 0; i < retryTimes; i++)
                     {
                         if (RunMailApi("search", type, Helper.ReplaceTokens(textNode.Value), Helper.ReplaceTokens(user.Value),
                                    Helper.ReplaceTokens(password.Value), variable, regex)) break;
                         Wait(retryWaitSecs);
-                        if (stopped) break;
+                        if (halted) break;
                     }
 
                 }
@@ -1984,12 +1982,12 @@ namespace AirdropBot
                 waitsecs = int.Parse(Helper.ReplaceTokens(milisecs.Value));
             }
 
-            stopped = false;
+            halted = false;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (true)
             {
-                if (stopped) return "";
+                if (halted) return "";
                 Application.DoEvents();
                 if (sw.ElapsedMilliseconds >= waitsecs)
                 {
@@ -2013,8 +2011,8 @@ namespace AirdropBot
             {
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                stopped = false;
-                while (!cloadingFinished && !stopped)
+                halted = false;
+                while (!cloadingFinished && !halted)
                 {
                     Application.DoEvents();
                     if (sw.ElapsedMilliseconds >= browsertimeoutSecs * 1000)
@@ -2106,11 +2104,11 @@ namespace AirdropBot
 
             sw.Start();
             string result = "";
-            stopped = false;
+            halted = false;
             while (true)
             {
                 Application.DoEvents();
-                if (stopped) break;
+                if (halted) break;
                 result = GetCElement(node);
                 if (regex != null && regex.Value != "")
                 {
@@ -2193,8 +2191,8 @@ namespace AirdropBot
                 tabBrowser.TabPages[0].Text = "Navigating to " + url + " ...";
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                stopped = false;
-                while (!cloadingFinished && !stopped)
+                halted = false;
+                while (!cloadingFinished && !halted)
                 {
                     Application.DoEvents();
                     //check every sec for stopelemenrender
@@ -2534,11 +2532,11 @@ namespace AirdropBot
 
         private void btnRunRest_Click(object sender, EventArgs e)
         {
-            stopped = false;
+            halted = false;
             if (lstUsers.Items.Count == 0) return;
             foreach (var idx in lstUsers.CheckedIndices)
             {
-                if (stopped) break;
+                if (halted) break;
                 lstUsers.SelectedIndex = (int)idx;
                 Thread.Sleep(1000);
                 btnApplyScenario_Click(sender, e);
@@ -2565,7 +2563,7 @@ namespace AirdropBot
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            stopped = true;
+            halted = true;
         }
 
         private void scrollToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2980,7 +2978,7 @@ namespace AirdropBot
 
         private void repeatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<repeat variable=\"i\" times=\"10\">\r\n\r\n<wait formilisec=\"1\"/>\r\n\r\n<break/>\r\n</repeat>";
+            txtScenario.SelectedText = "<repeat variable=\"i\" times=\"10\">\r\n\r\n<wait formilisec=\"1\"/>\r\n\r\n<break/><continue/>\r\n</repeat>";
 
         }
 
@@ -3311,5 +3309,12 @@ namespace AirdropBot
             txtScenario.SelectedText = "<log message=\"\"/>";
 
         }
+
+        private void currentDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "${CurrentDate(mmDDyyyy)}";
+
+        }
+
     }
 }

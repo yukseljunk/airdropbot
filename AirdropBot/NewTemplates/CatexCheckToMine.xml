@@ -3,6 +3,10 @@
 
 
   <!-- Check if you should mine -->
+  <xif test="${CurrentDate(mm)} &gt; 55">
+    <log message="no mining - too late for another turn"/>
+    <break/>
+  </xif>
 
   <navigate url="https://www.catex.io/manager/index" proxy="${UserProxyIp}:${UserProxyPort}" />
   <wait for="2" formilisec=""/>
@@ -21,9 +25,9 @@
     <break/>
   </xif>
 
-  <get param="plcattmined" what="innerText" xpath="//*[text()='Platform CATT mined this hour']/following-sibling::div" regex="([0-9,]*)"/>
+  <get param="plcattmined" what="innerText" xpath="//*[text()='Platform CATT mined today']/following-sibling::div" regex="([0-9,]*)"/>
 
-  <get param="plcattcanbemined" what="innerText" xpath="//*[text()='Platform CATT can be mined per hour']/following-sibling::div" regex="([0-9,]*)"/>
+  <get param="plcattcanbemined" what="innerText" xpath="//*[text()='Platform CATT can be mined today']/following-sibling::div" regex="([0-9,]*)"/>
 
   <setparam param="plcattminednosep" eval="" value="${plcattmined}" regex="," replace=""/>
   <setparam param="plcattcanbeminednosep" eval="" value="${plcattcanbemined}" regex="," replace=""/>

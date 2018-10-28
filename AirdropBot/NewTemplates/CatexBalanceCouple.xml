@@ -1,0 +1,118 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <log message="Balance couples start"/>
+  <navigate url="https://www.catex.io/trading/${SecondCoin}/${FirstCoin}" stopWhenElementRendered="//div[@class='trading_top']" proxy="${UserProxyIp}:${UserProxyPort}" />
+
+  <wait for="2" formilisec=""/>
+
+  <delete xpath="//div[@class='trading_top']"/>
+  <template name="CatexCancelOpenOrders" />
+
+  <waittill compare="TD" what="tagName" timeout="0" xpath="//td[text()='S1']//..//td[2]" regex=""/>
+  <wait for="1" formilisec=""/>
+  <!--Set price start -->
+
+  <get param="minsellOrder" what="outerText" xpath="//td[text()='S1']//..//td[2]" regex=""/>
+  <set value="${minsellOrder}" xpath="//*[@id='buy_price']"/>
+  <wait for="1" formilisec=""/>
+
+  <get param="baseamount2" what="innerText" xpath="//*[@id='baseCoin_asset_availableAmount']" regex=""/>
+
+  <setparam param="amountCanBeBought2" value="" eval="${baseamount2} / ${minsellOrder}" regex="," replace="."/>
+
+  <get param="targetamount2" what="innerText" xpath="//*[@id='coin_asset_availableAmount']" regex=""/>
+
+  <xif test="${amountCanBeBought2} &gt; ${targetamount2} ">
+    <setparam param="balanceRatio" value="" eval="${amountCanBeBought2} / ${targetamount2}*100" regex="," replace="."/>
+    <log message="Buy some ${SecondCoin} maybe with balanceratio ${balanceRatio} "/>
+
+    <xif test="${balanceRatio} &gt; 110">
+      <setparam param="balanceAmount" value="" eval="(${amountCanBeBought2} - ${targetamount2})/2" regex="," replace="."/>
+      <log message="Buy ${balanceAmount} ${SecondCoin} to balance"/>
+      <setparam param="amountLeft" value="${balanceAmount}" />
+
+
+      <repeat times="16">
+
+        <get param="sellAm" what="outerText" xpath="//td[text()='S1']//..//td[3]" regex=""/>
+        <get param="sellPr" what="outerText" xpath="//td[text()='S1']//..//td[2]" regex=""/>
+
+
+        <set value="${sellPr}" xpath="//*[@id='buy_price']"/>
+
+        <xif test="${amountLeft} &gt;= ${sellAm}">
+
+          <set value="${sellAm}" xpath="//*[@id='buy_amount']"/>
+          <setparam param="amountLeft" value="" eval="${amountLeft}-${sellAm}" regex="," replace="." />
+          <template name="CatexLimitBuy" />
+          <log message="buy for ${sellPr} amount ${sellAm} amount left ${amountLeft}"/>
+          <xif test="${amountLeft} &lt;= 0">
+            <break/>
+          </xif>
+
+          <continue/>
+        </xif>
+
+        <xif test="${amountLeft} &lt; ${sellAm}">
+
+          <set value="${amountLeft}" xpath="//*[@id='buy_amount']"/>
+          <template name="CatexLimitBuy" />
+          <log message="buy for ${sellPr} amount ${amountLeft}, amount left should be 0 "/>
+          <setparam param="amountLeft" value="0" />
+          <break/>
+        </xif>
+
+        <wait for="2" formilisec=""/>
+      </repeat>
+    </xif>
+  </xif>
+
+  <xif test="${amountCanBeBought2} &lt; ${targetamount2} ">
+    <setparam param="balanceRatio" value="" eval="${targetamount2} / ${amountCanBeBought2}*100" regex="," replace="."/>
+    <log message="Sell some ${SecondCoin} maybe with balanceratio ${balanceRatio} "/>
+
+    <xif test="${balanceRatio} &gt; 110">
+
+      <setparam param="balanceAmount" value="" eval="( ${targetamount2}-${amountCanBeBought2})/2" regex="," replace="."/>
+      <log message="Sell ${balanceAmount} ${SecondCoin} to balance"/>
+
+      <setparam param="amountLeft" value="${balanceAmount}" />
+
+      <repeat variable="rowIndexor" times="16">
+
+
+        <get param="buyyAm" what="outerText" xpath="//td[text()='B1']//..//td[3]" regex=""/>
+        <get param="buyyPr" what="outerText" xpath="//td[text()='B1']//..//td[2]" regex=""/>
+        
+        <set value="${buyyPr}" xpath="//*[@id='sell_price']"/>
+
+        <xif test="${amountLeft} &gt;= ${buyyAm}">
+
+          <set value="${buyyAm}" xpath="//*[@id='sell_amount']"/>
+          <setparam param="amountLeft" value="" eval="${amountLeft}-${buyyAm}" regex="," replace="." />
+          <template name="CatexLimitSell" />
+          <log message="sell for ${buyyPr} amount ${buyyAm} amount left ${amountLeft}"/>
+          <xif test="${amountLeft} &lt;= 0">
+            <break/>
+          </xif>
+
+          <continue/>
+        </xif>
+
+        <xif test="${amountLeft} &lt; ${buyyAm}">
+
+          <set value="${amountLeft}" xpath="//*[@id='sell_amount']"/>
+          <template name="CatexLimitSell" />
+
+          <log message="sell for ${buyyPr} amount ${amountLeft}, amount left should be 0 "/>
+          <setparam param="amountLeft" value="0" />
+          <break/>
+        </xif>
+        <wait for="2" formilisec=""/>
+      </repeat>
+
+    </xif>
+
+  </xif>
+
+</steps>

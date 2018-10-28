@@ -190,9 +190,10 @@
             this.pnlScenario = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.txtScenario = new System.Windows.Forms.TextBox();
-            this.ContentPanel = new System.Windows.Forms.Panel();
             this.tabBrowser = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.ContentPanel = new System.Windows.Forms.Panel();
+            this.currentDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -950,7 +951,8 @@
             this.randomToolStripMenuItem,
             this.randomExceptToolStripMenuItem,
             this.randomTextToolStripMenuItem,
-            this.evaluateExpressionToolStripMenuItem});
+            this.evaluateExpressionToolStripMenuItem,
+            this.currentDateToolStripMenuItem});
             this.tokensToolStripMenuItem.Name = "tokensToolStripMenuItem";
             this.tokensToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.tokensToolStripMenuItem.Text = "Tokens";
@@ -1517,20 +1519,6 @@
             this.txtScenario.Text = resources.GetString("txtScenario.Text");
             this.txtScenario.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
-            // ContentPanel
-            // 
-            this.ContentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ContentPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.ContentPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ContentPanel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.ContentPanel.Location = new System.Drawing.Point(6, 6);
-            this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(902, 597);
-            this.ContentPanel.TabIndex = 17;
-            this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
-            // 
             // tabBrowser
             // 
             this.tabBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1553,6 +1541,27 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "default";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ContentPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.ContentPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ContentPanel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.ContentPanel.Location = new System.Drawing.Point(6, 6);
+            this.ContentPanel.Name = "ContentPanel";
+            this.ContentPanel.Size = new System.Drawing.Size(902, 597);
+            this.ContentPanel.TabIndex = 17;
+            this.ContentPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ContentPanel_Paint);
+            // 
+            // currentDateToolStripMenuItem
+            // 
+            this.currentDateToolStripMenuItem.Name = "currentDateToolStripMenuItem";
+            this.currentDateToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.currentDateToolStripMenuItem.Text = "Current Date";
+            this.currentDateToolStripMenuItem.Click += new System.EventHandler(this.currentDateToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -1750,6 +1759,7 @@
         private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
         private System.Windows.Forms.TabControl tabBrowser;
         private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ToolStripMenuItem currentDateToolStripMenuItem;
     }
 }
 

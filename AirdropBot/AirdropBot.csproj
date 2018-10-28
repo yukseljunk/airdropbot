@@ -204,6 +204,10 @@
     <Content Include="msvcr110.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="NewTemplates\CatexBalanceCouple.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="NewTemplates\CatexCancelOpenOrders.xml" />
     <Content Include="NewTemplates\CoinexLogin.xml">
       <SubType>Designer</SubType>

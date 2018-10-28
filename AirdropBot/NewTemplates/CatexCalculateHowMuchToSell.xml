@@ -6,6 +6,9 @@
 
   <navigate url="https://www.catex.io/manager/asset" proxy="${UserProxyIp}:${UserProxyPort}" />
   <wait for="2" formilisec=""/>
+
+  <waittill compare="TD" what="tagName" timeout="0" xpath="//*[@id='asset_table']//td[text()='${BaseCoin}']/../td[3]" regex=""/>
+
   <get param="ethamount2" what="innerText" xpath="//*[@id='asset_table']//td[text()='${BaseCoin}']/../td[3]" regex=""/>
 
   <get param="ltcamount2" what="innerText" xpath="//*[@id='asset_table']//td[text()='${TargetCoin}']/../td[3]" regex=""/>
@@ -50,8 +53,12 @@
     <log message="nothing spent"/>
 
   </xif>
+  <xif test=" ${spenteth} &lt; 0 or ${spentltc} &lt; 0 or ${mycattmineddot2} &lt; 0">
+    
+    <log message="WARNING: spentbase:  ${spenteth} or spenttarget: ${spentltc} or mined catt: ${mycattmineddot2} is negative, we should not sell it!"/>
+  </xif>
 
-  <xif test="${sellmined}=true and ${totalspentinbase} &gt;0">
+  <xif test="${sellmined}=true and ${totalspentinbase} &gt;0 and ${spenteth} &gt; 0 and ${spentltc} &gt; 0 and ${mycattmineddot2} &gt; 0">
     
     <log message="try to sell mined CATT"/>
 
@@ -93,11 +100,23 @@
         </xif>
       </repeat>
 
-      <!--min 2 percent profit-->
-      <xif test=" ${cumTotal} &gt; ${mycattmineddot2}*${sellpercatt}*103/100">
+     
+	  <!--min 2 percent profit-->
+      <xif test=" ${cumTotal} &gt;= ${mycattmineddot2}*${sellpercatt}*110/100">
         <log message="Selling ${mycattmineddot2} in market for ${cumTotal} ${BaseCoin}"/>
         <set value="${mycattmineddot2}" xpath="//*[@id='sell_amount']"/>
         <set value="MARKET" xpath="//*[@id='sell_model']"/>
+        <template name="CatexLimitSell" />
+      </xif>
+	  
+	  <xif test=" ${cumTotal} &lt; ${mycattmineddot2}*${sellpercatt}*110/100">
+	    <setparam param="sellprice" eval="${sellpercatt}*110/100" value="" regex="," replace="."/>
+ 	    <setparam param="selltotal" eval="${mycattmineddot2}*${sellprice}" value="" regex="," replace="."/>
+
+        <log message="Give limit sell order for ${mycattmineddot2} CATT per ${sellprice} for ${selltotal} ${BaseCoin}"/>
+        <set value="${mycattmineddot2}" xpath="//*[@id='sell_amount']"/>
+        <set value="${sellprice}" xpath="//*[@id='sell_price']"/>
+        <set value="LIMIT" xpath="//*[@id='sell_model']"/>
         <template name="CatexLimitSell" />
       </xif>
 
