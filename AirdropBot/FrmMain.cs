@@ -676,12 +676,12 @@ namespace AirdropBot
             {
                 fileName = Helper.ReplaceTokens(fileNode.Value);
             }
-            Rectangle bounds = ContentPanel.Bounds;
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            Rectangle bounds = splitContainer1.Panel2.Bounds;
+            using (Bitmap bitmap = new Bitmap(bounds.Width-60, bounds.Height-50))
             {
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                    g.CopyFromScreen(new Point(bounds.Left+30, bounds.Top+95), Point.Empty, bounds.Size);
 
                 }
                 bitmap.Save(fileName, ImageFormat.Jpeg);
