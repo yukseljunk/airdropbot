@@ -1,0 +1,30 @@
+﻿<?xml version="1.0"?>
+<steps>
+  
+  <snap xpath="//*[contains(@class,'tradeFormWrapper')]/div[1]//*[@id='price']" x="130%" y="50%"/>
+
+  <sendkey value="{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}"/>
+  <sendkey value="${buyprice}"/>
+
+
+  <wait for="1" formilisec=""/>
+  <snap xpath="//*[contains(@class,'tradeFormWrapper')]/div[1]//*[@id='amount']" x="130%" y="50%"/>
+
+  <sendkey value="{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}"/>
+  <sendkey value="${buyamount}"/>
+
+  <wait for="1" formilisec=""/>
+
+  <snap xpath="//*[contains(@class,'tradeFormWrapper')]/div[2]//*[@id='price']"  x="130%" y="50%"/>
+
+  <sendkey value="{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}"/>
+  <sendkey value="${sellprice}"/>
+
+  <wait for="1" formilisec=""/>
+
+  <snap xpath="//*[contains(@class,'tradeFormWrapper')]/div[2]//*[@id='amount']" x="130%" y="50%"/>
+
+  <sendkey value="{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}{BACKSPACE}"/>
+  <sendkey value="${sellamount}"/>
+
+</steps>
