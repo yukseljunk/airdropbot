@@ -691,8 +691,8 @@ namespace AirdropBot
                 MessageBox.Show("Cannot create kucoin address for empty email, email pwd or kucoin password! " + (index + 1));//email, pass, proxy
                 return;
             }
-            var mewTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\Templates\\KucoinReg.xml");
-            mewTemplate = mewTemplate.Replace("${0}", GetCell(index, 3)).Replace("${1}", GetCell(index, 20)).Replace("${2}", GetCell(index, 11) + ":" + GetCell(index, 12)).Replace("${3}", GetCell(index, 4));
+            var mewTemplate = File.ReadAllText(CommonHelper.AssemblyDirectory + "\\NewTemplates\\KucoinReg.xml");
+            mewTemplate = mewTemplate.Replace("${UserKucoinUser}", GetCell(index, 3)).Replace("${UserKucoinPass}", GetCell(index, 20)).Replace("${UserProxyIp}", GetCell(index, 11)).Replace("${UserProxyPort}", GetCell(index, 12)).Replace("${UserMailPwd}", GetCell(index, 4));
 
             var frmMain = new FrmMain() { OnlyBrowser = true, Scenario = mewTemplate };
 
@@ -1585,7 +1585,7 @@ namespace AirdropBot
             var rowIndex = GetRowIndexForContextMenu();
             if (rowIndex == -1) return;
             OpenChrome(rowIndex);
-       
+
         }
 
         private void OpenChrome(int index)

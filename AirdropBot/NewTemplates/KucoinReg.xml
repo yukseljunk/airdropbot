@@ -1,0 +1,217 @@
+﻿<?xml version="1.0"?>
+<steps>
+  <navigate url="about:blank"/>
+  <clearcookies/>
+
+  <navigate url="https://www.kucoin.com/#/signup" proxy="${UserProxyIp}:${UserProxyPort}"/>
+  <wait for="2"/>
+  <scroll height="20"/>
+  <wait for="2"/>
+  <click xpath="//*[@class='ant-checkbox-input']" />
+  <wait for="2"/>
+  <snap xpath="//*[@id='email']"  x="%50" y="%160"/>
+  <sendkey value="${UserKucoinUser}"/>
+  <wait for="2"/>
+
+  <snap xpath="//*[@id='password']"  x="%50" y="%160"/>
+  <sendkey value="${UserKucoinPass}"/>
+  <wait for="2"/>
+
+  <snap xpath="//*[@id='confirm']"  x="%50" y="%160"/>
+  <sendkey value="${UserKucoinPass}"/>
+  <wait for="2"/>
+
+  <snap xpath="//*[@id='referrer']"  x="%50" y="%160"/>
+  <sendkey value="acPHQ3"/>
+  <wait for="2"/>
+
+
+  <snap xpath="//*[text()='Next']" x="%50" y="%160"/>
+  <wait for="3"/>
+
+  <waittill compare="Email Activation" what="innerText" timeout="0" xpath="//*[text()='Email Activation']" regex=""/>
+
+
+  <mail user="${UserKucoinUser}" pass="${UserMailPwd}">
+    <searchtill text="kucoin" retrytimes="5" retrywaitsecs="10"/>
+  </mail>
+  <wait for="2"/>
+  <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'valid=pending')]" regex=""/>
+
+
+  <navigate url="${ulker}" proxy="${UserProxyIp}:${UserProxyPort}"/>
+
+  <wait for="5"/>
+
+  <navigate url="https://www.kucoin.com/#/login" proxy="${UserProxyIp}:${UserProxyPort}"/>
+
+  <wait for="10"/>
+
+
+  <set value="" xpath="//*[@id='username']" />
+  <snap xpath="//*[@id='username']"  x="%50" y="%160"/>
+
+  <sendkey value="${UserKucoinUser}"/>
+  <wait for="2"/>
+  <snap xpath="//*[@id='password']"  x="%50" y="%160"/>
+  <sendkey value="${UserKucoinPass}"/>
+  <wait for="3"/>
+
+
+  <snap xpath="//*[@id='password']"  x="%50" y="%300"/>
+
+  <wait for="3"/>
+
+  <!--2fa setup-->
+  <navigate url="https://www.kucoin.com/#/user/setting/ga" proxy="${UserProxyIp}:${UserProxyPort}"/>
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Next']" />
+  <wait for="2" formilisec=""/>
+  <get param="gs" what="innerText" xpath="//div[text()='Be sure to back up your 2-step secret key']/following-sibling::div" regex=""/>
+
+  <writetofile path="c:\temp\${UserKucoinUser}.txt" text="GSecret: ${gs}" append="true"/>
+  
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Next']" />
+  <wait for="2" formilisec=""/>
+
+  <google2fa param="gk" secret="${gs}"/>
+
+  <snap xpath="//*[text()='After binding, please enter the Google 6-digit verification code:']" x="%50" y="%250"/>
+  <sendkey value="${gk}"  />
+
+  <snap xpath="//*[text()='After binding, please enter the Google 6-digit verification code:']" x="%50" y="%350"/>
+  <wait for="2" formilisec=""/>
+
+  <!--security questions-->
+
+
+  <navigate url="https://www.kucoin.com/#/user/setting/question" proxy="${UserProxyIp}:${UserProxyPort}"/>
+  <wait for="2" formilisec=""/>
+  <snap xpath="//*[@id='loginPassword']" x="%50" y="%150"/>
+  <sendkey value="${UserKucoinPass}"/>
+  <wait for="2" formilisec=""/>
+  <snap xpath="//*[@id='g2faCode']" x="%50" y="%150"/>
+  <google2fa param="gk" secret="${gs}"/>
+  <sendkey value="${gk}"  />
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Next']" />
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//form" x="%50" y="%30"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%40"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%42"/>
+  <wait for="1" formilisec=""/>
+  <sendkey value="${UserTgUser}"/>
+  <wait for="1" formilisec=""/>
+
+  <snap xpath="//form" x="%50" y="%56"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%66"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%68"/>
+  <wait for="1" formilisec=""/>
+  <sendkey value="${UserTwName}"/>
+  <wait for="1" formilisec=""/>
+
+  <snap xpath="//form" x="%50" y="%82"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%90"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%93"/>
+  <wait for="1" formilisec=""/>
+  <sendkey value="${UserFBProfile}"/>
+  <wait for="1" formilisec=""/>
+  <click xpath="//*[text()='Submit']" />
+  <wait for="2" formilisec=""/>
+
+  <click xpath="//*[text()='Yes I did']" />
+  <wait for="2" formilisec=""/>
+
+  <mail user="${UserKucoinUser}" pass="${UserMailPwd}">
+    <searchtill text="kucoin" retrytimes="5" retrywaitsecs="10"/>
+  </mail>
+  <wait for="2"/>
+  <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'confirm-security-question')]" regex=""/>
+
+  <navigate url="${ulker}" proxy="${UserProxyIp}:${UserProxyPort}"/>
+
+  <wait for="5"/>
+
+
+  <!--api-->
+
+
+  <navigate url="https://www.kucoin.com/#/user/setting/api" proxy="${UserProxyIp}:${UserProxyPort}"/>
+  <wait for="2" formilisec=""/>
+  <click xpath="//*[text()='Create']" />
+  <wait for="2" formilisec=""/>
+  <snap xpath="//*[@id='loginPassword']" x="%50" y="%150"/>
+  <sendkey value="${UserKucoinPass}"/>
+  <wait for="2" formilisec=""/>
+
+  <snap xpath="//*[@id='g2faCode']" x="%50" y="%150"/>
+  <google2fa param="gk" secret="${gs}"/>
+  <sendkey value="${gk}"  />
+  <wait for="2" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%50"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%56"/>
+  <wait for="1" formilisec=""/>
+  <snap xpath="//form" x="%50" y="%64"/>
+  <sendkey value="${UserTgUser}"/>
+  <wait for="1" formilisec=""/>
+  <click xpath="//*[text()='Submit']" />
+  <wait for="2" formilisec=""/>
+
+
+  <mail user="${UserKucoinUser}" pass="${UserMailPwd}">
+    <searchtill text="kucoin" retrytimes="5" retrywaitsecs="10"/>
+  </mail>
+  <wait for="2"/>
+  <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'confirm-api-key')]" regex=""/>
+
+  <navigate url="${ulker}" proxy="${UserProxyIp}:${UserProxyPort}"/>
+
+  <wait for="5"/>
+
+
+
+  <navigate url="https://www.kucoin.com/#/user/setting/api" proxy="${UserProxyIp}:${UserProxyPort}"/>
+
+  <wait for="2"/>
+  <get param="key" what="innerText" xpath="//span[text()='key:']/following-sibling::span" regex=""/>
+
+  <get param="secret" what="innerText" xpath="//span[text()='Secret:']/following-sibling::span" regex=""/>
+
+  <writetofile path="c:\temp\${UserKucoinUser}.txt" text="API Key: ${key}" append="true"/>
+
+  <writetofile path="c:\temp\${UserKucoinUser}.txt" text="API Secret: ${secret}" append="true"/>
+
+  <wait for="2"/>
+  <click xpath="//*[text()='Update']" />
+  <wait for="1"/>
+
+  <click xpath="//*[text()='Trading authority']" />
+  <wait for="1"/>
+  <click xpath="//*[text()='Save']" />
+  <wait for="3"/>
+  <click xpath="//*[text()='Confirm']" />
+  <wait for="3"/>
+  <click xpath="//*[text()='Confirm']" />
+  <wait for="3"/>
+
+
+  <mail user="${UserKucoinUser}" pass="${UserMailPwd}">
+    <searchtill text="kucoin" retrytimes="5" retrywaitsecs="10"/>
+  </mail>
+  <wait for="2"/>
+  <get param="ulker" what="getAttribute('href')" xpath="//*[contains(text() , 'confirm-api-key')]" regex=""/>
+
+  <navigate url="${ulker}" proxy="${UserProxyIp}:${UserProxyPort}"/>
+
+  <wait for="5"/>
+
+</steps>

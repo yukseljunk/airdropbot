@@ -5,16 +5,20 @@
   <navigate url="about:blank"/>
   <clearcookies/>
 
-  <navigate url="https://www.kucoin.com/#/login" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="//*[@id='username']"/>
+  <navigate url="https://www.kucoin.com/ucenter/signin" proxy="${UserProxyIp}:${UserProxyPort}" stopWhenElementRendered="//*[@placeholder='Email']" />
 
   <wait for="5"/>
 
-  <set value="" xpath="//*[@id='username']" />
-  <snap xpath="//*[@id='username']"  x="%50" y="%160"/>
+  <set value="" xpath="//*[@placeholder='Email']" />
+  <snap xpath="//*[@placeholder='Email']"  x="%50" y="%160"/>
 
   <sendkey value="${UserKucoinUser}"/>
+
   <wait for="2"/>
-  <snap xpath="//*[@id='password']"  x="%50" y="%160"/>
+
+  <set value="" xpath="//*[@placeholder='Email']" />
+  <snap xpath="//*[@placeholder='Email']"  x="%50" y="%160"/>
+
   <sendkey value="${UserKucoinPass}"/>
   <wait for="2"/>
 

@@ -221,7 +221,9 @@ namespace AirdropBot
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                //MessageBox.Show(exc.ToString());
+                Log.Error("btnApplyScenario_Click messagbox is removed");
+                Log.Error(exc.ToString());
                 EnDis(false);
 
             }
@@ -283,6 +285,7 @@ namespace AirdropBot
                 {
                     commandResult = NavigateCommand(node);
                 }
+
                 if (command == "restart")
                 {
                     commandResult = RestartCommand(node);
@@ -317,6 +320,10 @@ namespace AirdropBot
                 {
                     commandResult = ContinueIfCommand(node);
 
+                }
+                if (command == "setprocesstofront")
+                {
+                    commandResult = SetProcessCommand(node);
                 }
                 if (command == "click")
                 {
@@ -420,11 +427,29 @@ namespace AirdropBot
                 {
                     var res = "Error in " + command + " @" + stepNo + ".step: " + commandResult +
                               "\r\nCommand is : \r\n" + node.OuterXml;
-                    if (showErrorBox) MessageBox.Show(res);
+                    if (showErrorBox)
+                    {
+                        Log.Error("Run messagbox is removed");
+                        Log.Error(res);
+
+                        //MessageBox.Show(res);
+                    }
                     Log.Error(res);
                     return res;
                 }
                 stepNo++;
+            }
+            return "";
+        }
+
+
+        private string SetProcessCommand(XmlNode node)
+        {
+            var processNode = node.Attributes["process"];
+            if (processNode == null) return "Process attribute not defined!";
+            foreach (var p in Process.GetProcessesByName(Helper.ReplaceTokens(processNode.Value)))
+            {
+                WindowHelper.BringProcessToFront(p);
             }
             return "";
         }
@@ -644,7 +669,7 @@ namespace AirdropBot
             var retResult = "";
             for (int i = 0; i < int.Parse(Helper.ReplaceTokens(times.Value)); i++)
             {
-                if(continueCame)
+                if (continueCame)
                 {
                     continueCame = false;
                 }
@@ -677,11 +702,11 @@ namespace AirdropBot
                 fileName = Helper.ReplaceTokens(fileNode.Value);
             }
             Rectangle bounds = splitContainer1.Panel2.Bounds;
-            using (Bitmap bitmap = new Bitmap(bounds.Width-60, bounds.Height-50))
+            using (Bitmap bitmap = new Bitmap(bounds.Width - 60, bounds.Height - 50))
             {
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    g.CopyFromScreen(new Point(bounds.Left+30, bounds.Top+95), Point.Empty, bounds.Size);
+                    g.CopyFromScreen(new Point(bounds.Left + 30, bounds.Top + 95), Point.Empty, bounds.Size);
 
                 }
                 bitmap.Save(fileName, ImageFormat.Jpeg);
@@ -950,6 +975,7 @@ namespace AirdropBot
 
         private string SnapCommand(XmlNode node)
         {
+            var lclick = !(node.Attributes["click"] != null && node.Attributes["click"].Value.ToLower() == "right");
             var x = 0;
             var y = 0;
             var xnode = node.Attributes["x"];
@@ -1012,8 +1038,14 @@ namespace AirdropBot
             }
 
             MouseOperations.SetCursorPosition(this.Left + ContentPanel.Left + splitContainer1.Left + splitContainer1.Panel2.Left + x, this.Top + splitContainer1.Top + ContentPanel.Top + y + tabBrowser.Top + 20);
-            MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
-            MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
+            if (lclick)
+            {
+                MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
+                MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
+                return "";
+            }
+            MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.RightDown);
+            MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.RightUp);
 
             return "";
         }
@@ -2852,43 +2884,43 @@ namespace AirdropBot
 
         private void toPointToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void emptyToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"\" x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" xpath=\"\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byIdToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[@id='']\" x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" xpath=\"//*[@id='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byNameToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[@name='']\" x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" xpath=\"//*[@name='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[@class='']\" x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" xpath=\"//*[@class='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byTagToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"TAG\" x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" xpath=\"TAG\" x=\"%50\" y=\"%150\"/>";
 
         }
 
         private void byTextToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            txtScenario.SelectedText = "<snap xpath=\"//*[text()='']\" x=\"%50\" y=\"%150\"/>";
+            txtScenario.SelectedText = "<snap click=\"left\" xpath=\"//*[text()='']\" x=\"%50\" y=\"%150\"/>";
 
         }
 
@@ -3315,6 +3347,12 @@ namespace AirdropBot
             txtScenario.SelectedText = "${CurrentDate(mmDDyyyy)}";
 
         }
+
+        private void toolStripMenuItem32_Click(object sender, EventArgs e)
+        {
+            txtScenario.SelectedText = "<setprocesstofront process=\"firefox\"/>";
+        }
+
 
     }
 }
